@@ -1,14 +1,14 @@
 # CSE 230: Web Page
 
-Public course materials for [UCSD CSE 230: Fall 2021](https://ucsd-cse230.github.io/fa21/)
+Public course materials for [UCSD CSE 230: Fall 2021](https://ucsd-cse230-np.github.io/web/)
 
 ## Install
 
 You too, can build this webpage locally, like so:
 
 ```bash
-git clone git@github.com:ucsd-cse230/fa21.git
-cd fa21
+git clone git@github.com:ucsd-cse230-np/web.git
+cd web
 make
 ```
 
@@ -79,61 +79,3 @@ match "lectures/*"       $ crunchWithCtxCustom "lecture" postCtx
 This theme is a fork of [CleanMagicMedium-Jekyll](https://github.com/SpaceG/CleanMagicMedium-Jekyll)
 originally published by Lucas Gatsas.
 
-## New Class Checklist
-
-- [*] site.hs
-- [*] index.md
-- [*] links.md
-- [*] contact.md
-- [*] calendar.md
-- [*] grades.md
-- [*] lectures.md
-- [*] CANVAS
-- [*] assignments.md
-- [*] 00-lambda  
-	- [*] Github 
-	- [*] Canvas
-
---- 
-
-- [ ] groups
-	- [ ] create groups
-	- [ ] zoom breakout rooms
-
-- [ ] deploy voltron
-	- [ ] voltron groups
-
-
-## Spring 2020
-
-- [Roster](https://docs.google.com/spreadsheets/d/1DqB98XNyDpqsL1FWyReTOecj8GFD6KXVnkjM6iI2Lrs/edit?usp=sharing)
-
-## ieng6 Setup
-
-1. Set the `stack-root`
-
-```
-stack setup --stack-root=/software/CSE/cse130/.stack
-```
-
-2. Create a shell script
-
-```
-cat > fixpaths.sh
-
-cd ~/../public/bin && chmod -R a+rx *
-cd /software/CSE/cse130/.stack && chmod -R a+rx *
-```
-
-3. For each assignment,
-
-	- `git clone` it to download assignment as instructor
-	- `stack test` it to get the relevant libs added to the stack-path
-	- `./fixpaths.sh` to allow everyone else to read the libraries
-
-4. For each assignment,
-	- login as student to make sure that you can `git clone` and then run `stack test`
-
-## Private Stuff
-
-https://github.com/ucsd-cse130/grading/tree/master/assignments/

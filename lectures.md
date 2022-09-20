@@ -8,7 +8,7 @@ Lecture schedule is subject to change!
 | **Date**   | **Topic**                       | **Notes**                 |  **Code**           |
 |:----------:|:--------------------------------|:--------------------------|:--------------------|
 | *9/22*     | Intro                           | [html][00-intro]          |                     | 
-| *9/27*     | Lambda Calculus                 |                           |                     | 
+| *9/27*     | Lambda Calculus                 | [html][01-lambda]         |                     | 
 | *9/29*     | contd.                          |                           |                     | 
 | *10/4*     | contd.                          |                           |                     | 
 | *10/6*     | Haskell Basics                  |                           |                     |
@@ -31,6 +31,8 @@ Lecture schedule is subject to change!
 
 
 [00-intro]: lectures/00-intro.html
+[01-lambda]: lectures/01-lambda.html
+
 
 <!-- OLD -->
 
@@ -42,7 +44,6 @@ Lecture schedule is subject to change!
 
 [TBD]: TBD
 [code]: https://github.com/ucsd-cse230/fa20/tree/master/static/code/src
-[01-lambda]: lectures/01-lambda.html
 [01-haskell]: static/raw/lec-haskell.pdf
 [01-lambda-A]: static/raw/01-lambda-A.pdf
 [01-lambda-B]: static/raw/01-lambda-B.pdf

@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <!--
+      loads the http over https ssl -
+      welcome to my website!
+
+	this theme is based off the Ice & Fire theme created by Lucas Gatsas
+      https://www.twitter.com/LucasGatsas
+      www.lucasgatsas.ch - switzerland.
+  -->
+
+
+<!-- Microsoft Internet Explorer documentMode compatMode setting IE Modus -->
+<script type="text/javascript">
+var IE = null;
+if (window.navigator.appName == "Microsoft Internet Explorer") {
+  if (document.documentMode) {
+
+    IE = document.documentMode;
+    } else {
+
+        IE = 5;
+          if (document.compatMode) {
+      if (document.compatMode == "CSS1Compat")
+      IE = 11;
+      }
+    }
+  }
+</script>
+
+    <meta charset="utf-8">
+    <!-- X-UA -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <link rel="author" title="Ranjit Jhala" href="http://ranjitjhala.github.io" />
+
+    <meta name="google" content="notranslate" />
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- index ROBOTS follow -->
+    <meta name="robots" content="index, follow" />
+    <!-- Site Desciption -->
+    <meta name="description" content="UCSD CSE 230">
+    <!-- Site Desciption -->
+    <meta name="keywords" content="haskell, refinement types, liquid types, formal methods, type systems">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://ucsd-cse230-np.github.io/web/static/img/ico.png" type="image/x-icon" />
+    <!-- Blog Title -->
+    <title>cse230</title>
+
+    <!--     <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+-->
+    <!-- Property Metas -->
+    <meta property="og:image" content="https://ucsd-cse230-np.github.io/web/static/img/ix.png" />
+    <meta property="og:title" content="UCSD CSE 230" />
+    <meta property="og:site_name" content="UCSD CSE 230" />
+    <!-- Canonical -->
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseUrl | prepend: site.url }}">
+    <!-- StyleSheet -->
+    <link rel="stylesheet" href="https://ucsd-cse230.github.io/sp20/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://ucsd-cse230.github.io/sp20/static/css/ronacher.css" type="text/css">
+    <link rel="stylesheet" href="https://ucsd-cse230.github.io/sp20/static/css/syntax.css">
+    <link rel="stylesheet" href="https://ucsd-cse230.github.io/sp20/static/css/liquid-light.css">
+
+    <!-- Fonts
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+    -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+	#preloader {position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff; /* change if the mask should have another color then white */z-index:99; /* makes sure it stays on top */}
+	#status {width:200px;height:200px;position:absolute;left:50%; /* centers the loading animation horizontally one the screen */top:50%; /* centers the loading animation vertically one the screen */background-image:url("/static/img/preloader.gif"); /* path to your loading animation */background-repeat:no-repeat;background-position:center;margin:-100px 0 0 -100px; /* is width and height divided by two */}
+	ul, ol {margin-top: 0;margin-bottom: 10px;}
+	.navbar-inverse {background-color: #FFF;border-color: #FFFFFF;}
+</style>
+<style>
+  /* HEADER IMAGE */
+  header.intro-header {background: #6f5499;background: no-repeat center center;background-attachment: scroll;-webkit-background-size: cover;-moz-background-size: cover;background-size: cover;-o-background-size: cover;}
+
+	/* Preloader */#preloader {position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff; /* change if the mask should have another color then white */z-index:99; /* makes sure it stays on top */}
+	#status {width:200px;height:200px;position:absolute;left:50%; /* centers the loading animation horizontally one the screen */top:50%; /* centers the loading animation vertically one the screen */background-image:; /* path to your loading animation */background-repeat:no-repeat;background-position:center;margin:-100px 0 0 -100px; /* is width and height divided by two */}
+	li {list-style: none;}
+            body.modal-open
+            {overflow: hidden;padding-right: 0px;
+        }
+	article li {list-style: inherit;}
+	article .figure {text-align: center}
+    </style>
+    <!-- end Loading front stylesheet here -->
+    </head>
+
+    <body>
+	    
+	<!-- 	
+        <div id="preloader">
+	    <div id="status">
+	    </div>
+	</div>  
+	-->
+	<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://ucsd-cse230-np.github.io/web" id="blog-title-left-top">cse230</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://ucsd-cse230-np.github.io/web/calendar.html">Calendar</a></li>
+                <li><a href="https://ucsd-cse230-np.github.io/web/grades.html">Grades</a></li>
+                <li><a href="https://ucsd-cse230-np.github.io/web/lectures.html">Lectures</a></li>
+                <li><a href="https://ucsd-cse230-np.github.io/web/assignments.html">Assignments</a></li>
+                <li><a href="https://ucsd-cse230-np.github.io/web/project.html">Project</a></li>
+                <li><a href="https://ucsd-cse230-np.github.io/web/links.html">Links</a></li>
+                <li><a href="https://www.piazza.com/ucsd/fall2022/cse230/home" id="roundbutton" target="_blank"><i class="fa fa-twitter"></i>Piazza</a></li>
+                <li><a href="https://canvas.ucsd.edu/courses/39514" id="roundbutton" target="_blank"><i class="fa fa-twitter"></i>Canvas</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true" style="padding-right:0px; overflow: hidden;">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h1 class="font-style-inline-small-h1">Ranjit Jhala</h1>
+                            <hr class="star-primary">
+                            <img src="https://ucsd-cse230-np.github.io/web/static/img/ico.png" class="img-responsive img-centered" alt title>
+                            <p class="font-style-inline-small">
+                                <a href="https://www.twitter.com/polikarn" target="_blank">follow me</a>. <br>
+                                <a href="https://www.github.com/nadia_polikarpova" target="_blank">    <i class="fa fa-github" id="spaceg-social-modal"></i> </a>
+                                <a href="https://www.twitter.com/polikarn" target="_blank"><i class="fa fa-twitter" id="spaceg-social-modal"></i> </a>
+                                <a href="https://plus.google.com/u/0/104385825850161331469" target="_blank"> <i class="fa fa-google-plus" id="spaceg-social-modal"></i></a>
+                            </p>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Menu Modals Add New Sa.21.Feb.2015 03:22:25 -->
+    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true" style="padding-right:0px; overflow: hidden;">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h1 class="font-style-inline-small-h1">Nadia Polikarpova</h1>
+                            <hr class="star-primary">
+                            <p class="font-style-inline-small">
+                              <a href="https://www.twitter.com/polikarn" target="_blank">follow</a>. <br>
+                              <a href="https://www.github.com/nadia_polikarpova" target="_blank">    <i class="fa fa-github" id="spaceg-social-modal"></i> </a>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/calendar.html">Calendar</a></li>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/contact.html">Contact</a></li>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/grades.html">Grades</a></li>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/lectures.html">Lectures</a></li>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/assignments.html">Assignments</a></li>
+                              <li><a href="https://ucsd-cse230-np.github.io/web/links.html">Links</a></li>
+                              <li><a href="https://www.piazza.com/ucsd/fall2022/cse230/home" id="roundbutton" target="_blank"><i class="fa fa-twitter"></i>Piazza</a></li>
+                              <li><a href="https://canvas.ucsd.edu/courses/39514" id="roundbutton" target="_blank"><i class="fa fa-twitter"></i>Canvas</a></li>
+                            </p>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <div id="content">
+            <!-- Post Header -->
+    <header class="intro-header" style="background-image: url('https://ucsd-cse230-np.github.io/web/static/img/sea.jpg')" alt title>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Intro</h1>
+                    
+                    <span class="meta">
+		    
+		    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+			<h2 id="who-am-i">Who am I?</h2>
+<figure>
+<img src="https://cseweb.ucsd.edu/~npolikarpova/images/nadia_polikarpova.jpg" id="fig:nadia" class="align-center" style="width:25.0%" alt /><figcaption>Nadia Polikarpova</figcaption>
+</figure>
+<ul>
+<li>Assistant professor at CSE since 2017</li>
+<li>PhD at ETH Zurich</li>
+<li>Postdoc at MIT</li>
+</ul>
+<h3 id="my-research">My Research</h3>
+<ul>
+<li>Program Verification: how to <em>prove</em> the program is doing the right thing?</li>
+<li>Program Synthesis: how to <em>generate</em> a program that does the right thing?</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="the-crew">The Crew</h2>
+<ul>
+<li>Michael Borkowski</li>
+<li>Han Cao</li>
+<li><a href="https://weirdmachine.me/">Kasra Ferdowsifard</a></li>
+<li><a href="http://michaelbjames.com/">Michael James</a></li>
+<li><a href="https://kolosick.com/">Matt Kolosick</a></li>
+<li>Rose Kunkel</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="lecture-format">Lecture Format</h2>
+<p>In-person + live on Zoom</p>
+<p>For those joining on Zoom:</p>
+<ul>
+<li>Keep your <em>mic</em> off unless you are talking</li>
+<li>Keep your <em>video</em> on if you can</li>
+<li>Two ways to ask a question:
+<ol type="1">
+<li>Turn on your mic and ask</li>
+<li>Type into zoom chat</li>
+</ol></li>
+<li>Same if I ask you a question</li>
+</ul>
+<p>Lectures will also be recorded and published on canvas and <a href="https://podcast.ucsd.edu/">podcast</a></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="what-is-cse230">What is CSE230?</h2>
+<figure>
+<img src="https://www.microsoft.com/en-us/research/uploads/prod/2021/03/Tony-Hoare_360x360.jpg" id="fig:hoare" class="align-center" alt /><figcaption>Tony Hoare, Turing Award Lecture, 1980:</figcaption>
+</figure>
+<blockquote>
+<p>There are two ways of constructing a software design: One way is to make it so simple that there are <strong>obviously no deficiencies</strong>, and the other way is to make it so complicated that there are <strong>no obvious deficiencies</strong>. The first method is far more difficult.</p>
+</blockquote>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="goal-of-230-obviously-no-deficiencies">Goal of 230: Obviously No Deficiencies</h2>
+<p>Building software that is - Readable - Reusable - Modifiable - Predictable - Checkable</p>
+<p><br> <br> <br></p>
+<p>Yes, but <strong>how</strong>???</p>
+<p><br> <br> <br></p>
+<p><strong>Functional programming!</strong></p>
+<p>Have you used a functional language before?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="who-uses-functional-programming">Who Uses Functional Programming?</h2>
+<p>PL Researchers</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="who-uses-functional-programming-1">Who Uses Functional Programming?</h2>
+<ul>
+<li>Microsoft: <a href="https://fsharp.org/">F#</a></li>
+<li>Twitter: <a href="https://twitter.github.io/scala_school/">Scala</a></li>
+<li>WhatsApp: <a href="https://www.erlang.org/">Erlang</a></li>
+<li>JaneStreet: <a href="https://ocaml.org/">OCaml</a></li>
+<li>Google: <a href="https://research.google/pubs/pub62/">MapReduce</a>, <a href="https://www.tensorflow.org/">TensorFlow</a></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br></p>
+<figure>
+<img src="https://apidyn.royalsociety.org/images/fellows/P39875-Simon-Peyton%20Jones.jpg?width=275" id="fig:peyton" class="align-center" alt /><figcaption>Simon Peyton Jones:</figcaption>
+</figure>
+<blockquote>
+<p>When the limestone of imperative programming has worn away, the granite of functional programming will be revealed underneath</p>
+</blockquote>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="cse230-medium-of-instruction">CSE230: Medium of Instruction</h2>
+<p>Haskell</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="why-haskell">Why Haskell?</h2>
+<ul>
+<li>Bleeding edge PL</li>
+<li>Beautiful</li>
+<li>Fun</li>
+<li>Blows your mind</li>
+</ul>
+<figure>
+<img src="https://computingthehumanexperience.com/wp-content/uploads/2018/04/alan-perlis.jpg" id="fig:perlis" class="align-center" alt /><figcaption>Alan Perlis, Epigrams in Programming:</figcaption>
+</figure>
+<blockquote>
+<p>A language that doesn’t affect the way you think about programming, is not worth knowing.</p>
+</blockquote>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="cse-230-rough-outline">CSE 230: (Rough) Outline</h2>
+<ul>
+<li>The Lambda Calculus: the bedrock of FP</li>
+<li>Intro to Haskell</li>
+<li>Types!</li>
+<li>Advanced FP (monads, concurrency?)</li>
+<li>Building nre languages (interpreters, parsers)</li>
+<li>Testing and verification</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="course-logistics">Course Logistics</h2>
+<ul>
+<li><a href="https://ucsd-cse230-np.github.io/web">webpage</a>
+<ul>
+<li>calendar, lecture notes, programming assignments, …</li>
+</ul></li>
+<li><a href="https://canvas.ucsd.edu/courses/39514">canvas</a>
+<ul>
+<li>lecture recordings<br />
+</li>
+</ul></li>
+<li><a href="https://piazza.com/class/l891xpsvep14kr">piazza</a>
+<ul>
+<li>announcements and discussions</li>
+<li><strong>please sign up!</strong></li>
+</ul></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="grading">Grading</h2>
+<ul>
+<li>70% Homework assignments</li>
+<li>30% Project</li>
+<li>05% Extra credit for Piazza discussion
+<ul>
+<li>To <strong>top 15</strong> best participants</li>
+</ul></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="assignments">Assignments</h2>
+<ul>
+<li>4(5?) programming assignments</li>
+<li>Released <a href="https://ucsd-cse230-np.github.io/web/assignments.html">online</a>, at least a week before due date</li>
+<li>Due on <strong>Fridays at 11:59pm</strong>
+<ul>
+<li>except when Friday is a holiday</li>
+<li>check calendar for due dates</li>
+<li>first HW due 10/7</li>
+</ul></li>
+<li>4 late days
+<ul>
+<li>used atomically (5 mins late = 1 late day)</li>
+</ul></li>
+<li>Distributed, submitted, and graded on GitHub Classroom
+<ul>
+<li>submission instructions in the assignment</li>
+<li>we will send a form to collect your GitHub usernames</li>
+</ul></li>
+<li>Solve <strong>alone or in groups of two</strong>
+<ul>
+<li>user this <a href="https://piazza.com/class/l891xpsvep14kr/post/5">piazza thread</a> to find a partner</li>
+<li>you can use any assignment excpet HW0 as comprehensive exam, but you need to do it <em>alone</em></li>
+</ul></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="project">Project</h2>
+<ul>
+<li>More details <a href="https://ucsd-cse230-np.github.io/web/project.html">here</a></li>
+<li>Work in <em>groups of 4</em></li>
+<li>Develop any standalone command-line app
+<ul>
+<li>e.g., a game, a text editor, a shell, …</li>
+</ul></li>
+<li>Four milestones throughout the quarter:
+<ul>
+<li>Team registration: 10/26</li>
+<li>Proposal: 11/9</li>
+<li>Updates: 11/23</li>
+<li>Final demo: 12/7</li>
+</ul></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="in-class-quizzes">In-class Quizzes</h2>
+<p>We will do quizzes in class via iClickers (remotes and app)</p>
+<ul>
+<li>Make class interactive</li>
+<li>Help <em>you</em> and <em>me</em> understand what’s tricky</li>
+</ul>
+<p>You need to buy an iClicker remote <em>or</em> install the iClicker app on your phone</p>
+<p><strong>Protocol</strong></p>
+<ol type="1">
+<li><em>Discuss</em>
+<ul>
+<li>I show the quiz on screen</li>
+<li>If in class: discuss with your neighbor</li>
+<li>If remote: discuss with a friend on zoom chat (or any other chat)</li>
+<li>Try to reach consensus</li>
+</ul></li>
+<li><em>Vote</em>
+<ul>
+<li>Using iClicker remote or app</li>
+</ul></li>
+<li><em>Class Discuss</em>
+<ul>
+<li>What was easy or tricky?</li>
+</ul></li>
+</ol>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="questions">Questions?</h2>
+                <hr>
+            </div>
+        </div>
+    </div>
+</article>
+
+        </div>
+        <div id="footer">
+        </div>
+      <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="https://ucsd-cse230-np.github.io/web/feed.xml" data-datatype="json" data-type="GET" data-target="#frame" class="reload" id="clickme">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/polikarn" data-datatype="json" data-type="GET" data-target="#frame" class="reload" id="clickme" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://plus.google.com/u/0/104385825850161331469" data-datatype="json" data-type="GET" data-target="#frame" class="reload" id="clickme" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/nadia_polikarpova" target="_blank">
+                            <span class="fa-stack fa-lg">
+
+                              <i class="fa fa-arrow-circle-o-down"></i>
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+		    
+                </ul>
+                <p class="copyright text-muted">
+                
+                  Generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a>,
+                  template by <a href="http://lucumr.pocoo.org">Armin Ronacher</a>,
+                  suggest improvements <a href="https://github.com/ucsd-progsys/liquidhaskell-blog/">here</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- jQuery -->
+<script src="https://ucsd-cse230-np.github.io/web/static/js/jquery.min.js"></script>
+<script src="https://ucsd-cse230-np.github.io/web/static/js/spaceg.stylesheets.min.js"></script>
+<script src="https://ucsd-cse230-np.github.io/web/static/js/bootstrap.min.js"></script>
+<!--
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script src="https://ucsd-cse230-np.github.io/web/static/js/anim.js"></script>
+<script src="https://ucsd-cse230-np.github.io/web/static/js/scripts.js"></script>
+-->
+
+
+    </body>
+</html>

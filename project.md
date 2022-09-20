@@ -18,9 +18,10 @@ The goal of the project is to give you some hands on
 experience with building a realistic application using
 the principles learned in CSE 230.
 
-- **Friday 11/12** Proposal [Submit here](https://forms.gle/Fd4CUajSCzS4Er4e7)
-- **Friday 11/25** Updates
-- **12/10** Demonstration
+- **Wednesday 10/26** Teams
+- **Wednesday 11/09** Proposal
+- **Wednesday 11/23** Updates
+- **Wednesday 12/07** Demonstration
 
 The overall goal is for *you* to write an application 
 from scratch, so we will provide very basic starter 
@@ -60,15 +61,19 @@ The project will be evaluated based on the following criteria:
 - *unit testing:* the project should pass unit tests that are implemented either manually or using [quickcheck](https://hackage.haskell.org/package/QuickCheck). 
 - *presentation:* make sure to clearly present your goals and your implementation.
 
-### Milestone 1: Registration and Proposal
 
-1. Create a `github` repository for your project with a `README.md` 
-   that describes your proposed application and its goals in 300 words.
+### Milestone 1: Team Registration
 
-2. Fill up a google form (to be shared) linking your project and team members.
+Fill out a google form (to be shared) identifying your team members.
 
 
-### Milestone 2: Updates
+### Milestone 2: Proposal
+
+Create a `github` repository for your project with a `README.md` 
+that describes your proposed application and its goals in 300 words.
+
+
+### Milestone 3: Updates
 
 Update your `README` with 
 
@@ -77,10 +82,10 @@ Update your `README` with
 - Do you expect to meet your goals until the deadline?
 - If not, how will you modify your goals? 
 
-### Milestone 3: Demonstration
+### Milestone 4: Demonstration
 
-You will give a **10 min** demonstration of your project during an open
-"poster session" to be conducted during the finals slot **Friday 12/10 from 11:30am -- 2:30pm**.
+You will give a **15 min** demonstration of your project during an open
+"poster session" to be conducted during the finals slot **Wednesday 12/7 from 11:30am -- 2:30pm**.
 
 
 ## Final Demo: Plan and Rubric

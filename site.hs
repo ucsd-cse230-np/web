@@ -66,27 +66,26 @@ postCtx =
 siteCtx :: Context String
 siteCtx =
     constField "cssUrl"             "https://ucsd-cse230.github.io/sp20"      `mappend`
-    constField "baseUrl"            "https://ucsd-cse230.github.io/fa21"      `mappend`
+    constField "baseUrl"            "https://ucsd-cse230-np.github.io/web"    `mappend`
     constField "site_name"          "cse230"                                  `mappend`
     constField "site_description"   "UCSD CSE 230"                            `mappend`
-    constField "site_username"      "Ranjit Jhala"                            `mappend`
-    constField "twitter_username"   "ranjitjhala"                             `mappend`
-    constField "github_username"    "ranjitjhala"                             `mappend`
-    constField "google_username"    "rjhala@eng.ucsd.edu"                     `mappend`
+    constField "site_username"      "Nadia Polikarpova"                       `mappend`
+    constField "twitter_username"   "polikarn"                                `mappend`
+    constField "github_username"    "nadia_polikarpova"                       `mappend`
+    constField "google_username"    "npolikarpova@eng.ucsd.edu"               `mappend`
     constField "google_userid"      "u/0/104385825850161331469"               `mappend`
-    constField "piazza_classid"     "class/ktu6rpy6cmh79"                     `mappend`
-    constField "canvasUrl"          "https://canvas.ucsd.edu/courses/29526"   `mappend`
+    constField "piazza_classid"     "ucsd/fall2022/cse230/home"               `mappend`
+    constField "canvasUrl"          "https://canvas.ucsd.edu/courses/39514"   `mappend`
     defaultContext
 
 tops =
   [ "index.md"
+  , "calendar.md"
   , "grades.md"
   , "lectures.md"
-  , "links.md"
   , "assignments.md"
-  , "calendar.md"
-  , "contact.md"
   , "project.md"
+  , "links.md"
   ]
 
 fac  :: Int -> Int 

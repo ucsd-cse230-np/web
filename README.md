@@ -1,6 +1,6 @@
 # CSE 230: Web Page
 
-Public course materials for [UCSD CSE 230: Fall 2021](https://ucsd-cse230-np.github.io/web/)
+Public course materials for [UCSD CSE 230: Fall 2022](https://ucsd-cse230-np.github.io/web/)
 
 ## Install
 

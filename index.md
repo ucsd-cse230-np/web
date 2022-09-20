@@ -3,20 +3,23 @@ title: Programming Languages
 headerImg: angles.jpg
 ---
 
-## Staff
+## Course Resources
 
-+ *Instructor:* Ranjit Jhala `(rjhala+230@eng.ucsd.edu)`
-+ *TA:* Michael Borkowski `(mborkows+230@eng.ucsd.edu)`
-+ *TA:* Lisa Huang `(r6huang+230@ucsd.edu)`
-+ *TA:* Matt Kolosick `(mkolosick+230@eng.ucsd.edu)`
-+ *TA:* George Sakkas `(gsakkas+230@eng.ucsd.edu)`
+- **Lectures:** TTh 11am-12:20pm PCYNH 106 and on [Zoom](https://ucsd.zoom.us/j/934813358)
+- **Calendar:** Check [here](https://ucsd-cse230-np.github.io/web/calendar.html) for office hours, deadlines, etc.
+- **Piazza:** Check [here](https://piazza.com/ucsd/fall2022/cse230) for announcement and discussions.
+- **Canvas:** Check [here](https://canvas.ucsd.edu/courses/39514) for grades and lecture recordings.
 
-## Co-ordinates
 
-+ *Lectures:* Tu-Th 12:30 to 1:50pm
-+ *Location:* P416 WEST (Outdoor tent) and Zoom link on [CANVAS](https://canvas.ucsd.edu/courses/29526)
-+ *Messages:* [Piazza](https://piazza.com/class/ktu6rpy6cmh79)
-+ *Final:* Fri 12/10 11:30 - 2:30p
+## Team
+
+- **Instructor:** Nadia Polikarpova `(npolikarpova+230@eng.ucsd.edu)`
+- **TA:** Michael Borkowski `(mborkows+230@eng.ucsd.edu)`
+- **TA:** Han Cao `(h2cao+230@ucsd.edu)`
+- **TA:** Kasra Ferdowsifard `(kferdows+230@eng.ucsd.edu)`
+- **TA:** Michael James `(m3james+230@eng.ucsd.edu)`
+- **TA:** Matt Kolosick `(mkolosick+230@eng.ucsd.edu)`
+- **TA:** Rose Kunkel `(rkunkel+230@eng.ucsd.edu)`
 
 ## Description
 

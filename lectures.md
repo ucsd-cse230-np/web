@@ -3,41 +3,36 @@ title: Lecture Notes
 headerImg: books.jpg
 ---
 
-## Videos
+Lecture schedule is subject to change!
 
-This class will have zoom lectures with live coding. 
+| **Date**   | **Topic**                       | **Notes**                 |  **Code**           |
+|:----------:|:--------------------------------|:--------------------------|:--------------------|
+| *9/22*     | Intro                           | [html][00-intro]          |                     | 
+| *9/27*     | Lambda Calculus                 |                           |                     | 
+| *9/29*     | contd.                          |                           |                     | 
+| *10/4*     | contd.                          |                           |                     | 
+| *10/6*     | Haskell Basics                  |                           |                     |
+| *10/11*    | Haskell Types                   |                           |                     |  
+| *10/13*    | Bottling patterns with HOFs     |                           |                     |
+| *10/18*    | Haskell: IO                     |                           |                     |
+| *10/20*    | Type Classes                    |                           |                     |
+| *10/25*    | Functors and Monads             |                           |                     | 
+| *10/27*    | Iteration and State             |                           |                     | 
+| *11/1*     | Parser Combinators              |                           |                     |
+| *11/3*     | contd.                          |                           |                     |
+| *11/8*     | Monad Transformers              |                           |                     | 
+| *11/10*    | Property-based Testing          |                           |                     | 
+| *11/15*    | Concurrency                     |                           |                     |
+| *11/17*    | Refinement Types                |                           |                     |          
+| *11/22*    | TBD                             |                           |                     | 
+| *11/24*    | *No lecture: Thanksgiving*      |                           |                     |
+| *11/29*    | TBD                             |                           |                     |
+| *12/1*     | TBD                             |                           |                     | 
 
-The lectures will be recorded and available on [CANVAS](https://canvas.ucsd.edu/courses/29526)
 
-## Topics, Notes and Code
+[00-intro]: lectures/00-intro.html
 
-| **Date**   | **Topic**                       | **Notes**                 | **Markup**           | **Code**           |
-|:----------:|:--------------------------------|:--------------------------|:---------------------|:-------------------|
-| *9/23*     | Intro                           | [pdf][00-intro]           | [pdf][01-lambda-A]   |                    | 
-| *9/28*     | Lambda Calculus                 | [html][01-lambda]         | [pdf][01-lambda-B]   |                    | 
-| *9/30*     | ""                              |                           | [pdf][01-lambda-C]   |                    | 
-| *10/5*     | ""                              |                           | [pdf][01-lambda-D]   | [code][code-10-5]  | 
-| *10/7*     | Haskell Basics                  | [html][02-hs-basic]       |                      | [code][code-10-7]  |
-| *10/12*    | Haskell  Types                  | [html][03-hs-types]       |                      | [code][code-10-12] |  
-| *10/14*    | Bottling patterns with HOFs     | [html][07-patterns]       | [pdf][07-patterns-A] | [code][code-10-14] |
-| *10/19*    | Haskell: IO                     | [html][04-hs-io]          | ""                   | [code][code-10-19] |
-| *10/21*    | Type Classes                    | [html][08-typeclasses]    |                      | [code][code-10-21] |
-| *10/26*    | Functors and Monads             | [html][09-monads]         |                      | [code][code-10-26] | 
-| *10/28*    | Iteration and State             | [lists][10-list] [state][11-state]   |  [pdf][11-state-A] | [code][code-10-28] | 
-| *11/2*     | Parser Combinators              | [html][12-parsers]        |                      | [code][code-11-2]  |
-| *11/4*     | ""                              |                           |                      | [code][code-11-4]  |
-| *11/9*     | Monad Transformers              | [html][13-transformers]   |                      | [code][code-11-9]  | 
-| *11/16*    | Property-based Testing          | [html][14-testing]        |                      | [code][code-11-16] | 
-| *11/23*    | Concurrency                     | [html][15-stm]            | [pdf][pfd13]         | [code][code-11-23] |
-| *11/30*    | Refinement Types                | [1][lh1] [2][lh2] [3][lh3] [4][lh4]   |          |                    |          
-
-<!-- 
-| *12/3*     | Exceptions                      | [html][13-transformers]   | [pdf][13-exceptions] | [code][code]      | 
-| *12/8*     | Monad Transformers              | [html][13-transformers]   | [TBD][13-trans]      | [code][code]      | 
-|            | Property-based Testing          | [html][14-testing]        | [TBD][TBD]           | [code][code]      | 
-|            | List Monad                      | [html][10-list]           |                      |                  |
-|            | Proofs as Programs              |                           |                      |                  | 
--->
+<!-- OLD -->
 
 [lh1]: http://ucsd-progsys.github.io/lh-workshop/01-index.html
 [lh2]: http://ucsd-progsys.github.io/lh-workshop/02-refinements.html
@@ -47,7 +42,6 @@ The lectures will be recorded and available on [CANVAS](https://canvas.ucsd.edu/
 
 [TBD]: TBD
 [code]: https://github.com/ucsd-cse230/fa20/tree/master/static/code/src
-[00-intro]: static/raw/lec-intro.pdf
 [01-lambda]: lectures/01-lambda.html
 [01-haskell]: static/raw/lec-haskell.pdf
 [01-lambda-A]: static/raw/01-lambda-A.pdf
@@ -125,49 +119,3 @@ The lectures will be recorded and available on [CANVAS](https://canvas.ucsd.edu/
 [13-transformers]: lectures/13-transformers.html
 [14-testing]: lectures/14-testing.html
 [15-stm]: lectures/15-stm.html
-
-<!-- JUNK -->
-[07-testing]: lectures/00-intro.html
-[08-parconc]: lectures/00-intro.html
-[09-types]: lectures/00-intro.html
-[10-refinements]: lectures/00-intro.html
-[11-proofs]: lectures/00-intro.html 
-
-[pdf-intro]: static/lec-intro-2x2.pdf 
-[pdf-lambda]: static/lec-lambda-2x2.pdf
-[pdf-haskell]: static/lec-haskell-2x2.pdf
-
-[notes1]: https://piazza.com/class/ij0wjmlgp4r1gp?cid=7
-[hs1]:  static/lec-intro.hs 
-[lhs1]: static/lec-intro.lhs
-
-[lec2]: lectures/lec-higher-order-1.html
-[lhs2]: lectures/lec-higher-order-1.lhs
-[lec2s]: slides/lec-higher-order.lhs.slides.html
-
-[lec3]: lectures/lec-higher-order-2.html
-[lhs3]: lectures/lec-higher-order-2.lhs
-[lec3s]: slides/lec-polymorphism.lhs.slides.html
-
-[lec4]: lectures/lec-typeclasses.html
-[lhs4]: lectures/lec-typeclasses.lhs
-
-[lec7]: lectures/lec-monads.html
-[lhs7]: lectures/lec-monads.lhs
-
-[lec9]: lectures/lec-parsers.html
-[lhs9]: lectures/lec-parsers.lhs
-
-[lec10]: lectures/lec-quickcheck.html
-[lhs10]: lectures/lec-quickcheck.lhs
-
-[pdf13]: static/raw/lec-stm-2x2.pdf
-[lec13]: lectures/lec-stm.html
-[lhs13]: lectures/lec-stm.lhs
-
-
-[lec15]: lectures/lec-inference.html
-[lhs15]: lectures/lec-inference.lhs
-
-
-

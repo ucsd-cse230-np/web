@@ -554,7 +554,7 @@ is `x` _bound_ or _free_?
 
 ## EXERCISE: Free Variables
 
-An variable `x` is **free** in `e` if *there exists* a free occurrence of `x` in `e`
+A variable `x` is **free** in `e` if *there exists* a free occurrence of `x` in `e`
 
 <br>
 

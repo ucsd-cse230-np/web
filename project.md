@@ -18,10 +18,13 @@ The goal of the project is to give you some hands on
 experience with building a realistic application using
 the principles learned in CSE 230.
 
-- **Wednesday 10/26** Teams
-- **Wednesday 11/09** Proposal
-- **Wednesday 11/23** Updates
-- **Wednesday 12/07** Demonstration
+There will be four milestones throughout the quarter,
+each worth some percentage of the overall grade:
+
+- **Wednesday 10/26** Teams (1%)
+- **Wednesday 11/09** Proposal (2%)
+- **Wednesday 11/23** Updates (2%)
+- **Wednesday 12/07** Demonstration (25%)
 
 The overall goal is for *you* to write an application 
 from scratch, so we will provide very basic starter 
@@ -65,7 +68,6 @@ The project will be evaluated based on the following criteria:
 ### Milestone 1: Team Registration
 
 Fill out a google form (to be shared) identifying your team members.
-
 
 ### Milestone 2: Proposal
 

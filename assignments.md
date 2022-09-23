@@ -17,15 +17,20 @@ COMING SOON
  
 ## Haskell Installation Guide
 
-COMING SOON
+**Per OS Instructions**
+- Windows: install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install). You will first install the Windows Subsystem for Linux (WSL), with the administrator-level command `wsl --install`. Once you restart, then ensure you are using version 2, with `wsl -l -v`. If you haven't used this before, you are likely already on WSL2. If not, [check this link to see how to upgrade from 1 to 2](https://learn.microsoft.com/en-us/windows/wsl/install).
+- MacOS: Ensure you've agreed to the XCode License agreements, to ensure you have `clang` and other build tools available. Simply run `xcode-select --install`
+- Linux: You'll need some usual compiler tools, including `clang` and `nasm`. If you're on a Debian-like build, the `build-essential` package should suffice.
 
-<!-- Here's what you need to install for a completely local environment:
-- install [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you're on Windows, and [here are instructions for using it with vscode](https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode). Haskell can run on Windows, but it can have really weird issues sometimes, WSL is a much more pleasant experience. (If you have an old subsystem, WSL1 might have issues, you may need to update to WSL2)
-- install `stack` from a package manager like `apt` (`sudo apt install haskell-stack`) or `brew`, or from [the stack website](https://docs.haskellstack.org/) if you don't have a package manager.
-- install `nasm` and `clang` for compilation (without these, running `make` will have errors saying that it couldn't find one of these programs), these should also be in package managers.
-- Optionally, install IDE extensions like the VSCode `Haskell` extension for syntax highlighting/hover/more
+**General instructions**
+1. Install [GHCup](https://www.haskell.org/ghcup/)
+2. In a terminal, run: `ghcup tui`
+3. **Install** and **set** the recommended versions for all of: `Stack`, `HLS`, `Cabal`, and `GHC`.  (GHC, the most important one, should be `8.10.7`).
 
-With all this installed, you should have a local setup that seamlessly works with the PAs, just open up your IDE and run `make`. -->
+Once you have `GHC`, `Cabal`, and `Stack` installed,
+you can edit your homework in your favorite text editor and build it by running `make`.
+For best experience, we recommend using VSCode with the `Haskell` extension;
+to make the extension work, you first need to install `HLS` via `ghcup` (see above).
 
 ## Virtual Machine
 

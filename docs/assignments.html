@@ -238,14 +238,9 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 - [01-trees](https://classroom.github.com/a/EKaa5k6e), due **10/22 at 23:59:59**
 - [02-while](https://classroom.github.com/a/apPaNw-v), due **11/12 at 23:59:59** -->
 <h2 id="haskell-installation-guide">Haskell Installation Guide</h2>
-<p>COMING SOON</p>
-<!-- Here's what you need to install for a completely local environment:
-- install [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you're on Windows, and [here are instructions for using it with vscode](https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode). Haskell can run on Windows, but it can have really weird issues sometimes, WSL is a much more pleasant experience. (If you have an old subsystem, WSL1 might have issues, you may need to update to WSL2)
-- install `stack` from a package manager like `apt` (`sudo apt install haskell-stack`) or `brew`, or from [the stack website](https://docs.haskellstack.org/) if you don't have a package manager.
-- install `nasm` and `clang` for compilation (without these, running `make` will have errors saying that it couldn't find one of these programs), these should also be in package managers.
-- Optionally, install IDE extensions like the VSCode `Haskell` extension for syntax highlighting/hover/more
-
-With all this installed, you should have a local setup that seamlessly works with the PAs, just open up your IDE and run `make`. -->
+<p><strong>Per OS Instructions</strong> - Windows: install <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL2</a>. You will first install the Windows Subsystem for Linux (WSL), with the administrator-level command <code>wsl --install</code>. Once you restart, then ensure you are using version 2, with <code>wsl -l -v</code>. If you haven’t used this before, you are likely already on WSL2. If not, <a href="https://learn.microsoft.com/en-us/windows/wsl/install">check this link to see how to upgrade from 1 to 2</a>. - MacOS: Ensure you’ve agreed to the XCode License agreements, to ensure you have <code>clang</code> and other build tools available. Simply run <code>xcode-select --install</code> - Linux: You’ll need some usual compiler tools, including <code>clang</code> and <code>nasm</code>. If you’re on a Debian-like build, the <code>build-essential</code> package should suffice.</p>
+<p><strong>General instructions</strong> 1. Install <a href="https://www.haskell.org/ghcup/">GHCup</a> 2. In a terminal, run: <code>ghcup tui</code> 3. <strong>Install</strong> and <strong>set</strong> the recommended versions for all of: <code>Stack</code>, <code>HLS</code>, <code>Cabal</code>, and <code>GHC</code>. (GHC, the most important one, should be <code>8.10.7</code>).</p>
+<p>Once you have <code>GHC</code>, <code>Cabal</code>, and <code>Stack</code> installed, you can edit your homework in your favorite text editor and build it by running <code>make</code>. For best experience, we recommend using VSCode with the <code>Haskell</code> extension; to make the extension work, you first need to install <code>HLS</code> via <code>ghcup</code> (see above).</p>
 <h2 id="virtual-machine">Virtual Machine</h2>
 <p>Those of you having trouble installing the Haskell tool chain can use the CSE 230 VM (COMING SOON).</p>
                 <hr>

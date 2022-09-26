@@ -25,7 +25,11 @@ COMING SOON
 **General instructions**
 1. Install [GHCup](https://www.haskell.org/ghcup/)
 2. In a terminal, run: `ghcup tui`
-3. **Install** and **set** the recommended versions for all of: `Stack`, `HLS`, `Cabal`, and `GHC`.  (GHC, the most important one, should be `8.10.7`).
+3. **Install** and **set** these versions of the tools: 
+	  1. `Stack`: 2.9.1
+	  2. `HLS`: 1.8.0.0
+	  3. `Cabal`: 3.6.2.0
+	  4. `GHC`: 8.10.7
 
 Once you have `GHC`, `Cabal`, and `Stack` installed,
 you can edit your homework in your favorite text editor and build it by running `make`.

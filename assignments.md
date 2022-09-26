@@ -41,5 +41,5 @@ to make the extension work, you first need to install `HLS` via `ghcup` (see abo
 ## Virtual Machine
 
 Those of you having trouble installing the Haskell tool chain 
-can use the CSE 230 VM (COMING SOON).
+can use the [CSE 230 VM](https://drive.google.com/file/d/16T2-Z7SbqUdLgOOr6wPTHRkxEkBTtXs3/view?usp=sharing).
 

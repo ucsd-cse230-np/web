@@ -421,15 +421,11 @@ Think of middle-school algebra:
 
 ```haskell
 -- Simplify expression:
-  (1 + 2) * ((3 * 8) - 2)
- = 
-   3      * ((3 * 8) - 2)
- = 
-   3      * ( 24     - 2)
- = 
-   3      *  22
- = 
-   66
+  (x + 2)*(3x - 1)
+=> -- RULE: multiply polynomials
+  3x^2 - x + 6x - 2
+=> -- RULE: add monomials
+  3x^2 + 5x - 2
 ```
 
 <br>
@@ -641,7 +637,7 @@ What is the shortest closed expression?
 
 ## Semantics: Redex
 
-A **redex** is a term of the form
+A **redex** (*red*ucible *ex*pression) is a term of the form
 
 <br>
 
@@ -723,7 +719,7 @@ replace all free occurrences of the _formal_ by that _argument_
 =b> apple
 ```
 
-Is this right? Ask [Elsa](http://goto.ucsd.edu:8095/index.html#?demo=blank.lc)!
+Is this right? Ask [Elsa](http://goto.ucsd.edu/elsa/index.html)! (https://goto.ucsd.edu/elsa/index.html)
 
 <br>
 <br>
@@ -737,6 +733,42 @@ Is this right? Ask [Elsa](http://goto.ucsd.edu:8095/index.html#?demo=blank.lc)!
 <br>
 <br>
 <br>
+
+## QUIZ
+
+<br>
+
+```haskell
+(\x -> y x y x) apple
+=b> ???
+```
+
+**A.** `apple apple apple apple`
+
+**B.** `y apple y apple`
+
+**C.** `y y y y`
+
+**D.** `apple` 
+
+<br>
+
+(I) final
+
+    _Correct answer:_ **B.**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## QUIZ
 
@@ -775,36 +807,6 @@ Is this right? Ask [Elsa](http://goto.ucsd.edu:8095/index.html#?demo=blank.lc)!
 <br>
 <br>
 <br>
-
-## QUIZ
-
-<br>
-
-```haskell
-(\x -> y x y x) apple
-=b> ???
-```
-
-**A.** `apple apple apple apple`
-
-**B.** `y apple y apple`
-
-**C.** `y y y y`
-
-**D.** `apple` 
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 
 
 ## QUIZ
@@ -946,11 +948,11 @@ Formally:
 ```haskell
 x[x := e]            = e
 
-y[x := e]            = y                          -- as x /= y
+y[x := e]            = y          -- when x /= y
 
 (e1 e2)[x := e]      = (e1[x := e]) (e2[x := e])
 
-(\x -> e1)[x := e]   = \x -> e1                   -- Q: Why leave `e1` unchanged?
+(\x -> e1)[x := e]   = \x -> e1   -- Q: Why leave `e1` unchanged?
 
 (\y -> e1)[x := e] 
   | not (y in FV(e)) = \y -> e1[x := e]
@@ -1129,15 +1131,15 @@ A $\lambda$-term is in **normal form** if it *contains no redexes*.
 
 Which of the following term are **not** in _normal form_ ?
 
-**A.** `x`
+**A.** `x y`
 
-**B.** `x y`
+**B.** `(\x -> x) y`
 
-**C.** `(\x -> x) y`
+**C.** `x (\y -> y)`
 
-**D.** `x (\y -> y)`
+**D.** `z ((\x -> x) y)`
 
-**E.** C and D
+**E.** B and D
 
 (I) final
      
@@ -1163,9 +1165,10 @@ Which of the following term are **not** in _normal form_ ?
 A $\lambda$-term `e` **evaluates to** `e'` if
 
 1. There is a sequence of steps
-```haskell
-e =?> e_1 =?> ... =?> e_N =?> e'
-```
+
+    ```haskell
+    e =?> e_1 =?> ... =?> e_N =?> e'
+    ```
 
    where each `=?>` is either `=a>` or `=b>` 
    and `N >= 0`
@@ -1193,7 +1196,7 @@ e =?> e_1 =?> ... =?> e_N =?> e'
 (I) lecture
          
     ```haskell
-    (\f -> f (\x -> x)) (\x -> x)
+    (\f -> (\x -> x) f) (\x -> x)
       =?> ???
     ```
     
@@ -1221,6 +1224,57 @@ e =?> e_1 =?> ... =?> e_N =?> e'
       =b> (\x -> x) (\x -> x)
       =b> \x -> x
     ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE
+
+What is a $\lambda$-term `fill_this_in` such that the evaluation of
+`(\x -> x x) fill_this_in` *loops*, i.e.:
+
+```haskell
+eval loop : 
+  (\x -> x x) fill_this_in
+  =b> (\x -> x x) fill_this_in
+  =b> (\x -> x x) fill_this_in
+  =b> ...
+```
+
+ELSA: https://goto.ucsd.edu/elsa/index.html
+
+[Click here to try this exercise](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1664296539_173491.lc)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Non-Terminating Evaluation
+
+```haskell
+(\x -> x x) (\x -> x x)
+  =b> (\x -> x x) (\x -> x x)
+```
+
+Some programs loop back to themselves...
+
+... and *never* reduce to a normal form!
+
+This combinator is called $\Omega$
 
 <br>
 <br>
@@ -1258,77 +1312,8 @@ Evaluation:
     - where each step is `=a>`, `=b>`, or `=d>`
 - `e1 =~> e2`: `e1` evaluates to `e2` and `e2` is **in normal form**
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## EXERCISE
-
-Fill in the definitions of `FIRST`, `SECOND` and `THIRD` 
-such that you get the following behavior in `elsa`
-
-```haskell
-let FIRST  = fill_this_in
-let SECOND = fill_this_in
-let THIRD  = fill_this_in
-
-eval ex1 : 
-  FIRST apple banana orange
-  =*> apple 
-
-eval ex2 : 
-  SECOND apple banana orange
-  =*> banana 
-  
-eval ex3 : 
-  THIRD apple banana orange
-  =*> orange
-```
-
-ELSA: https://goto.ucsd.edu/elsa/index.html
-
-[Click here to try this exercise](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1585434130_24421.lc)
-
-
-## Non-Terminating Evaluation
-
-```haskell
-(\x -> x x) (\x -> x x)
-  =b> (\x -> x x) (\x -> x x)
-```
-
-Some programs loop back to themselves...
-
-... and *never* reduce to a normal form!
-
-This combinator is called $\Omega$
 
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-What if we pass $\Omega$ as an argument to another function?
-
-```
-let OMEGA = (\x -> x x) (\x -> x x)
-
-(\x -> (\y -> y)) OMEGA
-```
-
-Does this reduce to a normal form? Try it at home!
-
 <br>
 <br>
 <br>

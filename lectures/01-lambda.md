@@ -1515,6 +1515,7 @@ Can you [fill in the blanks to make it happen?][elsa-ite]
 ## EXERCISE: Boolean Operators
 
 ELSA: https://goto.ucsd.edu/elsa/index.html
+
 [Click here to try this exercise](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1585435168_24442.lc)
 
 Now that we have `ITE` it's easy to define other Boolean operators:
@@ -1837,19 +1838,6 @@ let SIX   = \f x -> f (f (f (f (f (f x)))))
 ```
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ## QUIZ: Church Numerals
 
 Which of these is a valid encoding of `ZERO` ?
@@ -1980,25 +1968,6 @@ eval add_two_zero:
 ```
 
 
-## QUIZ
-
-How shall we implement `ADD`?
-
-
-**A.**  `let ADD = \n m -> n INC m`
-
-**B.**  `let ADD = \n m -> INC n m`
-
-**C.**  `let ADD = \n m -> n m INC`
-
-**D.**  `let ADD = \n m -> n (m INC)`
-
-**E.**  `let ADD = \n m -> n (INC m)`
-
-(I) final
-
-    *Answer:* A
-
 
 <br>
 <br>
@@ -2115,58 +2084,9 @@ eval two_times_three :
 - **Booleans** \[done\]
 - **Records** (structs, tuples) \[done\]
 - **Numbers** \[done\]
-- **Lists** 
 - **Functions** \[we got those\]
 - Recursion
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## $\lambda$-calculus: Lists
-
-Lets define an API to build lists in the $\lambda$-calculus.
-
-**An Empty List**
-
-```
-NIL
-```
-
-**Constructing a list**
-
-A list with 4 elements
-
-```
-CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL)))
-```
-
-intuitively `CONS h t` creates a *new* list with 
-
-- *head* `h`
-- *tail* `t`
-
-**Destructing a list**
-
-- `HEAD l` returns the _first_ element of the list
-- `TAIL l` returns the _rest_ of the list
-
-```haskell
-HEAD (CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL))))
-=~> apple
-
-TAIL (CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL))))
-=~> CONS banana (CONS cantaloupe (CONS dragon NIL)))
-```
 
 <br>
 <br>
@@ -2181,71 +2101,6 @@ TAIL (CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL))))
 <br>
 <br>
 
-## $\lambda$-calculus: Lists
-
-```haskell
-let NIL  = ???
-let CONS = ???
-let HEAD = ???
-let TAIL = ???
-
-eval exHd:
-  HEAD (CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL))))
-  =~> apple
-
-eval exTl 
-  TAIL (CONS apple (CONS banana (CONS cantaloupe (CONS dragon NIL))))
-  =~> CONS banana (CONS cantaloupe (CONS dragon NIL)))
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## EXERCISE: Nth
-
-Write an implementation of `GetNth` such that
-
--  `GetNth n l` returns the n-th element of the list `l` 
-
-*Assume that `l` has n or more elements*
-
-```haskell
-let GetNth = ???
-
-eval nth1 :
-  GetNth ZERO (CONS apple (CONS banana (CONS cantaloupe NIL)))
-  =~> apple 
-
-eval nth1 :
-  GetNth ONE (CONS apple (CONS banana (CONS cantaloupe NIL)))
-  =~> banana
-
-eval nth2 :
-  GetNth TWO (CONS apple (CONS banana (CONS cantaloupe NIL)))
-  =~> cantaloupe
-```
-
-[Click here to try this in elsa](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1586466816_52273.lc) 
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 
 ## $\lambda$-calculus: Recursion
@@ -2284,11 +2139,9 @@ Can we write sum **using Church Numerals**?
 
 ## QUIZ
 
-You *can* write `SUM` using numerals but its *tedious*.
-
 Is this a correct implementation of `SUM`?
 
-```haskell
+```
 let SUM = \n -> ITE (ISZ n) 
             ZERO 
             (ADD n (SUM (DEC n)))
@@ -2314,10 +2167,10 @@ No!
   * Named terms in Elsa are just syntactic sugar
   * To translate an Elsa term to $\lambda$-calculus: replace each name with its definition
 
-```haskell
+```
 \n -> ITE (ISZ n) 
         ZERO 
-        (ADD n (SUM (DEC n))) -- But SUM is not yet defined!
+        (ADD n (SUM (DEC n))) -- But SUM is not a thing!
 ```
 
 <br>
@@ -2325,16 +2178,14 @@ No!
 
 **Recursion:** 
 
-- Inside *this* function 
-- Want to call the *same* function on `DEC n`
+ - Inside this function I want to call *the same function* on `DEC n`
 
 <br>
 <br>
 
-Looks like we can't do recursion!
-
-- Requires being able to refer to functions *by name*,
-- But $\lambda$-calculus functions are *anonymous*.
+Looks like we can't do recursion,
+because it requires being able to refer to functions *by name*,
+but in $\lambda$-calculus functions are *anonymous*.
 
 Right?
 
@@ -2360,21 +2211,16 @@ Think again!
 
 **Recursion:** 
 
-Instead of
-
-- ~~Inside *this* function I want to call the *same* function on `DEC n`~~
-
-Lets try
-
-- Inside *this* function I want to call *some* function `rec` on `DEC n`
-- And BTW, I want `rec` to be the *same* function 
+ - ~~Inside this function I want to call *the same function* on `DEC n`~~
+ - Inside this function I want to call *a function* on `DEC n`
+ - *And BTW,* I want it to be the same function 
  
 <br>
 <br>
 
 **Step 1:** Pass in the function to call "recursively"
  
-```haskell
+```
 let STEP = 
   \rec -> \n -> ITE (ISZ n) 
                   ZERO 
@@ -2383,18 +2229,13 @@ let STEP =
 <br>
 <br>
 
-**Step 2:** Do some magic to `STEP`, so `rec` is itself
+**Step 2:** Do something clever to `STEP`, so that the function passed as `rec`
+itself becomes
 
-```haskell
+```
 \n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))
 ```
-
-That is, obtain a term `MAGIC` such that 
-
-```haskell
-MAGIC =*> STEP MAGIC 
-```
-
+ 
 <br>
 <br>
 <br>
@@ -2407,16 +2248,15 @@ MAGIC =*> STEP MAGIC
 <br>
 <br>
 <br>
-
+ 
 ## $\lambda$-calculus: Fixpoint Combinator 
 
-
-**Wanted:** a $\lambda$-term `FIX` such that 
-
-- `FIX STEP` calls `STEP` with `FIX STEP` as the first argument:
+**Wanted:** a combinator `FIX` such that `FIX STEP`
+calls `STEP` with itself as the first argument:
 
 ```
-(FIX STEP) =*> STEP (FIX STEP)
+FIX STEP
+=*> STEP (FIX STEP)
 ```
 
 <br>
@@ -2435,28 +2275,29 @@ let SUM = FIX STEP
 ```
 
 Then by property of `FIX` we have:
-
-```haskell
-SUM   =*>   FIX STEP  =*>   STEP (FIX STEP)   =*>   STEP SUM
+```
+SUM =*> STEP SUM -- (1)
 ```
 
-and so now we compute:
 
 ```
-eval sum_two:
-  SUM TWO
-  =*> STEP SUM TWO
-  =*> ITE (ISZ TWO) ZERO (ADD TWO (SUM (DEC TWO)))
-  =*> ADD TWO (SUM (DEC TWO))
-  =*> ADD TWO (SUM ONE)
-  =*> ADD TWO (STEP SUM ONE)
-  =*> ADD TWO (ITE (ISZ ONE) ZERO (ADD ONE (SUM (DEC ONE))))
-  =*> ADD TWO (ADD ONE (SUM (DEC ONE)))
-  =*> ADD TWO (ADD ONE (SUM ZERO))
-  =*> ADD TWO (ADD ONE (ITE (ISZ ZERO) ZERO (ADD ZERO (SUM DEC ZERO)))
-  =*> ADD TWO (ADD ONE (ZERO)) 
-  =*> THREE
+eval sum_one:
+  SUM ONE
+  =*> STEP SUM ONE                 -- (1)
+  =d> (\rec n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))) SUM ONE
+  =b> (\n -> ITE (ISZ n) ZERO (ADD n (SUM (DEC n)))) ONE 
+                                   -- ^^^ the magic happened!
+  =b> ITE (ISZ ONE) ZERO (ADD ONE (SUM (DEC ONE)))
+  =*> ADD ONE (SUM ZERO)           -- def of ISZ, ITE, DEC, ...
+  =*> ADD ONE (STEP SUM ZERO)      -- (1)
+  =d> ADD ONE 
+        ((\rec n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))) SUM ZERO)
+  =b> ADD ONE ((\n -> ITE (ISZ n) ZERO (ADD n (SUM (DEC n)))) ZERO)
+  =*> ADD ONE (ITE (ISZ ZERO) ZERO (ADD ZERO (SUM (DEC ZERO))))
+  =b> ADD ONE ZERO
+  =~> ONE
 ```
+
 
 How should we define `FIX`???
 
@@ -2482,7 +2323,7 @@ Remember $\Omega$?
 =b> (\x -> x x) (\x -> x x)
 ``` 
  
-This is *self-replcating code*! We need something like this but a bit more involved...
+This is *self-replicating code*! We need something like this but a bit more involved...
 
 <br>
 <br>

@@ -9,10 +9,10 @@ that 35 mins over the deadline is equal to 1 late day.
 
 ## Assignment Links
 
-COMING SOON
+- [00-lambda](https://classroom.github.com/a/ggXupoII), due **10/7 at 23:59:59**
 
-<!-- - [00-lambda](https://classroom.github.com/a/PwNVGSom), due **10/8 at 23:59:59**
-- [01-trees](https://classroom.github.com/a/EKaa5k6e), due **10/22 at 23:59:59**
+
+<!-- - [01-trees](https://classroom.github.com/a/EKaa5k6e), due **10/22 at 23:59:59**
 - [02-while](https://classroom.github.com/a/apPaNw-v), due **11/12 at 23:59:59** -->
  
 ## Haskell Installation Guide

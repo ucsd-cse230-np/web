@@ -1328,10 +1328,11 @@ Evaluation:
 
 *Real languages have lots of features*
 
+- Functions \[we got those\]
 - Booleans
 - Records (structs, tuples)
 - Numbers
-- **Functions** \[we got those\]
+- Lists
 - Recursion
 
 Lets see how to _encode_ all of these features
@@ -1586,10 +1587,11 @@ eval ex_and_tt:
 
 ## Programming in $\lambda$-calculus
 
-- **Booleans** \[done\]
+- Functions \[we got those\]
+- Booleans \[done\]
 - Records (structs, tuples)
 - Numbers
-- **Functions** \[we got those\]
+- Lists
 - Recursion
 
 <br>
@@ -1749,10 +1751,11 @@ eval ex3:
 
 ## Programming in $\lambda$-calculus
 
-- **Booleans** \[done\]
-- **Records** (structs, tuples) \[done\]
+- Functions \[we got those\]
+- Booleans \[done\]
+- Records (structs, tuples) \[done\]
 - Numbers
-- **Functions** \[we got those\]
+- Lists
 - Recursion
 
 <br>
@@ -2081,10 +2084,307 @@ eval two_times_three :
 
 ## Programming in $\lambda$-calculus
 
-- **Booleans** \[done\]
-- **Records** (structs, tuples) \[done\]
-- **Numbers** \[done\]
-- **Functions** \[we got those\]
+- Functions \[we got those\]
+- Booleans \[done\]
+- Records (structs, tuples) \[done\]
+- Numbers \[done\]
+- Lists
+- Recursion
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## $\lambda$-calculus: Lists
+
+Records had *fixed* length:
+
+```haskell
+PAIR apple banana
+TRIPLE apple banana cherry
+```
+
+Now we want to build lists of *arbitrary* length.
+
+Can we do it like this?
+
+```haskell
+LIST apple banana
+LIST apple banana cherry
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+That's unlikely to work (requires a function with a variable number of arguments).
+
+But we can construct lists like this:
+  
+```haskell
+CONS apple (CONS banana NIL)
+CONS apple (CONS banana (CONS cherry NIL))
+```
+
+where
+
+- `NIL` denotes the empty list
+- `CONS h t` denotes a non-empty list with head `h` and tail `t`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+**Destructing a list**
+
+- `HEAD l` returns the _first_ element of the list
+- `TAIL l` returns the _rest_ of the list
+
+```haskell
+HEAD (CONS apple (CONS banana (CONS cherry NIL)))
+=*> apple
+
+TAIL (CONS apple (CONS banana (CONS cherry NIL)))
+=*> CONS banana (CONS cherry NIL)
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Lists: API
+
+We need to define five functions
+
+```haskell
+let CONS = ???
+let HEAD = ???
+let TAIL = ???
+
+let NIL  = ???
+let IS_EMPTY = ???
+```
+
+such that
+
+```haskell
+eval elem0:
+  HEAD (CONS apple (CONS banana (CONS cherry NIL)))
+  =~> apple
+
+eval elem1: 
+  HEAD (TAIL (CONS apple (CONS banana (CONS cherry NIL))))
+  =~> banana
+
+eval elem2: 
+  HEAD (TAIL (TAIL (CONS apple (CONS banana (CONS cherry NIL)))))
+  =~> cherry
+
+eval empty_nil:
+  IS_EMPTY NIL
+  =~> TRUE
+
+eval empty_cons:
+  IS_EMPTY (CONS apple (CONS banana (CONS cherry NIL)))
+  =~> FALSE
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+The first three are easy:
+
+```haskell
+let CONS = \h t -> PAIR h t
+let HEAD = \l -> FST l
+let TAIL = \l -> SND l
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: Nth
+
+Write an implementation of `GetNth` such that
+
+-  `GetNth n l` returns the n-th element of the list `l` 
+
+*Assume that `l` has n or more elements*
+
+```haskell
+let GetNth = ???
+
+eval nth1 :
+  GetNth ZERO (CONS apple (CONS banana (CONS cherry NIL)))
+  =~> apple 
+
+eval nth1 :
+  GetNth ONE (CONS apple (CONS banana (CONS cherry NIL)))
+  =~> banana
+
+eval nth2 :
+  GetNth TWO (CONS apple (CONS banana (CONS cherry NIL)))
+  =~> cherry
+```
+
+[Click here to try this in elsa](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1664898475_198478.lc) 
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## IS_EMPTY and NIL
+
+We need to define `IS_EMPTY` and `NIL` such that
+
+```haskell
+IS_EMPTY (CONS e1 e2) =~> FALSE -- for any e1 and e2!
+
+IS_EMPTY NIL =~> TRUE
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```haskell
+    IS_EMPTY (CONS e1 e2)
+=*>  -- by def. of CONS, PAIR
+    IS_EMPTY (\b -> b e1 e2)    
+=d> -- let's make IS_EMPTY apply its pair to something:
+    (\l -> l SOMETHING) (\b -> b e1 e2)
+=b>
+    (\b -> b e1 e2) SOMETHING
+=b>
+    SOMETHING e1 e2
+=~>
+    FALSE
+```
+
+What is such a `SOMETHING` that `SOMETHING e1 e2` is always `FALSE`?
+
+<br>
+<br>
+<br>
+
+```haskell
+let SOMETHING = \x y -> FALSE
+```
+
+i.e.
+
+```haskell
+let IS_EMPTY = \l -> l (\x y -> FALSE)
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: NIL
+
+Now define `NIL` such that:
+
+```haskell
+let IS_EMPTY = \l -> l (\x y -> FALSE)
+let NIL = ???
+
+eval is_empty_nil :
+  IS_EMPTY NIL
+  =~> TRUE
+```
+
+[Click here to try this in elsa](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1664899347_198509.lc)
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Programming in $\lambda$-calculus
+
+- Functions \[we got those\]
+- Booleans \[done\]
+- Records (structs, tuples) \[done\]
+- Numbers \[done\]
+- Lists \[done\]
 - Recursion
 
 

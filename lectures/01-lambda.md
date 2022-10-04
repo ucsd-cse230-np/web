@@ -2407,24 +2407,42 @@ eval is_empty_nil :
 
 <br>
 
-I want to write a function that sums up natural numbers up to `n`:
+I want to write a function `LEN` that computes the length of a list, i.e.:
 
 ```haskell
-let SUM = \n -> ...  -- 0 + 1 + 2 + ... + n
+eval len_nil: 
+  LEN NIL =~> ZERO
+  
+eval len_1:
+  LEN (CONS apple NIL) =~> ONE
+
+eval len_2:
+  LEN (CONS apple (CONS banana NIL)) =~> TWO
 ```
 
-such that we get the following behavior
+Can we write `LEN` **using Church Numerals**?
 
-```haskell
-eval exSum0: SUM ZERO  =~> ZERO
-eval exSum1: SUM ONE   =~> ONE
-eval exSum2: SUM TWO   =~> THREE
-eval exSum3: SUM THREE =~> SIX
-```
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Can we write sum **using Church Numerals**?
+Yes, if know the maximum possible length of a list.
 
-[Click here to try this in Elsa](https://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1586465192_52175.lc)
+(Try it at home!)
+
+But what if we don't?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+We need to use recursion!
 
 <br>
 <br>
@@ -2439,12 +2457,12 @@ Can we write sum **using Church Numerals**?
 
 ## QUIZ
 
-Is this a correct implementation of `SUM`?
+Is this a correct implementation of `LEN`?
 
-```
-let SUM = \n -> ITE (ISZ n) 
-            ZERO 
-            (ADD n (SUM (DEC n)))
+```haskell
+let LEN = \l -> ITE (IS_EMPTY l) 
+                ZERO 
+                (INC (LEN (TAIL l)))
 ```
 
 **A.**  Yes
@@ -2467,10 +2485,10 @@ No!
   * Named terms in Elsa are just syntactic sugar
   * To translate an Elsa term to $\lambda$-calculus: replace each name with its definition
 
-```
-\n -> ITE (ISZ n) 
-        ZERO 
-        (ADD n (SUM (DEC n))) -- But SUM is not a thing!
+```haskell
+let LEN = \l -> ITE (IS_EMPTY l) 
+                ZERO 
+                (INC (LEN (TAIL l))) -- But LEN is not a thing!
 ```
 
 <br>
@@ -2478,7 +2496,7 @@ No!
 
 **Recursion:** 
 
- - Inside this function I want to call *the same function* on `DEC n`
+ - Inside this function I want to call *the same function* on `TAIL l`
 
 <br>
 <br>
@@ -2511,8 +2529,8 @@ Think again!
 
 **Recursion:** 
 
- - ~~Inside this function I want to call *the same function* on `DEC n`~~
- - Inside this function I want to call *a function* on `DEC n`
+ - ~~Inside this function I want to call *the same function* on `TAIL l`~~
+ - Inside this function I want to call *a function* on `TAIL l`
  - *And BTW,* I want it to be the same function 
  
 <br>
@@ -2520,11 +2538,11 @@ Think again!
 
 **Step 1:** Pass in the function to call "recursively"
  
-```
+```haskell
 let STEP = 
-  \rec -> \n -> ITE (ISZ n) 
-                  ZERO 
-                  (ADD n (rec (DEC n))) -- Call some rec
+  \rec -> \l -> ITE (IS_EMPTY l) 
+                    ZERO 
+                    (INC (rec (TAIL l))) -- Call some rec
 ```
 <br>
 <br>
@@ -2533,7 +2551,7 @@ let STEP =
 itself becomes
 
 ```
-\n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))
+\l -> ITE (IS_EMPTY l) ZERO (INC (rec (TAIL l)))
 ```
  
 <br>
@@ -2571,31 +2589,39 @@ FIX STEP
 Once we have it, we can define:
 
 ```
-let SUM = FIX STEP
+let LEN = FIX STEP
 ```
 
 Then by property of `FIX` we have:
 ```
-SUM =*> STEP SUM -- (1)
+LEN =*> STEP LEN -- (1)
 ```
 
 
 ```
-eval sum_one:
-  SUM ONE
-  =*> STEP SUM ONE                 -- (1)
-  =d> (\rec n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))) SUM ONE
-  =b> (\n -> ITE (ISZ n) ZERO (ADD n (SUM (DEC n)))) ONE 
-                                   -- ^^^ the magic happened!
-  =b> ITE (ISZ ONE) ZERO (ADD ONE (SUM (DEC ONE)))
-  =*> ADD ONE (SUM ZERO)           -- def of ISZ, ITE, DEC, ...
-  =*> ADD ONE (STEP SUM ZERO)      -- (1)
-  =d> ADD ONE 
-        ((\rec n -> ITE (ISZ n) ZERO (ADD n (rec (DEC n)))) SUM ZERO)
-  =b> ADD ONE ((\n -> ITE (ISZ n) ZERO (ADD n (SUM (DEC n)))) ZERO)
-  =*> ADD ONE (ITE (ISZ ZERO) ZERO (ADD ZERO (SUM (DEC ZERO))))
-  =b> ADD ONE ZERO
-  =~> ONE
+LEN (CONS a NIL)
+  =*> -- (1) 
+STEP LEN (CONS a NIL)
+  =d>
+(\rec l -> ITE (IS_EMPTY l) ZERO (INC (rec (TAIL l)))) LEN (CONS a NIL)
+  =b> 
+(\    l -> ITE (IS_EMPTY l) ZERO (INC (LEN (TAIL l))))     (CONS a NIL) 
+  =b>                               -- ^^^ the magic happened!
+ITE (IS_EMPTY l) ZERO (INC (LEN (TAIL (CONS a NIL))))
+=*> -- def of IS_EMPTY, ITE, TAIL, ... 
+INC (LEN NIL)
+=*> -- (1)
+INC (STEP LEN NIL)
+=d> 
+INC ((\rec l -> ITE (IS_EMPTY l) ZERO (INC (rec (TAIL l)))) LEN NIL)
+=b> 
+INC ((\l -> ITE (IS_EMPTY l) ZERO (INC (LEN (TAIL l)))) NIL)
+=*> 
+INC (ITE (IS_EMPTY NIL) ZERO (INC (LEN (TAIL NIL))))
+=*> 
+INC ZERO
+=~> 
+ONE
 ```
 
 

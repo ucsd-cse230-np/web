@@ -2431,7 +2431,7 @@ Can we write `LEN` **using Church Numerals**?
 
 Yes, if know the maximum possible length of a list.
 
-(Try it at home!)
+[Try it in Elsa!](http://goto.ucsd.edu/elsa/index.html#?demo=permalink%2F1664904972_198787.lc)
 
 But what if we don't?
 

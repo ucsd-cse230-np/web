@@ -11,7 +11,7 @@ Lecture schedule is subject to change!
 | *9/27*     | Lambda Calculus                 | [html][01-lambda]         |                     | 
 | *9/29*     | contd.                          |                           |                     | 
 | *10/4*     | contd.                          |                           |                     | 
-| *10/6*     | Haskell Basics                  |                           |                     |
+| *10/6*     | Haskell Basics                  | [html][02-hs-basic]       |                     |
 | *10/11*    | Haskell Types                   |                           |                     |  
 | *10/13*    | Bottling patterns with HOFs     |                           |                     |
 | *10/18*    | Haskell: IO                     |                           |                     |

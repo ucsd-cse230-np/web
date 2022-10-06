@@ -3,55 +3,73 @@ title: Haskell Crash Course Part I
 headerImg: sea.jpg
 ---
 
-## From the Lambda Calculus to Haskell
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## Programming in Haskell
-
-**Computation by Calculation**
+## What is Haskell?
 
 <br>
 
-*Substituting equals by equals* 
+A **typed**, **lazy**, **purely functional** programming language
+
+<br>
+
+Haskell = $\lambda$-calculus + 
+
+  + better syntax
+  + types
+  + built-in features
+    - booleans, numbers, characters
+    - records (tuples)
+    - lists
+    - recursion
+    - ...
+    
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>    
+    
+## Why Haskell?
+
+Haskell programs tend to be *concise* and *correct*   
+
+## **QuickSort** in C
+
+```c
+void sort(int arr[], int beg, int end){
+  if (end > beg + 1){
+    int piv = arr[beg];
+    int l = beg + 1;
+    int r = end;
+    while (l != r-1)
+       if(arr[l] <= piv) l++;
+       else swap(&arr[l], &arr[r--]);
+    if(arr[l]<=piv && arr[r]<=piv)
+       l=r+1;
+    else if(arr[l]<=piv && arr[r]>piv)
+       {l++; r--;}
+    else if (arr[l]>piv && arr[r]<=piv)
+       swap(&arr[l++], &arr[r--]);
+    else r=l-1;
+    swap(&arr[r--], &arr[beg]);
+    sort(arr, beg, r);
+    sort(arr, l, end);
+  }
+}
+```
 
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-## Computation via Substituting Equals by Equals
+
+### QuickSort in Haskell
 
 ```haskell
-
-    (1 + 3) * (4 + 5)
-                        -- subst 1 + 3 = 4
-==>       4 * (4 + 5)
-                        -- subst 4 + 5 = 9
-==>       4 * 9
-                        -- subst 4 * 9 = 36
-==>       36
+sort []     = []
+sort (x:xs) = sort ls ++ [x] ++ sort rs
+  where
+    ls      = [ l | l <- xs, l <= x ]
+    rs      = [ r | r <- xs, x <  r ]
 ```
 
 <br>
@@ -60,97 +78,12 @@ headerImg: sea.jpg
 <br>
 <br>
 <br>
-<br>
-<br>
-
-## Computation via Substituting Equals by Equals
-
-**Equality-Substitution** enables **Abstraction** via **Pattern Recognition** 
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+### Goals for today
 
-## Abstraction via Pattern Recognition
-
-**Repeated Expressions**
-
-```
-                31 * (42 + 56)
-                70 * (12 + 95)
-                90 * (68 + 12)
-```
-
-**Recognize Pattern as $\lambda$-function**
-
-```
-pat = \x y z -> x  * ( y + z ) 
-```
-
-**Equivalent Haskell Definition**
-
-```
-pat   x y z =  x  * ( y + z ) 
-```
-
-**Function Call is Pattern Instance** 
-
-```
-pat 31 42 56 =*> 31 * (42 + 56) =*> 31 * 98  =*> 3038
-pat 70 12 95 =*> 70 * (12 + 95) =*> 70 * 107 =*> 7490
-pat 90 68 12 =*> 90 * (68 + 12) =*> 90 * 80  =*> 7200
-```
-
-**Key Idea:** Computation is _substitute_ equals by equals.
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Programming in Haskell 
-
-_Substitute Equals by Equals_ 
-
-<br>
-<br>
-
-Thats it! (*Do not* think of registers, stacks, frames etc.)
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Elements of Haskell
-
-![](/static/img/trinity.png){#fig:types .align-center width=60%}
-
-- Core program element is an **expression**
-- Every _valid_ expression has a **type** (determined at compile-time)
-- Every _valid_ expression reduces to a _value_ (computed at run-time)
-
-Ill-typed* expressions are rejected at *compile-time* before execution
-
-- *like*    in Java
-- *not like* $\lambda$-calculus or Python ...
+1. Understand the code above
+2. Understand what **typed**, **lazy**, and **purely functional** means (and why it's cool)
 
 <br>
 <br>
@@ -178,14 +111,267 @@ Ill-typed* expressions are rejected at *compile-time* before execution
 <br>
 <br>
 
-## Interactive Shell: `ghci` 
+
+## Haskell vs $\lambda$-calculus: similarities
+
+### (1) Programs
+
+A program is an **expression** (*not* a sequence of statements)
+
+It **evaluates** to a value (it *does not* perform actions)
+
+  * **$\lambda$**:
+
+    ```
+    (\x -> x) apple     -- =~> apple
+    ```
+
+  * **Haskell**:
+  
+    ```
+    (\x -> x) "apple"   -- =~> "apple"
+    ```
+
+### (2) Functions    
+      
+Functions are *first-class values*:
+
+* can be *passed as arguments* to other functions
+* can be *returned as results* from other functions
+* can be *partially applied* (arguments passed *one at a time*)
+
+(I) lecture
+ 
+    ```haskell
+    (\f x -> f (f x)) (\z -> z + 1) 0   -- =~> ???
+    ```
+    
+(I) final    
+
+    ```haskell
+    (\f x -> f (f x)) (\z -> z + 1) 0   -- =~> 2
+    ```
+
+
+*But:* unlike $\lambda$-calculus, not everything is a function!
+
+     
+### (3) Top-level bindings
+
+Like in Elsa, we can *name* terms to use them later
+ 
+**Elsa**:
 
 ```haskell
-$ stack ghci
+let T    = \x y -> x
+let F    = \x y -> y
 
-:load file.hs
-:type expression 
-:info variable
+let PAIR = \x y -> \b -> ITE b x y
+let FST  = \p -> p T
+let SND  = \p -> p F
+
+eval fst:
+ FST (PAIR apple orange)
+ =~> apple
+```
+
+**Haskell**:
+
+```haskell
+haskellIsAwesome = True
+
+pair = \x y -> \b -> if b then x else y
+fst = \p -> p haskellIsAwesome
+snd = \p -> p False
+
+-- In GHCi:
+> fst (pair "apple" "orange")   -- "apple"
+```   
+    
+The names are called **top-level variables**
+
+Their definitions are called **top-level bindings**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+    
+## Better Syntax: Equations and Patterns
+
+You can define function bindings using **equations**:
+
+```haskell
+pair x y b = if b then x else y -- same as: pair = \x y b -> ...
+fst p      = p True             -- same as: fst = \p -> ...
+snd p      = p False            -- same as: snd = \p -> ...
+```
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+A *single* function binding can have *multiple* equations with different **patterns** of parameters:
+
+```haskell
+pair x y True  = x  -- If 3rd arg evals to True,
+                    -- use this equation;
+pair x y False = y  -- Otherwise, if 3rd evals to False,
+                    -- use this equation.
+```
+
+At run time, the first equation whose pattern matches the actual arguments is chosen
+
+For now, a **pattern** is:
+ 
+  * a *variable* (matches any value)
+  
+  * or a *value* (matches only that value)
+
+<br>
+<br>
+
+Same as:
+
+```haskell
+pair x y True  = x  -- If 3rd arg evals to True,
+                    -- use this equation;
+pair x y b     = y  -- Otherwise, use this equation.
+```
+
+<br>
+<br>
+
+Same as:
+
+```haskell
+pair x y True  = x
+pair x y _     = y  -- Wildcard pattern `_` is like a variable 
+                    -- but cannot be used on the right
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
+
+Which of the following definitions of `pair` is **not the same** as the original?
+
+```haskell
+pair = \x y -> \b -> if b then x else y
+```
+
+**A.** `pair x y = \b -> if b then x else y`
+
+**B.**
+```haskell
+pair x _ True  = x
+pair _ y _     = y
+```
+
+**C.** `pair x _ True = x`
+
+**D.**
+```haskell
+pair x y b     = x
+pair x y False = y
+```
+
+**E.**  C and D
+
+<br>
+
+(I) final
+
+    _Answer:_ **E**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Equations with guards
+
+An equation can have multiple guards (Boolean expressions):
+
+```haskell
+cmpSquare x y  |  x > y*y   =  "bigger :)"
+               |  x == y*y  =  "same :|"
+               |  x < y*y   =  "smaller :("
+```
+
+Same as:
+
+```haskell
+cmpSquare x y  |  x > y*y   =  "bigger :)"
+               |  x == y*y  =  "same :|"
+               |  otherwise =  "smaller :("
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Recursion
+
+Recursion is built-in, no fixpoint combinator needed!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: Sum
+
+Write a haskell function that sums numbers up to some natural number `n`:
+
+```haskell
+sum n = ???
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+One solution:
+
+```haskell
+sum n = if n == 0 
+          then 0 
+          else n + sum (n - 1)
+```
+
+More idiomatic solution:
+
+```haskell
+sum 0 = 0
+sum n = n + sum (n - 1)
 ```
 
 <br>
@@ -197,25 +383,93 @@ $ stack ghci
 <br>
 <br>
 
-## A Haskell Source File 
+## The scope of variables
 
-A sequence of **top-level definitions** `x1`, `x2`, ... 
-
-- Each has *type* `type_1`, `type_2`, ...
-
-- Each defined by *expression* `expr_1`, `expr_2`, ...
+Top-level variable have **global** scope,
+so you can write:
 
 ```haskell
-x_1 :: type_1
-x_1 = expr_1
+message = if haskellIsAwesome          -- this var defined below
+            then "I love CSE 130"
+            else "I'm dropping CSE 130"
+            
+haskellIsAwesome = True
+```
 
-x_2 :: type_2
-x_2 = expr_2
+<br>
+<br>
 
-.
-.
-.
+Or you can write:
 
+```haskell
+-- What does f compute?
+f 0 = True
+f n = g (n - 1) -- mutual recursion!
+
+g 0 = False
+g n = f (n - 1) -- mutual recursion!
+```
+
+(I) final
+
+    Answer: `f` is `isEven`, `g` is `isOdd` 
+
+<br>
+<br>
+<br>
+
+Is this allowed?
+
+```haskell
+haskellIsAwesome = True
+
+haskellIsAwesome = False -- changed my mind
+```
+
+(I) final
+
+    Answer: no, a variable can be defined once per scope; no mutation!
+
+<br>
+<br>
+<br>
+<br>
+
+### Local variables
+
+You can introduce a *new* (local) scope using a `let`-expression:
+
+```haskell
+sum 0 = 0
+sum n = let n' = n - 1          
+        in n + sum n'  -- the scope of n' is the term after in
+```
+
+<br>
+<br>
+<br>
+
+Syntactic sugar for nested `let`-expressions:
+
+```haskell
+sum 0 = 0
+sum n = let 
+          n'   = n - 1
+          sum' = sum n'
+        in n + sum'
+```
+
+<br>
+<br>
+<br>
+
+If you need a variable whose scope is an equation, use the `where` clause instead:
+
+```haskell
+cmpSquare x y  |  x > z   =  "bigger :)"
+               |  x == z  =  "same :|"
+               |  x < z   =  "smaller :("
+  where z = y*y
 ```
 
 <br>
@@ -227,24 +481,80 @@ x_2 = expr_2
 <br>
 <br>
 
-## Basic Types
+## Types
 
+<br>
+<br>
+<br>
+<br>
+
+What would *Elsa* say?
 
 ```haskell
-ex1 :: Int
-ex1 = 31 * (42 + 56)   -- this is a comment
+let WEIRDO = ONE ZERO
+```
 
-ex2 :: Double
-ex2 = 3 * (4.2 + 5.6)  -- arithmetic operators "overloaded"
+<br>
 
-ex3 :: Char 
-ex3 = 'a'              -- 'a', 'b', 'c', etc. built-in `Char` values
+(I) final
 
-ex4 :: Bool 
-ex4 = True             -- True, False are builtin Bool values
+    Answer: Nothing. When evaluated will crunch to something nonsensical.
+    $lambda$-calculus is **untyped**.
 
-ex5 :: Bool 
-ex5 = False
+<br>
+<br>
+<br>
+
+What would *Python* say?
+
+```python
+def weirdo():
+  return 0(1)
+```
+
+<br>
+
+(I) final
+
+    Answer: Nothing. When evaluated will cause a run-time error.
+    Python is **dynamically typed**.
+
+<br>
+<br>
+<br>
+
+What would *Java* say?
+
+```java
+void weirdo() {
+  int zero;
+  zero(1);
+}
+```
+
+<br>
+
+(I) final
+
+    Answer: Java compiler will reject this.
+    Java is **statically typed**.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+In *Haskell* every expression either **has a type**
+or is **ill-typed** and rejected statically
+(at compile-time, before execution starts)
+
+  * like in Java
+  * unlike $\lambda$-calculus or Python
+
+```haskell
+weirdo = 1 0     -- rejected by GHC
 ```
 
 <br>
@@ -254,31 +564,52 @@ ex5 = False
 <br>
 <br>
 <br>
+
+## Elements of Haskell
+
+![](/static/img/trinity.png){#fig:types .align-center width=60%}
+
+- Core program element is an **expression**
+- Every _valid_ expression has a **type** (determined at compile-time)
+- Every _valid_ expression reduces to a _value_ (computed at run-time)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
-## QUIZ: Basic Operations
+## Type annotations
+
+You can annotate your bindings with their types using `::`, like so:
 
 ```haskell
-ex6 :: Int
-ex6 = 4 + 5
+-- | This is a Boolean:
+haskellIsAwesome :: Bool            
+haskellIsAwesome = True
 
-ex7 :: Int
-ex7 = 4 * 5
+-- | This is a string
+message :: String
+message = if haskellIsAwesome
+            then "I love CSE 130"
+            else "I'm dropping CSE 130"
+            
+-- | This is a word-size integer
+rating :: Int
+rating = if haskellIsAwesome then 10 else 0
 
-ex8 :: Bool
-ex8 = 5 > 4 
-
-quiz :: ???
-quiz = if ex8 then ex6 else ex7
+-- | This is an arbitrary precision integer
+bigNumber :: Integer
+bigNumber = factorial 100
 ```
 
-What is the *type* of `quiz`? 
+If you omit annotations, GHC will infer them for you
 
-**A.** `Int`
-
-**B.** `Bool`
-
-**C.** Error!
+  * Inspect types in GHCi using `:t`
+  * You should annotate all top-level bindings anyway! (Why?)
 
 <br>
 <br>
@@ -286,262 +617,56 @@ What is the *type* of `quiz`?
 <br>
 <br>
 <br>
-<br>
-<br>
-
-## QUIZ: Basic Operations
-
-```haskell
-ex6 :: Int
-ex6 = 4 + 5
-
-ex7 :: Int
-ex7 = 4 * 5
-
-ex8 :: Bool
-ex8 = 5 > 4 
-
-quiz :: ???
-quiz = if ex8 then ex6 else ex7
-```
-
-What is the *value* of `quiz`? 
-
-**A.** `9`
-
-**B.** `20`
-
-**C.** Other!
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 
 ## Function Types
 
-In Haskell, a **function is a value** that has a type 
+Functions have **arrow types**:
 
-```
-A -> B
-```
+* `\x -> e` has type `A -> B`
+* if `e` has type `B` assuming `x` has type `A`
 
-A function that 
+For example:
 
-- takes *input* of type `A` 
-- returns *output* of type `B`
+(I) lecture
+ 
+    ```haskell
+    > :t (\x -> if x then `a` else `b`)  -- ???
+    ```    
+    
+(I) final    
 
-For example
+    ```haskell
+    > :t (\x -> if x then `a` else `b`)
+    (\x -> if x then `a` else `b`) :: Bool -> Char
+    ```
+
+<br>
+<br>
+<br>
+<br>
+
+You should annotate your function bindings:
 
 ```haskell
-isPos :: Int -> Bool
-isPos = \n -> (x > 0)
+sum :: Int -> Int
+sum 0 = 0
+sum n = n + sum (n - 1)
 ```
 
-Define **function-expressions** using `\` like in $\lambda$-calculus!
-
-But Haskell also allows us to put the parameter on the _left_
+With multiple arguments:
 
 ```haskell
-isPos :: Int -> Bool
-isPos n = (x > 0)
+pair :: String -> (String -> (Bool -> String))
+pair x y b = if b then x else y
 ```
 
-(Meaning is **identical** to above definition with `\n -> ...`)
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## Multiple Argument Functions 
-
-A function that 
-
-- takes three _inputs_ `A1`, `A2` and `A3` 
-- returns one _output_ `B` has the type
+Same as:
 
 ```haskell
-A1 -> A2 -> A3 -> B
+pair :: String -> String -> Bool -> String
+pair x y b = if b then x else y
 ```
 
-For example
-
-```haskell
-pat :: Int -> Int -> Int -> Int
-pat = \x y z -> x * (y + z)
-```
-
-which we can write with the params on the _left_ as
-
-```haskell
-pat :: Int -> Int -> Int -> Int
-pat x y z = x * (y + z)
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## QUIZ 
-
-What is the type of `quiz` ?
-
-```haskell
-quiz :: ???
-quiz x y = (x + y) > 0
-```
-
-**A.** `Int -> Int`
-
-**B.** `Int -> Bool`
-
-**C.** `Int -> Int -> Int`
-
-**D.** `Int -> Int -> Bool`
-
-**E.** `(Int, Int) -> Bool`
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Function Calls 
-
-A function call is _exactly_ like in the $\lambda$-calculus 
-
-```
-e1 e2
-``` 
-
-where `e1` is a function and `e2` is the argument. For example
-
-```haskell
->>> isPos 12
-True 
-
->>> isPos (0 - 5)
-False
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## Multiple Argument Calls
-
-With multiple arguments, just pass them in one by one, e.g.
-
-```
-(((e e1) e2) e3)
-```
-
-For example
-
-```haskell
->>> pat 31 42 56 
-3038
-```
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## EXERCISE 
-
-Write a function `myMax` that returns the *maximum* of two inputs
-
-```haskell
-myMax :: Int -> Int -> Int
-myMax = ???
-```
-
-When you are done you should see the following behavior:
-
-```haskell
->>> myMax 10 20
-20
-
->>> myMax 100 5
-100
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-## How to Return Multiple Outputs?
-
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Tuples 
-
-A type for packing `n` different kinds of values into a single "struct"
-
-```haskell
-(T1,..., Tn)
-```
-
-For example
-
-```haskell
-tup1 :: ???
-tup1 = ('a', 5) 
-
-tup2 :: (Char, Double, Int)
-tup2 = ('a', 5.2, 7) 
-``` 
-
-<br>
-<br>
 <br>
 <br>
 <br>
@@ -551,91 +676,29 @@ tup2 = ('a', 5.2, 7)
 
 ## QUIZ
 
-What is the type `???` of `tup3`?
+With `pair :: String -> String -> Bool -> String`,
+what would GHCi say to 
 
 ```haskell
-tup3 :: ???
-tup3 = ((7, 5.2), True)
+>:t pair "apple" "orange"
 ```
 
+**A.** Syntax error
 
-**A.** `(Int, Bool)`
+**B.** The term is ill-typed
 
-**B.** `(Int, Double, Bool)`
+**C.** `String`
 
-**C.** `(Int, (Double, Bool))`
+**D.** `Bool -> String`
 
-**D.** `((Int, Double), Bool)`
-
-**E.** `(Tuple, Bool)`
-
+**E.** `String -> String -> Bool -> String`
 
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-## Extracting Values from Tuples
+(I) final
 
-We can **create** a tuple of three values `e1`, `e2`, and `e3` ...
+    _Answer:_ **D**
 
-```haskell
-tup = (e1, e2, e3)
-```
-
-... but how to **extract** the values from this tuple?
-
-**Pattern Matching**
-
-```haskell
-fst3 :: (t1, t2, t3) -> t1
-fst3 (x1, x2, x3) = x1
-
-snd3 :: (t1, t2, t3) -> t2
-snd3 (x1, x2, x3) = x2
-
-thd3 :: (t1, t2, t3) -> t3
-thd3 (x1, x2, x3) = x3
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## QUIZ
-
-What is the value of `quiz` defined as
-
-```haskell
-tup2 :: (Char, Double, Int)
-tup2 = ('a', 5.2, 7) 
-
-snd3 :: (t1, t2, t3) -> t2
-snd3 (x1, x2, x3) = x2
-
-quiz = snd3 tup2
-```
-
-**A.** `'a'`
-
-**B.** `5.2`
-
-**C.** `7`
-
-**D.** `('a', 5.2)`
-
-**E.** `(5.2, 7)`
-
-<br>
 <br>
 <br>
 <br>
@@ -646,27 +709,367 @@ quiz = snd3 tup2
 
 ## Lists
 
-Unbounded Sequence of values of type `T`
+A list is
+
+  * either an *empty list*
+    
+    `[]       -- pronounced "nil"`
+    
+  * or a *head element* attached to a *tail list* 
+  
+    `x:xs     -- pronounced "x cons xs"`
+    
+<br>
+<br>    
+  
+Examples:
 
 ```haskell
-[T]
+[]                -- A list with zero elements
+
+1:[]              -- A list with one element: 1
+
+(:) 1 []          -- Same thing: for any infix op, 
+                  -- (op) is a regular function!
+
+1:(2:(3:(4:[])))  -- A list with four elements: 1, 2, 3, 4
+
+1:2:3:4:[]        -- Same thing (: is right associative)
+
+[1,2,3,4]         -- Same thing (syntactic sugar)
+```  
+
+<br>
+<br>
+
+### Terminology: constructors and values
+
+`[]` and `(:)` are called the list **constructors**
+
+We've seen constructors before:
+
+  * `True` and `False` are `Bool` constructors
+  * `0`, `1`, `2` are... well, it's complicated, but you can think of them as `Int` constructors
+  * these constructions didn't take any parameters, so we just called them *values*
+
+In general, a **value** is a constructor applied to *other values*
+
+  * examples above are list values
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## The Type of a List
+
+A list has type `[A]` if each one of its elements has type `A`
+
+Examples:
+
+```haskell
+myList :: [Int]
+myList = [1,2,3,4]
 ```
 
-For example
+<br>
+
+(I) lecture
+ 
+    ```haskell
+    -- myList' :: ??
+    myList' = ['h', 'e', 'l', 'l', 'o']
+    ```
+    
+(I) final    
+
+    ```haskell
+    myList' :: [Char]                   -- or :: String
+    myList' = ['h', 'e', 'l', 'l', 'o'] -- or = "hello"
+    ```
+
+<br>
+
+(I) lecture
+ 
+    ```haskell
+    -- myList'' :: ???
+    myList'' = [1, 'h']    
+    ```
+    
+(I) final    
+
+    ```haskell
+    -- myList'' :: Type error: elements have different types!
+    myList'' = [1, 'h']
+    ```
+    
+<br>
+
+(I) lecture
+ 
+    ```haskell
+    -- myList''' :: ???
+    myList''' = []
+    ```      
+    
+(I) final    
+
+    ```haskell
+    myList''' :: [t] -- Generic: works for any type t!
+    myList''' = []
+    ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+  
+## EXERCISE: range
+
+Write a function `upto` that takes in a lower bound `l` and an upper bound `u` 
+and returns a list of all the numbers from `l` to `u` (inclusive)
+
+(I) lecture
+ 
+    ```haskell
+    -- | List of integers from n upto m
+    upto :: Int -> Int -> [Int]
+    upto l u = ???
+    ```
+    
+(I) final    
+
+    ```haskell
+    -- | List of integers from n upto m
+    upto :: Int -> Int -> [Int]
+    upto l hi
+      | l > u     = []
+      | otherwise = l : (upto (l + 1) u)
+    ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+There's also syntactic sugar for this!
 
 ```haskell
-chars :: [Char]
-chars = ['a','b','c'] 
+[1..7]    -- [1,2,3,4,5,6,7]
+[1,3..7]  -- [1,3,5,7]
+```
 
-ints :: [Int]
-ints = [1,3,5,7] 
 
-pairs :: [(Int, Bool)]
-pairs = [(1,True),(2,False)]
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Functions on lists: length
+
+```haskell
+-- | Length of the list
+length :: ???
+length xs = ???
 ```
 
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Pattern matching on lists
+
+```haskell
+-- | Length of the list
+length :: [Int] -> Int
+length []     = 0
+length (_:xs) = 1 + length xs
+```
+
+<br>
+<br>
+
+~~A pattern is either a *variable* (incl. `_`) or a *value*~~
+
+A pattern is 
+
+  * either a *variable* (incl. `_`)
+  * or a *constructor* applied to other *patterns*
+  
+<br>
+<br>  
+
+**Pattern matching** attempts to match *values* against *patterns* and, 
+if desired, *bind* variables to successful matches.
+
+<br>
+<br>
+<br>
+<br>
+<br>  
+
+
+## QUIZ
+
+What happens when we match the pattern `(x:xs)` against the value `[1]`?
+
+**A.** Does not match
+
+**B.** `x` is bound to `1`, and `xs` is unbound
+
+**C.** `xs` is bound to `[1]`, and `x` is unbound
+
+**D.** `x` is bound to `1`, `xs` is bound to `[]`
+
+**E.** `x` is bound to `1`, `xs` is bound to `[1]`
+
+<br>
+
+(I) final
+
+    _Answer:_ **D**
+  
+
+<br>
+<br>
+<br>
+<br>
+<br>  
+
+
+## Some useful library functions
+
+```haskell
+-- | Is the list empty?
+null :: [t] -> Bool
+
+-- | Head of the list
+head :: [t] -> t   -- careful: partial function!
+
+-- | Tail of the list
+tail :: [t] -> [t] -- careful: partial function!
+
+-- | Length of the list
+length :: [t] -> Int
+
+-- | Append two lists
+(++) :: [t] -> [t] -> [t]
+
+-- | Are two lists equal?
+(==) :: [t] -> [t] -> Bool
+```
+
+<br>
+
+You can search for library functions on [Hoogle](https://www.haskell.org/hoogle/)!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Pairs
+
+```haskell
+myPair :: (String, Int)  -- pair of String and Int
+myPair = ("apple", 3)
+```
+
+<br>
+
+`(,)` is the *pair constructor*
+
+<br>
+<br>
+
+
+Field access:
+
+```haskell
+-- Using library functions:
+whichFruit = fst myPair  -- "apple"
+howMany    = snd myPair  -- 3
+
+-- Using pattern matching:
+isEmpty (x, y)   =  y == 0
+
+-- same as:
+isEmpty          = \(x, y) -> y == 0
+
+-- same as:
+isEmpty p        = let (x, y) = p in y == 0
+
+-- Now p is the whole pair and x, y are first and second:
+isEmpty p@(x, y) =  y == 0
+```
+
+<br>
+<br>
+
+You can use pattern matching not only in equations,
+but also in $\lambda$-bindings and `let`-bindings!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Tuples
+
+Can we implement triples like in $\lambda$-calculus?
+
+<br>
+<br>
+<br>
+<br>
+
+Sure! But Haskell has native support for $n$-tuples:
+
+```haskell
+myPair   :: (String, Int)
+myPair   = ("apple", 3)
+
+myTriple :: (Bool, Int, [Int])
+myTriple = (True, 1, [1,2,3])
+
+my4tuple :: (Float, Float, Float, Float)
+my4tuple = (pi, sin pi, cos pi, sqrt 2)
+
+...
+
+-- And also:
+myUnit   :: ()
+myUnit   = ()
+```
+
 <br>
 <br>
 <br>
@@ -676,364 +1079,193 @@ pairs = [(1,True),(2,False)]
 
 ## QUIZ
 
-What is the type of `things` defined as
+Which of the following terms is *ill-typed*?
+
+You can assume that `(+) :: Int -> Int -> Int`.
+
+**A.** `(\(x,y,z) -> x + y + z) (1, 2, True)`
+
+**B.** `(\(x,y,z) -> x + y + z) (1, 2, 3, 4)`
+
+**C.** `(\(x,y,z) -> x + y + z) [1, 2, 3]`
+
+**D.** `(\x y z -> x + y + z) (1, 2, 3)`
+
+**E.**  all of the above
+
+<br>
+
+(I) final
+
+    _Answer:_ **E**. If we do not assume that `+` only works on integers, D is actually well-typed: it's a function that expects two more triples and will add them together.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>  
+
+## List comprehensions
+
+A convenient way to construct lists from other lists:
+
 
 ```haskell
-things :: ???
-things = [ [1], [2, 3], [4, 5, 6] ] 
+[toUpper c | c <- s]  -- Convert string s to upper case
+
+
+[(i,j) | i <- [1..3],
+         j <- [1..i] ] -- Multiple generators
+         
+[(i,j) | i <- [0..5],
+         j <- [0..5],
+         i + j == 5] -- Guards         
 ```
 
-**A.** `[Int]`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>  
 
-**B.** `([Int], [Int], [Int])`
-
-**C.** `[(Int, Int, Int)]`
-
-**D.** `[[Int]]`
-
-**E.** `List`
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## List's Values Must Have The SAME Type!
-
-The type `[T]` denotes an unbounded sequence of values of type `T`
-
-Suppose you have a list
-
-```
-oops = [1, 2, 'c']
-```
-
-There is no `T` that we can use
-
-- As last element is not `Int`
-- First two elements are not `Char`!
-
-**Result: Mysterious Type Error!**
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Constructing Lists
-
-There are two ways to construct lists
+## QuickSort in Haskell
 
 ```haskell
-    []     -- creates an empty list 
-    h:t    -- creates a list with "head" 'h' and "tail" t 
+sort :: [Int] -> [Int]
+sort []     = []
+sort (x:xs) = sort ls ++ [x] ++ sort rs
+  where
+    ls      = [ l | l <- xs, l <= x ]
+    rs      = [ r | r <- xs, x <  r ]
 ```
 
-For example
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## What is Haskell?
+
+<br>
+
+A **typed**, **lazy**, **purely functional** programming language
+
+<br>
+<br>
+<br>
+
+### Haskell is statically typed
+
+Every expression either has a type,
+or is *ill-typed* and rejected at compile time
+
+<br>
+
+**Why is this good?**
+
+  * catches errors early
+  * types are contracts (you don't have to handle ill-typed inputs!)
+  * enables compiler optimizations
+  
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Haskell is purely functional
+
+**Functional** = functions are *first-class values*
+
+**Pure** = a program is an expression that evaluates to a value
+
+  * no side effects!
+  
+  * unlike in Python, Java, etc:
+  
+    ```java
+    public int f(int x) {
+      calls++;                         // side effect!
+      System.out.println("calling f"); // side effect!
+      launchMissile();                 // side effect!
+      return calls;
+    }
+    ```
+    
+  * in Haskell, a function of type `Int -> Int`
+    computes a *single integer output* from a *single integer input*
+    and does **nothing else**
+  
+**Referential transparency:** The same expression always evaluates to the same value
+
+  * More precisely: In a scope where `x1, ..., xn` are defined,
+    all occurrences of `e` with `FV(e) = {x1, ..., xn}` have the same value
+
+<br>
+  
+**Why is this good?**
+
+  * easier to reason about (remember `x++` vs `++x` in C++?)
+  * enables compiler optimizations 
+  * especially great for parallelization (`e1 + e2`: we can always compute `e1` and `e2` in parallel!)
+  
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Haskell is lazy
+
+An expression is evaluated only when its result is needed
+  
+Example: `take 2 [1 .. (factorial 100)]`
+
+<br>
 
 ```haskell
->>> 3 : []
-[3]
-
->>> 2 : (3 : []) 
-[2, 3]
-
->>> 1 : (2 : (3 : [])) 
-[1, 2, 3]
-```
-
-**Cons Operator** `:` **is Right Associative**
-
-`x1 : x2 : x3 : x4 : t` means `x1 : (x2 : (x3 : (x4 : t)))`
-
-So we can just avoid the parentheses.
-
-**Syntactic Sugar**
-
-Haskell lets you write `[x1, x2, x3, x4]` instead of `x1 : x2 : x3 : x4 : []`
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Functions Producing Lists
-
-Lets write a function `copy3` that 
-
-- takes an input `x` and 
-- returns a list with _three_ copies of `x`
-
-```haskell
-copy3 :: ???
-copy3 x = ???
-```
-
-When you are done, you should see the following
-
-```haskell
->>> copy3 5
-[5, 5, 5]
-
->>> copy3 "cat"
-["cat", "cat", "cat"]
+        take 2 (   upto 1 (factorial 100))
+=>      take 2 (   upto 1 933262154439...)
+=>      take 2 (1:(upto 2 933262154439...)) -- def upto
+=> 1:  (take 1 (   upto 2 933262154439...)) -- def take 3
+=> 1:  (take 1 (2:(upto 3 933262154439...)) -- def upto
+=> 1:2:(take 0 (   upto 3 933262154439...)) -- def take 3
+=> 1:2:[]                                   -- def take 1
 ```
 
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## PRACTICE: Clone
-
-Write a function `clone` such that 
-`clone n x` returns a list with `n` copies of `x`. 
-
-```haskell
-clone :: ???
-clone n x = ???
-```
-
-When you are done you should see the following behavior
-
-```haskell
->>> clone 0 "cat" 
-[]
-
->>> clone 1 "cat" 
-["cat"]
-
->>> clone 2 "cat" 
-["cat", "cat"]
-
->>> clone 3 "cat" 
-["cat", "cat", "cat"]
-
->>> clone 3 100
-[100, 100, 100]
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## How does `clone` execute?
-
-(Substituting equals-by-equals!)
-
-```haskell
-clone 3 100
-  =*> ???
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## EXERCISE: Range
-
-Write a function `range` such that `range i j` 
-returns the list of values `[i, i+1, ..., j]`
-
-```haskell
-range :: ???
-range i j = ???
-```
-
-When we are done you should get the behavior
-
-```haskell
->>> range 4 3 
-[]
-
->>> range 3 3 
-[3]
-
->>> range 2 3 
-[2, 3]
-
->>> range 1 3 
-[1, 2, 3]
-
->>> range 0 3 
-[0, 1, 2, 3]
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Functions Consuming Lists
-
-So far: how to *produce* lists.
-
-**Next** how to *consume* lists!
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Example
-
-Lets write a function `firstElem` such that 
-`firstElem xs` returns the _first_ element 
-`xs` if it is a non-empty list, and `0` otherwise.
-
-```haskell
-firstElem :: [Int] -> Int
-firstElem xs = ???
-```
-
-When you are done you should see the following behavior:
-
-```haskell
->>> firstElem []
-0
-
->>> firstElem [10, 20, 30]
-10
-
->>> firstElem [5, 6, 7, 8] 
-5
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-## QUIZ 
+**Why is this good?**
 
-Suppose we have the following `mystery` function 
+  * can implement cool stuff like infinite lists: `[1..]`
+  
+    ```haskell
+    -- first n pairs of co-primes: 
+    take n [(i,j) | i <- [1..],
+                    j <- [1..i],
+                    gcd i j == 1]
+    ```
 
-```haskell
-mystery :: [a] -> Int
-mystery []     = 0
-mystery (x:xs) = 1 + mystery xs
-```
-
-What does `mystery [10, 20, 30]` evaluate to?
-
-**A.** `10` 
-
-**B.** `20`
-
-**C.** `30`
-
-**D.** `3`
-
-**E.** `0`
-
-<br>
+  
+  * encourages simple, general solutions
+  * but has its problems too :(
+           
 <br>
 <br>
 <br>
 <br>
 <br>
-<br>
-<br>
-
-## EXERCISE: Summing a List
-
-Write a function `sumList` such that `sumList [x1, ..., xn]` returns `x1 + ... + xn` 
-
-```haskell
-sumList :: [Int] -> Int
-sumList = ???
-```
-
-When you are done you should get the following behavior:
-
-```haskell
->>> sumList []
-0
-
->>> sumlist [3]
-3
-
->>> sumlist [2, 3]
-5
-
->>> sumlist [1, 2, 3]
-6
-```
-
-## Recap
-
-![](/static/img/trinity.png){#fig:types .align-center width=60%}
-
-- Core program element is an **expression**
-- Every _valid_ expression has a **type** (determined at compile-time)
-- Every _valid_ expression reduces to a _value_ (computed at run-time)
-
-
-**Execution** 
-
-- Basic values & operators 
 
-- Execution / Function Calls just *substitute equals by equals*
+That's all folks!  
+  
+  
 
-- Pack data into *tuples* & *lists*
+   
 
-- Unpack data via *pattern-matching*
 

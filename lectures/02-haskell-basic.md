@@ -965,7 +965,9 @@ What happens when we match the pattern `(x:xs)` against the value `[1]`?
 
 ## EXERCISE: counting zeros
 
-Write a function `count0` that takes in a list of integers and returns the number of zeros in the list:
+Write a function `count0` that counts the number of zeros in a list
+
+  - do not use *conditionals* or *guards*!
 
 ```haskell
 count0 :: [Int] -> Int

@@ -1,5 +1,5 @@
 ---
-title: Haskell Crash Course Part I
+title: Haskell Crash Course
 headerImg: sea.jpg
 ---
 
@@ -952,6 +952,52 @@ What happens when we match the pattern `(x:xs)` against the value `[1]`?
 (I) final
 
     _Answer:_ **D**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: counting zeros
+
+Write a function `count0` that takes in a list of integers and returns the number of zeros in the list:
+
+```haskell
+count0 :: [Int] -> Int
+count0 = ???
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
+
+Which of the following is **not** a pattern?
+
+**A.** `(1:xs)`
+
+**B.** `(_:_:_)`
+
+**C.** `[x]`
+
+**D.** `[1+2,x,y]`
+
+**E.**  all of the above
+
+<br>
+
+(I) final
+
+    _Answer:_ **D** (`1+2` is a function application, not a constructor application)
   
 
 <br>
@@ -1012,21 +1058,50 @@ myPair = ("apple", 3)
 Field access:
 
 ```haskell
--- Using library functions:
+-- Option 1: using library functions:
 whichFruit = fst myPair  -- "apple"
 howMany    = snd myPair  -- 3
+```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: Destructing pairs
+
+Define the following function:
+
+```haskell
+isEmpty :: (String, Int) -> Bool
+isEmpty p = (fst p == "") || (snd p == 0)
+```
+
+but **without** using `fst` or `snd`!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```haskell
 -- Using pattern matching:
-isEmpty (x, y)   =  y == 0
+isEmpty (x, y)   =  x == "" || y == 0
 
--- same as:
-isEmpty          = \(x, y) -> y == 0
-
--- same as:
-isEmpty p        = let (x, y) = p in y == 0
-
--- Now p is the whole pair and x, y are first and second:
-isEmpty p@(x, y) =  y == 0
+-- With multiple equations (more idiomatic):
+isEmpty ("", _)  = True
+isEmpty (_, 0)   = True
+isEmpty _        = False
 ```
 
 <br>
@@ -1034,6 +1109,17 @@ isEmpty p@(x, y) =  y == 0
 
 You can use pattern matching not only in equations,
 but also in $\lambda$-bindings and `let`-bindings!
+
+```haskell
+-- pattern matching in lambda:
+isEmpty          = \(x, y) -> x == "" || y == 0
+
+-- pattern matching in let:
+isEmpty p        = let (x, y) = p in x == "" || y == 0
+
+-- Now p is the whole pair and x, y are first and second:
+isEmpty p@(x, y) =  x == "" || y == 0
+```
 
 <br>
 <br>

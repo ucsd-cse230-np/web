@@ -12,23 +12,22 @@ Lecture schedule is subject to change!
 | *9/29*     | contd.                          |                           |                     | 
 | *10/4*     | contd.                          |                           |                     | 
 | *10/6*     | Haskell Basics                  | [html][02-hs-basic]       |                     |
-| *10/11*    | Haskell Types                   |                           |                     |  
-| *10/13*    | Bottling patterns with HOFs     |                           |                     |
-| *10/18*    | Haskell: IO                     |                           |                     |
-| *10/20*    | Type Classes                    |                           |                     |
-| *10/25*    | Functors and Monads             |                           |                     | 
-| *10/27*    | Iteration and State             |                           |                     | 
-| *11/1*     | Parser Combinators              |                           |                     |
-| *11/3*     | contd.                          |                           |                     |
-| *11/8*     | Monad Transformers              |                           |                     | 
-| *11/10*    | Property-based Testing          |                           |                     | 
-| *11/15*    | Concurrency                     |                           |                     |
-| *11/17*    | Refinement Types                |                           |                     |          
-| *11/22*    | TBD                             |                           |                     | 
-| *11/24*    | *No lecture: Thanksgiving*      |                           |                     |
-| *11/29*    | TBD                             |                           |                     |
+| *10/11*    | contd.                          |                           |                     |  
+| *10/13*    | Algebraic Data Types            | [html][03-hs-types]       |                     |
+| *10/18*    | Bottling patterns with HOFs     |                           |                     |
+| *10/20*    | Haskell: IO                     |                           |                     |
+| *10/25*    | Type Classes                    |                           |                     | 
+| *10/27*    | Functors and Monads             |                           |                     | 
+| *11/1*     | Iteration and State             |                           |                     |
+| *11/3*     | Parser Combinators              |                           |                     |
+| *11/8*     | contd.                          |                           |                     | 
+| *11/10*    | Monad Transformers              |                           |                     | 
+| *11/15*    | Property-based Testing          |                           |                     |
+| *11/17*    | Concurrency                     |                           |                     |          
+| *11/22*    | Refinement Types                |                           |                     | 
+| *11/24*    | TBD                             |                           |                     |
+| *11/29*    | *No lecture: Thanksgiving*      |                           |                     |
 | *12/1*     | TBD                             |                           |                     | 
-
 
 [00-intro]: lectures/00-intro.html
 [01-lambda]: lectures/01-lambda.html

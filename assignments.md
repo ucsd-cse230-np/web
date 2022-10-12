@@ -10,6 +10,7 @@ that 35 mins over the deadline is equal to 1 late day.
 ## Assignment Links
 
 - [00-lambda](https://classroom.github.com/a/ggXupoII), due **10/7 at 23:59:59**
+- [01-trees](https://classroom.github.com/a/GaWjIp0f), due **10/28 at 23:59:59**
 
 
 <!-- - [01-trees](https://classroom.github.com/a/EKaa5k6e), due **10/22 at 23:59:59**

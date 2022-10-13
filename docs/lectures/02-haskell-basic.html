@@ -310,7 +310,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>can be <em>returned as results</em> from other functions</li>
 <li>can be <em>partially applied</em> (arguments passed <em>one at a time</em>)</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>(\f x <span class="ot">-&gt;</span> f (f x)) (\z <span class="ot">-&gt;</span> z <span class="op">+</span> <span class="dv">1</span>) <span class="dv">0</span>   <span class="co">-- =~&gt; ???</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>(\f x <span class="ot">-&gt;</span> f (f x)) (\z <span class="ot">-&gt;</span> z <span class="op">+</span> <span class="dv">1</span>) <span class="dv">0</span>   <span class="co">-- =~&gt; 2</span></span></code></pre></div>
 <p><em>But:</em> unlike <span class="math inline"><em>λ</em></span>-calculus, not everything is a function!</p>
 <h3 id="top-level-bindings">(3) Top-level bindings</h3>
 <p>Like in Elsa, we can <em>name</em> terms to use them later</p>
@@ -378,6 +378,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>pair x y <span class="dt">False</span> <span class="ot">=</span> y</span></code></pre></div>
 <p><strong>E.</strong> C and D</p>
 <p><br></p>
+<p><em>Answer:</em> <strong>E</strong></p>
 <p><br> <br> <br> <br> <br></p>
 <h2 id="equations-with-guards">Equations with guards</h2>
 <p>An equation can have multiple guards (Boolean expressions):</p>
@@ -419,11 +420,13 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>g <span class="dv">0</span> <span class="ot">=</span> <span class="dt">False</span></span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>g n <span class="ot">=</span> f (n <span class="op">-</span> <span class="dv">1</span>) <span class="co">-- mutual recursion!</span></span></code></pre></div>
+<p>Answer: <code class="sourceCode haskell">f</code> is <code class="sourceCode haskell">isEven</code>, <code class="sourceCode haskell">g</code> is <code class="sourceCode haskell">isOdd</code></p>
 <p><br> <br> <br></p>
 <p>Is this allowed?</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>haskellIsAwesome <span class="ot">=</span> <span class="dt">True</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>haskellIsAwesome <span class="ot">=</span> <span class="dt">False</span> <span class="co">-- changed my mind</span></span></code></pre></div>
+<p>Answer: no, a variable can be defined once per scope; no mutation!</p>
 <p><br> <br> <br> <br></p>
 <h3 id="local-variables">Local variables</h3>
 <p>You can introduce a <em>new</em> (local) scope using a <code class="sourceCode haskell"><span class="kw">let</span></code>-expression:</p>
@@ -449,11 +452,13 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p>What would <em>Elsa</em> say?</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">let</span> <span class="dt">WEIRDO</span> <span class="ot">=</span> <span class="dt">ONE</span> <span class="dt">ZERO</span></span></code></pre></div>
 <p><br></p>
+<p>Answer: Nothing. When evaluated will crunch to something nonsensical. <span class="math inline"><em>l</em><em>a</em><em>m</em><em>b</em><em>d</em><em>a</em></span>-calculus is <strong>untyped</strong>.</p>
 <p><br> <br> <br></p>
 <p>What would <em>Python</em> say?</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">def</span> weirdo():</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>(<span class="dv">1</span>)</span></code></pre></div>
 <p><br></p>
+<p>Answer: Nothing. When evaluated will cause a run-time error. Python is <strong>dynamically typed</strong>.</p>
 <p><br> <br> <br></p>
 <p>What would <em>Java</em> say?</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">weirdo</span>() {</span>
@@ -461,6 +466,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>  <span class="fu">zero</span>(<span class="dv">1</span>);</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>}</span></code></pre></div>
 <p><br></p>
+<p>Answer: Java compiler will reject this. Java is <strong>statically typed</strong>.</p>
 <p><br> <br> <br> <br> <br> <br></p>
 <p>In <em>Haskell</em> every expression either <strong>has a type</strong> or is <strong>ill-typed</strong> and rejected statically (at compile-time, before execution starts)</p>
 <ul>
@@ -509,7 +515,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>if <code class="sourceCode haskell">e</code> has type <code class="sourceCode haskell"><span class="dt">B</span></code> assuming <code class="sourceCode haskell">x</code> has type <code class="sourceCode haskell"><span class="dt">A</span></code></li>
 </ul>
 <p>For example:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">:</span>t (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x <span class="kw">then</span> <span class="ot">`a`</span> <span class="kw">else</span> <span class="ot">`b`</span>)  <span class="co">-- ???</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">:</span>t (\x <span class="ot">-&gt;</span> <span class="kw">if</span> x <span class="kw">then</span> <span class="ot">`a`</span> <span class="kw">else</span> <span class="ot">`b`</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>(\x <span class="ot">-&gt;</span> <span class="kw">if</span> x <span class="kw">then</span> <span class="ot">`a`</span> <span class="kw">else</span> <span class="ot">`b`</span>)<span class="ot"> ::</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Char</span></span></code></pre></div>
 <p><br> <br> <br> <br></p>
 <p>You should annotate your function bindings:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="fu">sum</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
@@ -531,6 +538,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>D.</strong> <code class="sourceCode haskell"><span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">String</span></code></p>
 <p><strong>E.</strong> <code class="sourceCode haskell"><span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">String</span></code></p>
 <p><br></p>
+<p><em>Answer:</em> <strong>D</strong></p>
 <p><br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="lists">Lists</h2>
 <p>A list is</p>
@@ -574,20 +582,22 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">myList ::</span> [<span class="dt">Int</span>]</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>myList <span class="ot">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="co">-- myList' :: ??</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>myList' <span class="ot">=</span> [<span class="ch">'h'</span>, <span class="ch">'e'</span>, <span class="ch">'l'</span>, <span class="ch">'l'</span>, <span class="ch">'o'</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">myList' ::</span> [<span class="dt">Char</span>]                   <span class="co">-- or :: String</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>myList' <span class="ot">=</span> [<span class="ch">'h'</span>, <span class="ch">'e'</span>, <span class="ch">'l'</span>, <span class="ch">'l'</span>, <span class="ch">'o'</span>] <span class="co">-- or = &quot;hello&quot;</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">-- myList'' :: ???</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>myList'' <span class="ot">=</span> [<span class="dv">1</span>, <span class="ch">'h'</span>]    </span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">-- myList'' :: Type error: elements have different types!</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>myList'' <span class="ot">=</span> [<span class="dv">1</span>, <span class="ch">'h'</span>]</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="co">-- myList''' :: ???</span></span>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">myList''' ::</span> [t] <span class="co">-- Generic: works for any type t!</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>myList''' <span class="ot">=</span> []</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="exercise-range">EXERCISE: range</h2>
 <p>Write a function <code class="sourceCode haskell">upto</code> that takes in a lower bound <code class="sourceCode haskell">l</code> and an upper bound <code class="sourceCode haskell">u</code> and returns a list of all the numbers from <code class="sourceCode haskell">l</code> to <code class="sourceCode haskell">u</code> (inclusive)</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="co">-- | List of integers from n upto m</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="ot">upto ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>upto l u <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>upto l hi</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>  <span class="op">|</span> l <span class="op">&gt;</span> u     <span class="ot">=</span> []</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> l <span class="op">:</span> (upto (l <span class="op">+</span> <span class="dv">1</span>) u)</span></code></pre></div>
 <p><br> <br> <br> <br> <br></p>
 <p>There’s also syntactic sugar for this!</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a>[<span class="dv">1</span><span class="op">..</span><span class="dv">7</span>]    <span class="co">-- [1,2,3,4,5,6,7]</span></span>
@@ -621,6 +631,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>D.</strong> <code class="sourceCode haskell">x</code> is bound to <code class="sourceCode haskell"><span class="dv">1</span></code>, <code class="sourceCode haskell">xs</code> is bound to <code class="sourceCode haskell">[]</code></p>
 <p><strong>E.</strong> <code class="sourceCode haskell">x</code> is bound to <code class="sourceCode haskell"><span class="dv">1</span></code>, <code class="sourceCode haskell">xs</code> is bound to <code class="sourceCode haskell">[<span class="dv">1</span>]</code></p>
 <p><br></p>
+<p><em>Answer:</em> <strong>D</strong></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="exercise-counting-zeros">EXERCISE: counting zeros</h2>
 <p>Write a function <code class="sourceCode haskell">count0</code> that counts the number of zeros in a list</p>
@@ -638,6 +649,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>D.</strong> <code class="sourceCode haskell">[<span class="dv">1</span><span class="op">+</span><span class="dv">2</span>,x,y]</code></p>
 <p><strong>E.</strong> all of the above</p>
 <p><br></p>
+<p><em>Answer:</em> <strong>D</strong> (<code class="sourceCode haskell"><span class="dv">1</span><span class="op">+</span><span class="dv">2</span></code> is a function application, not a constructor application)</p>
 <p><br> <br> <br> <br> <br></p>
 <h2 id="some-useful-library-functions">Some useful library functions</h2>
 <div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="co">-- | Is the list empty?</span></span>
@@ -723,6 +735,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>D.</strong> <code class="sourceCode haskell">(\x y z <span class="ot">-&gt;</span> x <span class="op">+</span> y <span class="op">+</span> z) (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</code></p>
 <p><strong>E.</strong> all of the above</p>
 <p><br></p>
+<p><em>Answer:</em> <strong>E</strong>. If we do not assume that <code class="sourceCode haskell"><span class="op">+</span></code> only works on integers, D is actually well-typed: it’s a function that expects two more triples and will add them together.</p>
 <p><br> <br> <br> <br> <br> <br></p>
 <h2 id="list-comprehensions">List comprehensions</h2>
 <p>A convenient way to construct lists from other lists:</p>

@@ -60,6 +60,8 @@ for building up types to represent complex data
 
 4. *Recursive Types:* types that contain themselves
 
+5. *Polymorphic Datatypes:* datatypes with parameters
+
 <br>
 <br>
 <br>
@@ -132,10 +134,10 @@ We can now use synonyms by creating values of the given types
 
 ```haskell
 circ0 :: CircleT 
-circ0 = (0, 0, 100)  -- ^ circle at "origin" with radius 100
+circ0 = (0, 0, 100)  -- circle at "origin" with radius 100
 
 cub0 :: CuboidT
-cub0 = (10, 20, 30)  -- ^ cuboid with l=10, d=20, h=30 
+cub0 = (10, 20, 30)  -- cuboid with l=10, d=20, h=30 
 ```
 
 And we can write functions over synonyms too
@@ -177,10 +179,10 @@ type CircleT = (Double, Double, Double)
 type CuboidT = (Double, Double, Double)
 
 circ0 :: CircleT
-circ0 = (0, 0, 100)  -- ^ circle at "origin" with radius 100
+circ0 = (0, 0, 100)  -- circle at "origin" with radius 100
 
 cub0 :: CuboidT
-cub0 = (10, 20, 30)  -- ^ cuboid with length=10, depth=20, height=30 
+cub0 = (10, 20, 30)  -- cuboid with length=10, depth=20, height=30 
 
 area :: CircleT -> Double
 area (x, y, r) = pi * r * r  
@@ -198,6 +200,10 @@ What is the result of
 **A.** `0`
 
 **B.** Type error
+
+(I) final    
+
+    *Answer:* A
 
 <br>
 <br>
@@ -241,6 +247,8 @@ And hence, synonyms
 
 4. *Recursive Types:* types that contain themselves
 
+5. *Polymorphic Datatypes:* datatypes with parameters
+
 <br>
 <br>
 <br>
@@ -254,7 +262,7 @@ And hence, synonyms
 
 ## Creating *New* Data Types 
 
-We can avoid mixing up by creating _new_ `data` types
+We can avoid mixing up values by creating _new_ `data` types
 
 ```haskell
 -- | A new type `Circle` with constructor `MkCircle`,
@@ -269,11 +277,11 @@ data Cuboid = MkCuboid Double Double Double
 We use constructors to *build* values of the new type: 
 
 ```haskell
-circ1 :: CircleT 
-circ1 = MkCircle 0 0 100  -- ^ circle at "origin" w/ radius 100
+circ1 :: Circle 
+circ1 = MkCircle 0 0 100  -- circle at "origin" w/ radius 100
 
 cub1 :: Cuboid
-cub1 = MkCuboid 10 20 30  -- ^ cuboid w/ len=10, dep=20, ht=30 
+cub1 = MkCuboid 10 20 30  -- cuboid w/ len=10, dep=20, ht=30 
 ```
 
 <br>
@@ -291,21 +299,25 @@ cub1 = MkCuboid 10 20 30  -- ^ cuboid w/ len=10, dep=20, ht=30
 Suppose we create a new type with a `data` definition
 
 ```haskell
--- | A new type `CircleT` with constructor `MkCircle`
+-- | A new type `Circle` with constructor `MkCircle`
 data Circle = MkCircle Double Double Double
 ```
 
 What is the **type of** the `MkCircle` _constructor_?
 
-**A.** `MkCircle :: CircleT`
+**A.** `MkCircle :: Circle`
 
-**B.** `MkCircle :: Double -> CircleT`
+**B.** `MkCircle :: Double -> Circle`
 
-**C.** `MkCircle :: Double -> Double -> CircleT`
+**C.** `MkCircle :: Double -> Double -> Circle`
 
-**D.** `MkCircle :: Double -> Double -> Double -> CircleT`
+**D.** `MkCircle :: Double -> Double -> Double -> Circle`
 
-**E.** `MkCircle :: (Double, Double, Double) -> CircleT`
+**E.** `MkCircle :: (Double, Double, Double) -> Circle`
+
+(I) final    
+
+    *Answer:* D
 
 <br>
 <br>
@@ -378,6 +390,10 @@ What is the result of
 **A.** `6000`
 
 **B.** Type error
+
+(I) final    
+
+    *Answer:* B
 
 <br>
 <br>
@@ -452,6 +468,8 @@ same as for tuples, just using different constructors!
 
 4. *Recursive Types:* types that contain themselves
 
+5. *Polymorphic Datatypes:* datatypes with parameters
+
 <br>
 <br>
 <br>
@@ -499,10 +517,10 @@ Where we have defined
 
 ```haskell
 circ1 :: Circle 
-circ1 = MkCircle 0 0 100  -- ^ circle at "origin" with radius 100
+circ1 = MkCircle 0 0 100  -- circle at "origin" with radius 100
 
 cub1 :: Cuboid
-cub1 = MkCuboid 10 20 30  -- ^ cuboid with length=10, depth=20, height=30 
+cub1 = MkCuboid 10 20 30  -- cuboid with length=10, depth=20, height=30 
 ```
 
 <br>
@@ -542,8 +560,8 @@ Lets create a _single_ type that can represent _both_ kinds of shapes!
 
 ```haskell
 data Shape 
-  = MkCircle Double Double Double   -- ^ Circle at x, y with radius r 
-  | MkCuboid Double Double Double   -- ^ Cuboid with length, depth, height
+  = MkCircle Double Double Double   -- Circle at x, y with radius r 
+  | MkCuboid Double Double Double   -- Cuboid with length, depth, height
 ```
 
 A **sum type** is a data type with multiple constructors
@@ -568,8 +586,8 @@ With the definition:
 
 ```haskell
 data Shape 
-  = MkCircle Double Double Double   -- ^ Circle at x, y with radius r 
-  | MkCuboid Double Double Double   -- ^ Cuboid with length, depth, height
+  = MkCircle Double Double Double   -- Circle at x, y with radius r 
+  | MkCuboid Double Double Double   -- Cuboid with length, depth, height
 ```
 
 What is the type of `MkCircle 0 0 100` ? 
@@ -581,6 +599,10 @@ What is the type of `MkCircle 0 0 100` ?
 **C.** `MkCircle`
 
 **D.** `(Double, Double, Double)`
+
+(I) final    
+
+    *Answer:* A
 
 <br>
 <br>
@@ -602,17 +624,17 @@ Now we can define
 
 ```haskell
 circ2 :: Shape
-circ2 = MkCircle 0 0 100  -- ^ circle at "origin" with radius 100
+circ2 = MkCircle 0 0 100  -- circle at "origin" with radius 100
 
 cub2 :: Shape 
-cub2 = MkCuboid 10 20 30  -- ^ cuboid with length=10, depth=20, height=30 
+cub2 = MkCuboid 10 20 30  -- cuboid with length=10, depth=20, height=30 
 ```
 
 and then define collections of `Shape`s
 
 ```haskell
 shapes :: [Shape]
-shapes = [circ1, cub1]
+shapes = [circ2, cub2]
 ```
 
 <br>
@@ -634,12 +656,14 @@ Lets define a type for 2D shapes
 
 ```haskell
 data Shape2D 
-  = MkRect Double Double -- ^ 'MkRect w h' is a rectangle with width 'w', height 'h'
-  | MkCirc Double        -- ^ 'MkCirc r' is a circle with radius 'r'
-  | MkPoly [Vertex]      -- ^ 'MkPoly [v1,...,vn]' is a polygon with vertices at 'v1...vn'
+  = MkRect Double Double -- rectangle with width and height
+  | MkCirc Double        -- circle with radius
+  | MkPoly [Vertex]      -- polygon with a list of vertices
 
 type Vertex = (Double, Double)
 ```
+
+Different constructors can have different types!
 
 <br>
 <br>
@@ -654,14 +678,21 @@ type Vertex = (Double, Double)
 
 ## Tagged Boxes 
 
-Values of this type are either two doubles *tagged* with `Rectangle` 
+A values of type `Shape2D` is either two doubles *tagged* with `Rectangle` 
 
 ```haskell
 >>> :type (Rectangle 4.5 1.2)
 (Rectangle 4.5 1.2) :: Shape
 ```
 
-or a list of pairs of `Double` values *tagged* with `Polygon`
+or a single double *tagged* with `Circle`
+
+```haskell
+>>> :type (Circle 3.2)
+(Circle 3.2) :: Shape
+```
+
+or a list of pairs of d *tagged* with `Polygon`
 
 ```haskell
 ghci> :type (Polygon [(1, 1), (2, 2), (3, 3)])
@@ -672,9 +703,7 @@ ghci> :type (Polygon [(1, 1), (2, 2), (3, 3)])
 <br>
 <br>
 
-Data values inside special **Tagged Boxes**
-
-![Datatypes are Boxed-and-Tagged Values](/static/img/lec4_boxed.png)
+![Data values are **Tagged Boxes**](/static/img/lec4_boxed.png)
 
 
 <br>
@@ -702,6 +731,9 @@ How do we get the value out of the box?
 Write a function to compute the `perimeter` of a `Shape2D` 
 
 ```haskell
+data Shape2D = MkRect Double Double | MkCirc Double | MkPoly [Vertex]
+type Vertex = (Double, Double)
+
 perimeter :: Shape2D -> Double
 perimeter s = ???
 ```
@@ -732,6 +764,7 @@ distance (x1, y1) (x2, y2) = sqrt ((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 4. ***Recursive Types:* types that contain themselves**
 
+5. *Polymorphic Datatypes:* datatypes with parameters
 
 <br>
 <br>
@@ -750,12 +783,9 @@ We can define datatypes *recursively* too
 
 ```haskell
 data IntList 
-  = INil                -- ^ empty list
-  | ICons Int IntList   -- ^ list with "hd" Int and "tl" IntList
-  deriving (Show)
+  = INil                -- empty list
+  | ICons Int IntList   -- list with "hd" Int and "tl" IntList
 ```
-
-(Ignore the bit about `deriving` for now.) 
 
 <br>
 <br>
@@ -772,23 +802,27 @@ data IntList
 
 ```haskell
 data IntList 
-  = INil                -- ^ empty list
-  | ICons Int IntList   -- ^ list with "hd" Int and "tl" IntList
-  deriving (Show)
+  = INil                -- empty list
+  | ICons Int IntList   -- list with "hd" Int and "tl" IntList
 ```
 
 What is the type of `ICons` ?
 
-**A.** `Int -> IntList -> List`
+**A.** `IntList`
 
-**B.** `IntList`
+**B.** `Int -> IntList`
 
-**C.** `Int -> IntList -> IntList`
+**C.** `(Int, IntList)`
 
-**D.** `Int -> List    -> IntList`
+**D.** `Int -> IntList -> IntList`
 
 **E.** `IntList -> IntList`
 
+(I) final    
+
+    *Answer:* D
+
+
 <br>
 <br>
 <br>
@@ -800,40 +834,28 @@ What is the type of `ICons` ?
 <br>
 <br>
 
-
-## Constructing `IntList`
-
-Can *only* build `IntList` via constructors.
-
-```haskell
->>> :type INil 
-INil:: IntList
-
->>> :type ICons
-ICons :: Int -> IntList -> IntList
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ## EXERCISE 
 
-Write down a representation of type `IntList` of the list of three numbers `1`, `2` and `3`.
+Write down an `IntList` representation of the list `[1,2,3]`
 
 ```haskell
 list_1_2_3 :: IntList
 list_1_2_3 = ???
 ```
 
-**Hint** Recursion means boxes *within* boxes
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+Recursion means boxes *within* boxes
 
 ![Recursively Nested Boxes](/static/img/lec4_nested.png)
 
@@ -848,31 +870,14 @@ list_1_2_3 = ???
 <br>
 <br>
 
-## Trees: Multiple Recursive Occurrences
 
-We can represent `Int` *trees* like 
+## Recursive functions over recursive data
 
-```haskell
-data IntTree 
-   = ILeaf Int              -- ^ single "leaf" w/ an Int
-   | INode IntTree IntTree  -- ^ internal "node" w/ 2 sub-trees
-   deriving (Show)
-```
-
-A *leaf* is a box containing an `Int` tagged `ILeaf` e.g.
+Lets rewrite the `count0` function from last lecture to work on `IntList`s:
 
 ```haskell
->>> it1  = ILeaf 1 
->>> it2  = ILeaf 2
-```
-
-A *node* is a box containing two sub-trees tagged `INode` e.g. 
-
-```haskell
->>> itt   = INode (ILeaf 1) (ILeaf 2)
->>> itt'  = INode itt itt
->>> INode itt' itt'
-INode (INode (ILeaf 1) (ILeaf 2)) (INode (ILeaf 1) (ILeaf 2))
+count0 :: IntList -> Int
+count0 xs = ???
 ``` 
 
 <br>
@@ -884,31 +889,111 @@ INode (INode (ILeaf 1) (ILeaf 2)) (INode (ILeaf 1) (ILeaf 2))
 <br>
 <br>
 <br>
-<br>
-
-## Multiple Branching Factors
-
-e.g. [2-3 trees](http://en.wikipedia.org/wiki/2-3_tree) 
 
 ```haskell
-data Int23T 
-  = ILeaf0 
-  | INode2 Int Int23T Int23T
-  | INode3 Int Int23T Int23T Int23T
-  deriving (Show)
+count0 :: IntList -> Int
+count0 INil         = 0
+count0 (ICons 0 xs) = 1 + count0 xs
+count0 (ICons _ xs) = count0 xs
 ```
 
-An example value of type `Int23T` would be
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Trees
+
+Lists are *unary trees*:
+
+![Unary tree (aka list)](/static/img/list-tree.png){#fig:boxes .align-center width=50%}  
+
+<br>
+<br>
+<br>
+
+How do we represent *binary trees*?
+
+![Binary tree](/static/img/tree-data-node.png){#fig:boxes .align-center width=80%}  
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ: Binary trees
+
+How do you represent this *binary tree* as a recursive datatype?
+
+![Binary tree](/static/img/tree-data-node.png){#fig:boxes .align-center width=50%}
+  
+**(A)** `data ITree = ILeaf | INode Int ITree`
+
+**(B)** `data ITree = ILeaf | INode ITree ITree`
+
+**(C)** `data ITree = ILeaf | INode Int ITree ITree`
+
+**(D)** `data ITree = ILeaf Int | INode ITree ITree`
+
+**(E)** `data ITree = ILeaf Int | INode Int ITree ITree`
+
+<br>
+
+(I) final
+
+    *Answer:* C
+    
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>  
+
+![Binary tree](/static/img/tree-data-node.png){#fig:boxes .align-center width=50%}
 
 ```haskell
-i23t :: Int23T
-i23t = INode3 0 t t t
-  where t = INode2 1 ILeaf0 ILeaf0
+-- | Binary tree of integers
+data ITree = ILeaf | INode Int ITree ITree
+
+t1234 = INode 1 
+          (INode 2 (INode 3 ILeaf ILeaf) ILeaf) 
+          (INode 4 ILeaf ILeaf)
 ```
 
-which looks like 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-![Integer 2-3 Tree](/static/img/lec4_int23t.png)
+## Algebraic Data Types
+
+1. *Type Synonyms:* naming existing types \[done\]
+
+2. *Product Types:* bundling things together \[done\]
+
+3. *Sum Types:* types with multiple variants  \[done\]
+
+4. *Recursive Types:* types that contain themselves  \[done\]
+
+5. ***Polymorphic Datatypes:* datatypes with parameters**
 
 <br>
 <br>
@@ -917,25 +1002,22 @@ which looks like
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
+
 
 ## Parameterized Types
 
-We can define `CharList` or `DoubleList` 
-- versions of `IntList` for `Char` and `Double` as
+Our `IntList` datatype can only store `Int`s :-(
+
+What if we want to store `Char`s or `Double`s?
 
 ```haskell
 data CharList 
   = CNil
   | CCons Char CharList
-  deriving (Show)
 
 data DoubleList 
    = DNil
    | DCons Char DoubleList
-   deriving (Show)
 ``` 
 
 <br>
@@ -979,63 +1061,35 @@ data CList = CNil | CCons Char   CList
 data DList = DNil | DCons Double DList
 ``` 
 
+<br>
+<br>
+<br>
+<br>
+
 **Common:** `Nil`/`Cons` structure
 
 **Different:** type of each "head" element
 
+<br>
+<br>
+<br>
+<br>
+
 ### Refactored using Type Parameter
 
 ```haskell
+-- | A list of elements of type `a`
 data List a = Nil | Cons a  (List a)
 ```
 
-### Recover original types as *instances* of `List`
+We can recover original types as *instances* of `List`:
 
 ```haskell
-type IntList    = List Int
-type CharList   = List Char
-type DoubleList = List Double
-```
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Polymorphic Data has Polymorphic Constructors
-
-Look at the types of the constructors 
-
-```haskell
->>> :type Nil 
-Nil :: List a
-```
-
-That is, the `Empty` tag is a value of *any* kind of list, and
-
-```haskell
->>> :type Cons 
-Cons :: a -> List a -> List a
-```
-
-`Cons` takes an `a` *and* a `List a` and returns a `List a`.
-
-```haskell
-cList :: List Char     -- list where 'a' = 'Char' 
-cList = Cons 'a' (Cons 'b' (Cons 'c' Nil))
-
 iList :: List Int      -- list where 'a' = 'Int' 
 iList = Cons 1 (Cons 2 (Cons 3 Nil))
+
+cList :: List Char     -- list where 'a' = 'Char' 
+cList = Cons 'a' (Cons 'b' (Cons 'c' Nil))
 
 dList :: List Double   -- list where 'a' = 'Double' 
 dList = Cons 1.1 (Cons 2.2 (Cons 3.3 Nil))
@@ -1056,32 +1110,145 @@ dList = Cons 1.1 (Cons 2.2 (Cons 3.3 Nil))
 <br>
 <br>
 
-## Polymorphic Function over Polymorphic Data
-
-Lets write the list length function
+## QUIZ 
 
 ```haskell
-len :: List a -> Int
-len Nil         = 0
-len (Cons x xs) = 1 + len xs
+data List a = Nil | Cons a  (List a)
+```
+
+What is the type of `Cons` ?
+
+**A.** `Int ->  List      -> List`
+
+**B.** `Int ->  List Int  -> List Int`
+
+**C.** `Char -> List Char -> List Char`
+
+**D.** `a    -> List      -> List`
+
+**E.** `a    -> List a    -> List a`
+
+(I) final    
+
+    *Answer:* E
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Polymorphic Data has Polymorphic Constructors
+
+Look at the types of the constructors 
+
+```haskell
+>>> :type Nil 
+Nil :: List a
+```
+
+That is, the `Empty` tag is a value of *any* kind of list, and
+
+```haskell
+>>> :type Cons 
+Cons :: a -> List a -> List a
+```
+
+`Cons` takes an `a` *and* a `List a` and returns a `List a`.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE: Polymorphic Functions
+
+Write an `append` function that appends two `List`s:
+
+```haskell
+data List a = Nil | Cons a  (List a)
+
+append :: ??? -- What is the type of `append`?
+append = ???
+```
+
+so that we can call:
+
+```haskell
+-- Using built-in list syntax for readability:
+>>> append [1.1, 2.2] [3.3, 4.4]
+[1.1, 2.2, 3.3, 4.4]
+
+>>> append "mmm, " "donuts!"
+"mmm, donuts!"
+```
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Polymorphic Functions over Polymorphic Data
+
+The `append` function on `List`s is polymorphic:
+
+```haskell
+append :: List a -> List a -> List a
+append Nil ys         = ys
+append (Cons x xs) ys = Cons x (append xs ys)
 ``` 
 
-`len` doesn't care about the actual *values* in the list
-- only "counts" the number of `Cons` constructors 
+`append` doesn't care about the actual *values* in the list
 
-Hence `len :: List a -> Int` 
+- only manipulates the *structure* of the list
 
-- we can call `len` on **any kind of list**. 
+
+
+Hence `append :: List a -> List a -> List a` 
+
+- we can call `append` on lists **of any kind**
+- as long as both lists are of **the same kind**
 
 ```haskell
->>> len [1.1, 2.2, 3.3, 4.4]    -- a := Double  
-4
+>>> append [1.1, 2.2] [3.3, 4.4]  -- a = Double
+[1.1, 2.2, 3.3, 4.4]
 
->>> len "mmm donuts!"           -- a := Char
-11
+>>> append "mmm, " "donuts!"      -- a = Char
+"mmm, donuts!"
 
->>> len [[1], [1,2], [1,2,3]]   -- a := ???
-3
+>>> append [1, 2] "donuts!"       -- a = ???
+???
+
+>>> append [[1], [1,2]] [[1,2,3]] -- a := ???
+???
 ```
 
 <br>
@@ -1113,7 +1280,7 @@ data List a = Nil | Cons a (List a)
 - `Nil` is called `[]` 
 - `Cons` is called `:`
 
-Many list manipulating functions e.g. in [Data.List][1] are *polymorphic*
+Many list manipulating functions e.g. in `Data.List` are *polymorphic*
 - Can be reused across all kinds of lists.
 
 ```haskell
@@ -1122,41 +1289,6 @@ head :: [a] -> a
 tail :: [a] -> [a]
 ```
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-## Generalizing Other Data Types
-
-Polymorphic trees
-
-```haskell
-data Tree a 
-   = Leaf a 
-   | Node (Tree a) (Tree a) 
-   deriving (Show)
-```
-
-Polymorphic *2-3* trees
-
-```haskell
-data Tree23 a 
-   = Leaf0  
-   | Node2 (Tree23 a) (Tree23 a)
-   | Node3 (Tree23 a) (Tree23 a) (Tree23 a)
-   deriving (Show)
-```
 
 <br>
 <br>
@@ -1180,6 +1312,7 @@ data Tree23 a
 If `a` is the *type parameter*, then what is `List`? 
 
 A *type-constructor* that 
+
 - takes *as input* a type `a`
 - returns *as output* the type `List a` 
 
@@ -1233,9 +1366,15 @@ What is the *kind* of `->`? That, is what does GHCi say if we type
 
 **C.** `* -> * -> *`
 
-We will not dwell too much on this now. 
+(I) final    
 
-As you might imagine, they allow for all sorts of abstractions over data. 
+    *Answer:* C
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 If interested, see [this for more information about kinds](http://en.wikipedia.org/wiki/Kind_(type_theory)). 
 

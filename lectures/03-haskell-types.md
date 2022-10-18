@@ -837,6 +837,12 @@ What is the type of `ICons` ?
 
 ## EXERCISE 
 
+With the definition:
+
+```haskell
+data IntList = INil | ICons Int IntList
+```
+
 Write down an `IntList` representation of the list `[1,2,3]`
 
 ```haskell
@@ -1318,7 +1324,7 @@ A *type-constructor* that
 
 But wait, if `List` is a *type-constructor* then what is its "type"? 
 
-- A *kind* is the "type" of a type.
+- A *kind* is the "type" of a type constructor.
 
 ```haskell
 >>> :kind Int

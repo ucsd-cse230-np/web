@@ -398,7 +398,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <img src="../static/img/fairy.png" alt /><figcaption>Fairy In a Bottle</figcaption>
 </figure>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="exercise-refactor">EXERCISE: refactor</h2>
+<h2 id="exercise-refactor-with-map">EXERCISE: refactor with map</h2>
 <p>With <code class="sourceCode haskell"><span class="fu">map</span></code> defined as:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="fu">map</span> f []     <span class="ot">=</span> []</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="fu">map</span> f (x<span class="op">:</span>xs) <span class="ot">=</span> f x <span class="op">:</span> <span class="fu">map</span> f xs</span></code></pre></div>
@@ -499,8 +499,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">pattern</span> <span class="ot">=</span> <span class="op">...</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="the-fold-right-pattern">The “fold-right” pattern</h2>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="fu">foldr</span> f b []     <span class="ot">=</span> b</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a><span class="fu">foldr</span> f b (x<span class="op">:</span>xs) <span class="ot">=</span> f x (<span class="fu">foldr</span> f b xs)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span></code></pre></div>
 <p>General Pattern</p>
 <ul>
 <li>Recurse on tail</li>
@@ -511,56 +511,69 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <img src="../static/img/fairy.png" alt /><figcaption>Fairy In a Bottle</figcaption>
 </figure>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="exercise-refactor-1">EXERCISE: refactor</h2>
+<h2 id="exercise-refactor-with-fold">EXERCISE: refactor with fold</h2>
 <p>With <code class="sourceCode haskell"><span class="fu">foldr</span></code> defined as:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="fu">foldr</span> f b []     <span class="ot">=</span> b</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="fu">foldr</span> f b (x<span class="op">:</span>xs) <span class="ot">=</span> f x (<span class="fu">foldr</span> f b xs)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span></code></pre></div>
 <p>refactor <code class="sourceCode haskell"><span class="fu">sum</span></code> and <code class="sourceCode haskell">cat</code> to use <code class="sourceCode haskell"><span class="fu">foldr</span></code>:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="fu">sum</span> xs <span class="ot">=</span> <span class="fu">foldr</span> <span class="op">...</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>cat xs <span class="ot">=</span> <span class="fu">foldr</span> <span class="op">...</span></span></code></pre></div>
-<p>If possible, use eta-contraction to make your code more concise!</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="fu">sum</span> xs <span class="ot">=</span> <span class="fu">foldr</span> op base xs</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>    base     <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>    op x acc <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>cat xs <span class="ot">=</span> <span class="fu">foldr</span> op base xs</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true"></a>    base     <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true"></a>    op x acc <span class="ot">=</span> <span class="op">...</span></span></code></pre></div>
+<p>Now use eta-contraction to make your code more concise!</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="solution">Solution</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="fu">sum</span> <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>cat <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">++</span>) <span class="st">&quot;&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="fu">sum</span> xs <span class="ot">=</span> <span class="fu">foldr</span> op base xs</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>    base     <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>    op x acc <span class="ot">=</span> x <span class="op">+</span> acc</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a>cat xs <span class="ot">=</span> <span class="fu">foldr</span> op base xs</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true"></a>    base     <span class="ot">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true"></a>    op x acc <span class="ot">=</span> x <span class="op">++</span> acc</span></code></pre></div>
+<p>or, more concisely:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="fu">sum</span> <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>cat <span class="ot">=</span> <span class="fu">foldr</span> (<span class="op">++</span>) <span class="st">&quot;&quot;</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="executing-foldr">Executing “foldr”</h2>
 <p>To develop some intuition about <code class="sourceCode haskell"><span class="fu">foldr</span></code> lets “run” it by hand.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="fu">foldr</span> f b []     <span class="ot">=</span> b</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a><span class="fu">foldr</span> f b (x<span class="op">:</span>xs) <span class="ot">=</span> f x (<span class="fu">foldr</span> f b xs)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a><span class="fu">foldr</span> op b (a1<span class="op">:</span>a2<span class="op">:</span>a3<span class="op">:</span>a4<span class="op">:</span>[])</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a2<span class="op">:</span>a3<span class="op">:</span>a4<span class="op">:</span>[]))</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a3<span class="op">:</span>a4<span class="op">:</span>[])))</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a4<span class="op">:</span>[]))))</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> (a4 <span class="ot">`op`</span> <span class="fu">foldr</span> op b [])))</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> (a4 <span class="ot">`op`</span> b)))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a><span class="fu">foldr</span> op b (a1<span class="op">:</span>a2<span class="op">:</span>a3<span class="op">:</span>[])</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a2<span class="op">:</span>a3<span class="op">:</span>[]))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a3<span class="op">:</span>[])))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b [])))</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> b))</span></code></pre></div>
 <p>Look how it <em>mirrors</em> the structure of lists!</p>
 <ul>
 <li><code class="sourceCode haskell">(<span class="op">:</span>)</code> is replaced by <code class="sourceCode haskell">op</code></li>
 <li><code class="sourceCode haskell">[]</code> is replaced by <code class="sourceCode haskell">base</code></li>
 </ul>
 <p>For example:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">3</span>, <span class="dv">4</span>]))</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">4</span>])))</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> []))))</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> <span class="dv">0</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">3</span>, <span class="dv">4</span>]))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> [<span class="dv">4</span>])))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> (<span class="fu">foldr</span> (<span class="op">+</span>) <span class="dv">0</span> []))))</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a>  <span class="op">==&gt;</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> <span class="dv">0</span>)))</span></code></pre></div>
 <p>Accumulate the values from the <strong>right</strong>!</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-1">QUIZ</h2>
 <p>What is the most general type of <code class="sourceCode haskell"><span class="fu">foldr</span></code>?</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="fu">foldr</span> f b []     <span class="ot">=</span> b</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="fu">foldr</span> f b (x<span class="op">:</span>xs) <span class="ot">=</span> f x (<span class="fu">foldr</span> f b xs)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span></code></pre></div>
 <p><strong>(A)</strong> <code class="sourceCode haskell">(a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> a</code></p>
 <p><strong>(B)</strong> <code class="sourceCode haskell">(a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</code></p>
 <p><strong>(C)</strong> <code class="sourceCode haskell">(a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</code></p>
@@ -570,9 +583,9 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-2">QUIZ</h2>
 <p>Recall the function to compute the <code class="sourceCode haskell">len</code> of a list</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">len ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>len []     <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>len (x<span class="op">:</span>xs) <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> len xs</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">len ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>len []     <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>len (x<span class="op">:</span>xs) <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> len xs</span></code></pre></div>
 <p>Which of these is a valid implementation of <code class="sourceCode haskell">len</code></p>
 <p><strong>A.</strong> <code class="sourceCode haskell">len <span class="ot">=</span> <span class="fu">foldr</span> (\n <span class="ot">-&gt;</span> n <span class="op">+</span> <span class="dv">1</span>) <span class="dv">0</span></code></p>
 <p><strong>B.</strong> <code class="sourceCode haskell">len <span class="ot">=</span> <span class="fu">foldr</span> (\n m <span class="ot">-&gt;</span> n <span class="op">+</span> m) <span class="dv">0</span></code></p>
@@ -583,88 +596,133 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="the-missing-parameter-revisited">The Missing Parameter Revisited</h2>
 <p>We wrote <code class="sourceCode haskell"><span class="fu">foldr</span></code> as</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="fu">foldr</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span></code></pre></div>
-<p>but can also write this</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="fu">foldr</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a><span class="fu">foldr</span> op base  <span class="ot">=</span> go </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>     go []     <span class="ot">=</span> base</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a>     go (x<span class="op">:</span>xs) <span class="ot">=</span> op x (go xs)</span></code></pre></div>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a><span class="fu">foldr</span> op base []     <span class="ot">=</span> base</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a><span class="fu">foldr</span> op base (x<span class="op">:</span>xs) <span class="ot">=</span> op x (<span class="fu">foldr</span> op base xs)</span></code></pre></div>
+<p>but can also write this</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="fu">foldr</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="fu">foldr</span> op base  <span class="ot">=</span> go </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>     go []     <span class="ot">=</span> base</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>     go (x<span class="op">:</span>xs) <span class="ot">=</span> op x (go xs)</span></code></pre></div>
 <p>Can someone explain where the <code class="sourceCode haskell">xs</code> went <em>missing</em> ?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="aside-folding-right-vs-left">Aside: folding right vs left</h2>
+<p>We can also fold a list from the <strong>left</strong>:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="fu">foldl</span> op b (a1<span class="op">:</span>a2<span class="op">:</span>a3<span class="op">:</span>[])</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>  <span class="fu">foldl</span> op (b <span class="ot">`op`</span> a1) (a2<span class="op">:</span>a3<span class="op">:</span>[])</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>  <span class="fu">foldl</span> op ((b <span class="ot">`op`</span> a1) <span class="ot">`op`</span> a2) (a3<span class="op">:</span>[])</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true"></a>  <span class="fu">foldl</span> op (((b <span class="ot">`op`</span> a1) <span class="ot">`op`</span> a2) <span class="ot">`op`</span> a3) []</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true"></a>  ((b <span class="ot">`op`</span> a1) <span class="ot">`op`</span> a2) <span class="ot">`op`</span> a3</span></code></pre></div>
+<p>Contrast this to folding from the <strong>right</strong>:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="fu">foldr</span> op b (a1<span class="op">:</span>a2<span class="op">:</span>a3<span class="op">:</span>[])</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a><span class="op">==&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a2<span class="op">:</span>a3<span class="op">:</span>[]))</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b (a3<span class="op">:</span>[])))</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> (<span class="fu">foldr</span> op b [])))</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true"></a><span class="op">==&gt;</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true"></a>  a1 <span class="ot">`op`</span> (a2 <span class="ot">`op`</span> (a3 <span class="ot">`op`</span> b))</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="left-vs.-right">Left vs. Right</h2>
+<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="fu">foldr</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="fu">foldr</span> op base  <span class="ot">=</span> go </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>     go []     <span class="ot">=</span> base</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>     go (x<span class="op">:</span>xs) <span class="ot">=</span> op x (go xs)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a><span class="fu">foldl</span><span class="ot"> ::</span> (b <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> b <span class="co">-- Different type!</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true"></a><span class="fu">foldl</span> op base  <span class="ot">=</span> go base</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true"></a>     go acc []     <span class="ot">=</span> acc</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true"></a>     go acc (x<span class="op">:</span>xs) <span class="ot">=</span> go (op acc x) xs <span class="co">-- Different recursion!</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="trees">Trees</h2>
 <p>Recall binary trees of integers <code class="sourceCode haskell"><span class="dt">ITree</span></code> from last time.</p>
 <p>They can be generalized to trees of any type <code class="sourceCode haskell">a</code>:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Tree</span> a </span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Leaf</span> </span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>t1234 <span class="ot">=</span> <span class="dt">Node</span> <span class="dv">1</span> </span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>          (<span class="dt">Node</span> <span class="dv">2</span> (<span class="dt">Node</span> <span class="dv">3</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) <span class="dt">Leaf</span>) </span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>          (<span class="dt">Node</span> <span class="dv">4</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Tree</span> a </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Leaf</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a><span class="ot">t1234 ::</span> <span class="dt">Tree</span> <span class="dt">Int</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a>t1234 <span class="ot">=</span> <span class="dt">Node</span> <span class="dv">1</span> </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>          (<span class="dt">Node</span> <span class="dv">2</span> (<span class="dt">Node</span> <span class="dv">3</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) <span class="dt">Leaf</span>) </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>          (<span class="dt">Node</span> <span class="dv">4</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span></code></pre></div>
 <figure>
 <img src="../static/img/tree-data-node.png" id="fig:boxes" class="align-center" style="width:50.0%" alt /><figcaption>Binary tree</figcaption>
 </figure>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="exercise-tree-height">EXERCISE: tree height</h2>
-<p>Write a function to compute the <code class="sourceCode haskell">height</code> of a tree, where height is the max number of <code class="sourceCode haskell"><span class="dt">Node</span></code>s on a path from the root to a leaf.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Tree</span> a <span class="ot">=</span> <span class="dt">Leaf</span> <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a><span class="ot">height ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a>height <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>height (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true"></a></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> height t1234</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true"></a><span class="dv">3</span> </span></code></pre></div>
+<p>Write a function to compute the <code class="sourceCode haskell">height</code> of a tree, where</p>
+<ul>
+<li>height is the max number of <code class="sourceCode haskell"><span class="dt">Node</span></code>s on a path from the root to a leaf</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Tree</span> a <span class="ot">=</span> <span class="dt">Leaf</span> <span class="op">|</span> <span class="dt">Node</span> a (<span class="dt">Tree</span> a) (<span class="dt">Tree</span> a)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a><span class="ot">height ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>height <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true"></a>height (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> height t1234</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true"></a><span class="dv">3</span> </span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="examples-tree-sum">Examples: tree sum</h2>
 <p>Let’s write a function to <em>sum</em> the leaves of an <code class="sourceCode haskell"><span class="dt">Int</span></code> tree:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="ot">sumTree ::</span> <span class="dt">Tree</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>sumTree <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>sumTree (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> sumTree t1234</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true"></a><span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="ot">sumTree ::</span> <span class="dt">Tree</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>sumTree <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>sumTree (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> sumTree t1234</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true"></a><span class="dv">10</span></span></code></pre></div>
 <p><br> <br> <br></p>
 <p>Let’s write a function to gather all the elements in the tree:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="ot">toList ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> [a] </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>toList <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span> </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>toList (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> toList t1234</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="ot">toList ::</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> [a] </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>toList <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>toList (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> toList t1234</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true"></a>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="pattern-tree-fold">Pattern: Tree Fold</h2>
 <p>Can you spot the pattern? Those three functions are almost the same!</p>
 <p><strong>Step 1:</strong> Rename to maximize similarity</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="co">-- height</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">max</span> (foo l) (foo l)</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a><span class="co">-- sumTree</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> foo l <span class="op">+</span> foo r</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a><span class="co">-- toList</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> []</span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> x <span class="op">:</span> foo l <span class="op">++</span> foo r</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a><span class="co">-- height</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">max</span> (foo l) (foo l)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a><span class="co">-- sumTree</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> foo l <span class="op">+</span> foo r</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true"></a><span class="co">-- toList</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true"></a>foo <span class="dt">Leaf</span>         <span class="ot">=</span> []</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true"></a>foo (<span class="dt">Node</span> x l r) <span class="ot">=</span> x <span class="op">:</span> foo l <span class="op">++</span> foo r</span></code></pre></div>
 <p><strong>Step 2:</strong> Identify the differences</p>
 <ol type="1">
 <li>???</li>
 <li>???</li>
 </ol>
 <p><strong>Step 3</strong> Make <em>differences</em> a parameter</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>foo p1 p2 <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>foo p1 p2 (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>foo p1 p2 <span class="dt">Leaf</span>         <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>foo p1 p2 (<span class="dt">Node</span> x l r) <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="pattern-folding-on-trees">Pattern: Folding on Trees</h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>tFold op b <span class="dt">Leaf</span>         <span class="ot">=</span> b </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>tFold op b (<span class="dt">Node</span> x l r) <span class="ot">=</span> op x (tFold op b l) (tFold op b r)</span></code></pre></div>
+<h2 id="pattern-tree-fold-1">Pattern: Tree fold</h2>
+<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>tFold op base <span class="dt">Leaf</span>         <span class="ot">=</span> base </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>tFold op base (<span class="dt">Node</span> x l r) <span class="ot">=</span> op x (tFold op base l) (tFold op base r)</span></code></pre></div>
 <p>Lets try to work out the type of <code class="sourceCode haskell">tFold</code>!</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="ot">tFold ::</span> t_op <span class="ot">-&gt;</span> t_b <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> t_out</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="ot">tFold ::</span> <span class="op">???</span> <span class="ot">-&gt;</span> <span class="op">???</span> <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="op">???</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="ot">tFold ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> b</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>tFold op base <span class="ot">=</span> go</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a>    go <span class="dt">Leaf</span>         <span class="ot">=</span> base</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>    go (<span class="dt">Node</span> x l r) <span class="ot">=</span> op x (go l) (go r)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-3">QUIZ</h2>
 <p>Suppose that <code class="sourceCode haskell"><span class="ot">t ::</span> <span class="dt">Tree</span> <span class="dt">Int</span></code>.</p>
 <p>What does <code class="sourceCode haskell">tFold (\x y z <span class="ot">-&gt;</span> y <span class="op">+</span> z) <span class="dv">1</span> t</code> return?</p>
@@ -674,57 +732,59 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>d.</strong> the <em>number of leaves</em> of the tree <code class="sourceCode haskell">t</code></p>
 <p><strong>e.</strong> type <em>error</em></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="exercise">EXERCISE</h2>
+<h2 id="exercise-using-tree-fold">EXERCISE: using tree fold</h2>
 <p>Write a function to compute the <em>largest</em> element in a tree or <code class="sourceCode haskell"><span class="dv">0</span></code> if tree is empty or all negative.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a><span class="ot">treeMax ::</span> <span class="dt">Tree</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>treeMax t <span class="ot">=</span> tFold f b t </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a>     f    <span class="ot">=</span> <span class="op">???</span> </span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a>     b    <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="ot">treeMax ::</span> <span class="dt">Tree</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a>treeMax t <span class="ot">=</span> tFold f b t </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true"></a>     b       <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true"></a>     f x l r <span class="ot">=</span> <span class="op">???</span> </span></code></pre></div>
+<p>Recall that <code class="sourceCode haskell">tFold</code> is defined as</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="ot">tFold ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> b</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>tFold op base <span class="ot">=</span> go</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true"></a>    go <span class="dt">Leaf</span>         <span class="ot">=</span> base</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true"></a>    go (<span class="dt">Node</span> x l r) <span class="ot">=</span> op x (go l) (go r)</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="map-over-trees">Map over Trees</h2>
 <p>We can also write a <code class="sourceCode haskell">tmap</code> equivalent of <code class="sourceCode haskell"><span class="fu">map</span></code> for <code class="sourceCode haskell"><span class="dt">Tree</span></code>s</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a><span class="ot">treeMap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> b</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>treeMap f (<span class="dt">Leaf</span> x)   <span class="ot">=</span> <span class="dt">Leaf</span> (f x)</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true"></a>treeMap f (<span class="dt">Node</span> l r) <span class="ot">=</span> <span class="dt">Node</span> (treeMap f l) (treeMap f r)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a><span class="ot">treeMap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> b</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>treeMap f (<span class="dt">Leaf</span> x)   <span class="ot">=</span> <span class="dt">Leaf</span> (f x)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a>treeMap f (<span class="dt">Node</span> l r) <span class="ot">=</span> <span class="dt">Node</span> (treeMap f l) (treeMap f r)</span></code></pre></div>
 <p>which gives</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> treeMap (\n <span class="ot">-&gt;</span> n <span class="op">*</span> n) tree123     <span class="co">-- square all elements of tree</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a><span class="dt">Node</span> <span class="dv">1</span> (<span class="dt">Node</span> <span class="dv">4</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) (<span class="dt">Node</span> <span class="dv">9</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> treeMap (\n <span class="ot">-&gt;</span> n <span class="op">*</span> n) tree1234     <span class="co">-- square all elements of tree</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a><span class="dt">Node</span> <span class="dv">1</span> (<span class="dt">Node</span> <span class="dv">4</span> (<span class="dt">Node</span> <span class="dv">9</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) <span class="dt">Leaf</span>) (<span class="dt">Node</span> <span class="dv">16</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="exercise-map-via-fold">EXERCISE: map via fold</h2>
 <p>Can we rewrite <code class="sourceCode haskell">treeMap</code> using <code class="sourceCode haskell">tFold</code>?</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="ot">treeMap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> b</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>treeMap f t <span class="ot">=</span> tFold op base t </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a>     op     <span class="ot">=</span> <span class="op">???</span> </span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>     base   <span class="ot">=</span> <span class="op">???</span> </span></code></pre></div>
-<p>When you are done, we should get</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> animals <span class="ot">=</span> <span class="dt">Node</span> <span class="st">&quot;cow&quot;</span> (<span class="dt">Node</span> <span class="st">&quot;piglet&quot;</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) (<span class="dt">Leaf</span> <span class="st">&quot;hippo&quot;</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> treeMap <span class="fu">reverse</span> animals</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a><span class="dt">Node</span> <span class="st">&quot;woc&quot;</span> (<span class="dt">Node</span> <span class="st">&quot;telgip&quot;</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>) (<span class="dt">Leaf</span> <span class="st">&quot;oppih&quot;</span> <span class="dt">Leaf</span> <span class="dt">Leaf</span>)</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true"></a><span class="ot">treeMap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Tree</span> a <span class="ot">-&gt;</span> <span class="dt">Tree</span> b</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true"></a>treeMap f <span class="ot">=</span> tFold op base </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true"></a>     base   <span class="ot">=</span> <span class="op">???</span> </span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true"></a>     op     <span class="ot">=</span> <span class="op">???</span> </span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="folding-custom-data-types">Folding custom data types</h2>
 <p>We can also write fancy folds for our own data types!</p>
 <p>For example, here is a “directory” data type from HW1:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Dir</span> a </span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Fil</span> a             <span class="co">-- ^ A single file named `a`</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Sub</span> a [<span class="dt">Dir</span> a]     <span class="co">-- ^ A sub-directory name `a` with contents `[Dir a]`</span></span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true"></a></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">DirElem</span> a </span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">SubDir</span> a          <span class="co">-- ^ A single Sub-Directory named `a`</span></span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">File</span> a            <span class="co">-- ^ A single File named `a` </span></span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true"></a></span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true"></a><span class="ot">foldDir ::</span> ([a] <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">DirElem</span> a <span class="ot">-&gt;</span> r) <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">Dir</span> a <span class="ot">-&gt;</span> r</span>
-<span id="cb54-10"><a href="#cb54-10" aria-hidden="true"></a>foldDir f r0 dir <span class="ot">=</span> go [] r0 dir  </span>
-<span id="cb54-11"><a href="#cb54-11" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb54-12"><a href="#cb54-12" aria-hidden="true"></a>      go stk r (<span class="dt">Fil</span> a)    <span class="ot">=</span> f stk r (<span class="dt">File</span> a)  </span>
-<span id="cb54-13"><a href="#cb54-13" aria-hidden="true"></a>      go stk r (<span class="dt">Sub</span> a ds) <span class="ot">=</span> L.foldl' (go stk') r' ds                          </span>
-<span id="cb54-14"><a href="#cb54-14" aria-hidden="true"></a>        <span class="kw">where</span> </span>
-<span id="cb54-15"><a href="#cb54-15" aria-hidden="true"></a>            r'   <span class="ot">=</span> f stk r (<span class="dt">SubDir</span> a)  </span>
-<span id="cb54-16"><a href="#cb54-16" aria-hidden="true"></a>            stk' <span class="ot">=</span> a<span class="op">:</span>stk</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Dir</span> a </span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Fil</span> a          <span class="co">-- A single file named `a`</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Sub</span> a [<span class="dt">Dir</span> a]  <span class="co">-- A sub-directory name `a` with contents `[Dir a]`</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">DirElem</span> a </span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">File</span> a         <span class="co">-- A single File named `a` </span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">SubDir</span> a       <span class="co">-- A single Sub-Directory named `a`</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true"></a><span class="ot">foldDir ::</span> ([a] <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">DirElem</span> a <span class="ot">-&gt;</span> r) <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">Dir</span> a <span class="ot">-&gt;</span> r</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true"></a>foldDir op r0 dir <span class="ot">=</span> go [] r0 dir  </span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true"></a>      go path r (<span class="dt">Fil</span> a)    <span class="ot">=</span> op path r (<span class="dt">File</span> a)  </span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true"></a>      go path r (<span class="dt">Sub</span> a ds) <span class="ot">=</span> foldl' (go path') r' ds                          </span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true"></a>        <span class="kw">where</span> </span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true"></a>            r'    <span class="ot">=</span> op path r (<span class="dt">SubDir</span> a)  </span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true"></a>            path' <span class="ot">=</span> a<span class="op">:</span>path</span></code></pre></div>
 <p><code class="sourceCode haskell">foldDir</code> takes as input</p>
 <ul>
-<li><p>an <em>accumulator</em> <code class="sourceCode haskell">f</code> of type <code class="sourceCode haskell">[a] <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">DirElem</span> a <span class="ot">-&gt;</span> r</code></p>
+<li><p>an <em>operation</em> <code class="sourceCode haskell">op</code> of type <code class="sourceCode haskell">[a] <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> <span class="dt">DirElem</span> a <span class="ot">-&gt;</span> r</code></p>
 <ul>
 <li><p>takes as <em>input</em> the path <code class="sourceCode haskell">[a]</code> , the current result <code class="sourceCode haskell">r</code>, the next <code class="sourceCode haskell"><span class="dt">DirElem</span> [a]</code></p></li>
 <li><p>and returns as <em>output</em> the new result <code class="sourceCode haskell">r</code></p></li>

@@ -321,6 +321,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> volume circ0</span></code></pre></div>
 <p><strong>A.</strong> <code class="sourceCode haskell"><span class="dv">0</span></code></p>
 <p><strong>B.</strong> Type error</p>
+<p><em>Answer:</em> A</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="beware">Beware!</h2>
 <p>Type Synonyms</p>
@@ -368,6 +369,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>C.</strong> <code class="sourceCode haskell"><span class="dt">MkCircle</span><span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Circle</span></code></p>
 <p><strong>D.</strong> <code class="sourceCode haskell"><span class="dt">MkCircle</span><span class="ot"> ::</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Double</span> <span class="ot">-&gt;</span> <span class="dt">Circle</span></code></p>
 <p><strong>E.</strong> <code class="sourceCode haskell"><span class="dt">MkCircle</span><span class="ot"> ::</span> (<span class="dt">Double</span>, <span class="dt">Double</span>, <span class="dt">Double</span>) <span class="ot">-&gt;</span> <span class="dt">Circle</span></code></p>
+<p><em>Answer:</em> D</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="aside-record-syntax">Aside: Record syntax</h3>
 <p>Haskell’s <strong>record syntax</strong> allows you to <em>name</em> the constructor parameters:</p>
@@ -398,6 +400,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> volume (<span class="dt">MkCuboid</span> <span class="dv">10</span> <span class="dv">20</span> <span class="dv">30</span>)</span></code></pre></div>
 <p><strong>A.</strong> <code class="sourceCode haskell"><span class="dv">6000</span></code></p>
 <p><strong>B.</strong> Type error</p>
+<p><em>Answer:</em> B</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="deconstructing-data">Deconstructing Data</h2>
 <p>Constructors let us <em>build</em> values of new type … but how to <em>use</em> those values?</p>
@@ -474,6 +477,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>B.</strong> <code class="sourceCode haskell"><span class="dt">Circle</span></code></p>
 <p><strong>C.</strong> <code class="sourceCode haskell"><span class="dt">MkCircle</span></code></p>
 <p><strong>D.</strong> <code class="sourceCode haskell">(<span class="dt">Double</span>, <span class="dt">Double</span>, <span class="dt">Double</span>)</code></p>
+<p><em>Answer:</em> A</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="list-of-shapes-take-2">List of Shapes: Take 2</h2>
 <p>Now we can define</p>
@@ -550,6 +554,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>C.</strong> <code class="sourceCode haskell">(<span class="dt">Int</span>, <span class="dt">IntList</span>)</code></p>
 <p><strong>D.</strong> <code class="sourceCode haskell"><span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">IntList</span> <span class="ot">-&gt;</span> <span class="dt">IntList</span></code></p>
 <p><strong>E.</strong> <code class="sourceCode haskell"><span class="dt">IntList</span> <span class="ot">-&gt;</span> <span class="dt">IntList</span></code></p>
+<p><em>Answer:</em> D</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="exercise-1">EXERCISE</h2>
 <p>With the definition:</p>
@@ -595,6 +600,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>(D)</strong> <code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">ITree</span> <span class="ot">=</span> <span class="dt">ILeaf</span> <span class="dt">Int</span> <span class="op">|</span> <span class="dt">INode</span> <span class="dt">ITree</span> <span class="dt">ITree</span></code></p>
 <p><strong>(E)</strong> <code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">ITree</span> <span class="ot">=</span> <span class="dt">ILeaf</span> <span class="dt">Int</span> <span class="op">|</span> <span class="dt">INode</span> <span class="dt">Int</span> <span class="dt">ITree</span> <span class="dt">ITree</span></code></p>
 <p><br></p>
+<p><em>Answer:</em> C</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <figure>
 <img src="../static/img/tree-data-node.png" id="fig:boxes" class="align-center" style="width:50.0%" alt /><figcaption>Binary tree</figcaption>
@@ -666,6 +672,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>C.</strong> <code class="sourceCode haskell"><span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">List</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">List</span> <span class="dt">Char</span></code></p>
 <p><strong>D.</strong> <code class="sourceCode haskell">a    <span class="ot">-&gt;</span> <span class="dt">List</span>      <span class="ot">-&gt;</span> <span class="dt">List</span></code></p>
 <p><strong>E.</strong> <code class="sourceCode haskell">a    <span class="ot">-&gt;</span> <span class="dt">List</span> a    <span class="ot">-&gt;</span> <span class="dt">List</span> a</code></p>
+<p><em>Answer:</em> E</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="polymorphic-data-has-polymorphic-constructors">Polymorphic Data has Polymorphic Constructors</h2>
 <p>Look at the types of the constructors</p>
@@ -758,6 +765,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>A.</strong> <code class="sourceCode haskell"><span class="op">*</span></code></p>
 <p><strong>B.</strong> <code class="sourceCode haskell"><span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span></code></p>
 <p><strong>C.</strong> <code class="sourceCode haskell"><span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span></code></p>
+<p><em>Answer:</em> C</p>
 <p><br> <br> <br> <br> <br></p>
 <p>If interested, see <a href="http://en.wikipedia.org/wiki/Kind_(type_theory)">this for more information about kinds</a>.</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>

@@ -5,29 +5,29 @@ headerImg: books.jpg
 
 Lecture schedule is subject to change!
 
-| **Date**   | **Topic**                       | **Notes**                 |  **Code**           |
-|:----------:|:--------------------------------|:--------------------------|:--------------------|
-| *9/22*     | Intro                           | [html][00-intro]          |                     | 
-| *9/27*     | Lambda Calculus                 | [html][01-lambda]         |                     | 
-| *9/29*     | contd.                          |                           |                     | 
-| *10/4*     | contd.                          |                           |                     | 
-| *10/6*     | Haskell Basics                  | [html][02-hs-basic]       |                     |
-| *10/11*    | contd.                          |                           |                     |  
-| *10/13*    | Algebraic Data Types            | [html][03-hs-types]       |                     |
-| *10/18*    | Bottling patterns with HOFs     | [html][04-hof]            |                     |
-| *10/20*    | contd.                          |                           |                     |  
-| *10/25*    | Haskell: IO                     | [html][05-hs-io]          |                     |
-| *10/27*    | Type Classes                    |                           |                     | 
-| *11/1*     | Functors and Monads             |                           |                     |
-| *11/3*     | Iteration and State             |                           |                     |
-| *11/8*     | Parser Combinators              |                           |                     | 
-| *11/10*    | contd.                          |                           |                     | 
-| *11/15*    | Monad Transformers              |                           |                     |
-| *11/17*    | Property-based Testing          |                           |                     |          
-| *11/22*    | Concurrency                     |                           |                     | 
-| *11/24*    | Refinement Types                |                           |                     |
-| *11/29*    | *No lecture: Thanksgiving*      |                           |                     |
-| *12/1*     | TBD                             |                           |                     | 
+| **Date**   | **Topic**                       | **Notes**                 |
+|:----------:|:--------------------------------|:--------------------------|
+| *9/22*     | Intro                           | [html][00-intro]          |
+| *9/27*     | Lambda Calculus                 | [html][01-lambda]         |
+| *9/29*     | contd.                          |                           |
+| *10/4*     | contd.                          |                           |
+| *10/6*     | Haskell Basics                  | [html][02-hs-basic]       |
+| *10/11*    | contd.                          |                           |
+| *10/13*    | Algebraic Data Types            | [html][03-hs-types]       |
+| *10/18*    | Bottling patterns with HOFs     | [html][04-hof]            |
+| *10/20*    | contd.                          |                           |
+| *10/25*    | Haskell: IO                     | [html][05-hs-io]          |
+| *10/27*    | Type Classes                    | [html][06-classes]        |
+| *11/1*     | Functors and Monads             |                           |
+| *11/3*     | Iteration and State             |                           |
+| *11/8*     | Parser Combinators              |                           |
+| *11/10*    | contd.                          |                           |
+| *11/15*    | Monad Transformers              |                           |
+| *11/17*    | Property-based Testing          |                           |
+| *11/22*    | Concurrency                     |                           |
+| *11/24*    | Refinement Types                |                           |
+| *11/29*    | *No lecture: Thanksgiving*      |                           |
+| *12/1*     | TBD                             |                           |
 
 [00-intro]: lectures/00-intro.html
 [01-lambda]: lectures/01-lambda.html
@@ -35,6 +35,7 @@ Lecture schedule is subject to change!
 [03-hs-types]: lectures/03-haskell-types.html
 [04-hof]: lectures/04-hof.html
 [05-hs-io]: lectures/05-haskell-io.html
+[06-classes]: lectures/06-classes.html
 
 
 <!-- OLD -->

@@ -635,62 +635,53 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <h2 id="using-typeclasses">Using Typeclasses</h2>
 <p>Now let’s see how to write code that uses type classes!</p>
 <p><br> <br></p>
-<p>Let’s build a small library for <em>Environments</em> mapping keys <code class="sourceCode haskell">k</code> to values <code class="sourceCode haskell">v</code></p>
-<ul>
-<li><p>In Nano, we represented environments as <code class="sourceCode haskell">[(<span class="dt">Id</span>, <span class="dt">Value</span>)]</code></p></li>
-<li><p>But what if I want to have keys that are <em>not</em> <code class="sourceCode haskell"><span class="dt">Id</span></code> and values that are <em>not</em> <code class="sourceCode haskell"><span class="dt">Value</span></code>?</p></li>
-<li><p>What if I want to change the representation to something more <em>efficient</em>?</p></li>
-</ul>
-<p><br> <br></p>
-<p>Let’s define a new <em>polymorphic</em> datatype <code class="sourceCode haskell"><span class="dt">Env</span></code>!</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Env</span> k v</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Def</span>  v              <span class="co">-- default value to be used for missing keys</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Bind</span> k v (<span class="dt">Env</span> k v)  <span class="co">-- bind key `k` to the value `v`</span></span>
+<p>Let’s build a small library for dictionaries mapping keys <code class="sourceCode haskell">k</code> to values <code class="sourceCode haskell">v</code></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Dict</span> k v</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Empty</span>                <span class="co">-- empty dictionary</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Bind</span> k v (<span class="dt">Dict</span> k v)  <span class="co">-- bind key `k` to the value `v`</span></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>  <span class="kw">deriving</span> (<span class="dt">Show</span>)</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="the-api">The API</h2>
-<p>We want to be able to do the following with <code class="sourceCode haskell"><span class="dt">Env</span></code>:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; let env0 = add &quot;cat&quot; 10.0 (add &quot;dog&quot; 20.0 (Def 0))</span></span>
+<p>We want to be able to do the following with <code class="sourceCode haskell"><span class="dt">Dict</span></code>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; let dict0 = add &quot;cat&quot; 10.0 (add &quot;dog&quot; 20.0 empty)</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;cat&quot; env0</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;cat&quot; dict0</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a><span class="co">-- 10</span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;dog&quot; env0</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;dog&quot; dict0</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a><span class="co">-- 20</span></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;horse&quot; env0</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a><span class="co">-- 0</span></span></code></pre></div>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a><span class="co">-- &gt;&gt;&gt; get &quot;horse&quot; dict0</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a><span class="co">-- error: key not found</span></span></code></pre></div>
 <p><br> <br></p>
 <p>Okay, lets implement!</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="co">-- | 'add key val env' returns a new env </span></span>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="co">-- | 'add key val dict' returns a new dictionary</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a><span class="co">-- | that additionally maps `key` to `val`</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a><span class="ot">add ::</span> k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> <span class="dt">Env</span> k v <span class="ot">-&gt;</span> <span class="dt">Env</span> k v</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>add key val env <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a><span class="ot">add ::</span> k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> <span class="dt">Dict</span> k v <span class="ot">-&gt;</span> <span class="dt">Dict</span> k v</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>add key val dict <span class="ot">=</span> <span class="op">???</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a><span class="co">-- | 'get key env' returns the value of `key` </span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true"></a><span class="co">-- | and the &quot;default&quot; if no value is found</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true"></a><span class="ot">get ::</span> k <span class="ot">-&gt;</span> <span class="dt">Env</span> k v <span class="ot">-&gt;</span> v</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true"></a>get key env <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a><span class="co">-- | 'get key dict' returns the value of `key` </span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true"></a><span class="ot">get ::</span> k <span class="ot">-&gt;</span> <span class="dt">Dict</span> k v <span class="ot">-&gt;</span> v</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true"></a>get key dict <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p>But we get a type error!</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="constraint-propagation">Constraint Propagation</h2>
 <p>Lets <em>delete</em> the types of <code class="sourceCode haskell">add</code> and <code class="sourceCode haskell">get</code> and see what Haskell says their types are!</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>λ<span class="op">&gt;</span> <span class="op">:</span><span class="kw">type</span> get</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="ot">get ::</span> (<span class="dt">Eq</span> k) <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> <span class="dt">Env</span> k v <span class="ot">-&gt;</span> <span class="dt">Env</span> k v</span></code></pre></div>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="ot">get ::</span> (<span class="dt">Eq</span> k) <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> <span class="dt">Dict</span> k v <span class="ot">-&gt;</span> <span class="dt">Dict</span> k v</span></code></pre></div>
 <p>Haskell tells us that we can use any <code class="sourceCode haskell">k</code> type as a <em>key</em> as long as this type is an instance of the <code class="sourceCode haskell"><span class="dt">Eq</span></code> typeclass.</p>
 <p>How, did GHC figure this out?</p>
 <ul>
 <li>If you look at the code for <code class="sourceCode haskell">get</code> you’ll see that we check if two keys <em>are equal</em>!</li>
 </ul>
 <p><br> <br> <br> <br> <br> <br></p>
-<h2 id="exercise">Exercise</h2>
+<h2 id="exercise-a-faster-dictionary">EXERCISE: A Faster Dictionary</h2>
 <p>Write an optimized version of</p>
 <ul>
 <li><code class="sourceCode haskell">add</code> that ensures the keys are in <em>increasing</em> order</li>
-<li><code class="sourceCode haskell">get</code> that gives up and returns the “default” the moment we see a key that’s larger than the one we’re looking for</li>
+<li><code class="sourceCode haskell">get</code> that gives up the moment we see a key that’s larger than the one we’re looking for</li>
 </ul>
-<p><em>(How) do you need to change the type of <code class="sourceCode haskell"><span class="dt">Env</span></code>?</em></p>
 <p><em>(How) do you need to change the types of <code class="sourceCode haskell">get</code> and <code class="sourceCode haskell">add</code>?</em></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="explicit-type-annotations">Explicit Type Annotations</h2>
@@ -786,7 +777,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p>The above JSON value would be represented by the <code class="sourceCode haskell"><span class="dt">JVal</span></code></p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a>js1 <span class="ot">=</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>  <span class="dt">JObj</span> [(<span class="st">&quot;name&quot;</span>, <span class="dt">JStr</span> <span class="st">&quot;Nadia&quot;</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>       ,(<span class="st">&quot;age&quot;</span>,  <span class="dt">JNum</span> <span class="fl">36.0</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>       ,(<span class="st">&quot;age&quot;</span>,  <span class="dt">JNum</span> <span class="fl">37.0</span>)</span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>       ,(<span class="st">&quot;likes&quot;</span>,   <span class="dt">JArr</span> [ <span class="dt">JStr</span> <span class="st">&quot;poke&quot;</span>, <span class="dt">JStr</span> <span class="st">&quot;coffee&quot;</span>, <span class="dt">JStr</span> <span class="st">&quot;pasta&quot;</span>])</span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>       ,(<span class="st">&quot;hates&quot;</span>,   <span class="dt">JArr</span> [ <span class="dt">JStr</span> <span class="st">&quot;beets&quot;</span>, <span class="dt">JStr</span> <span class="st">&quot;milk&quot;</span>])</span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a>       ,(<span class="st">&quot;lunches&quot;</span>, <span class="dt">JArr</span> [ <span class="dt">JObj</span> [(<span class="st">&quot;day&quot;</span>,  <span class="dt">JStr</span> <span class="st">&quot;mon&quot;</span>)</span>
@@ -929,28 +920,24 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb52-15"><a href="#cb52-15" aria-hidden="true"></a>    <span class="dt">JObj</span> [(k1, toJSON v1), (k2, toJSON v2), (k3, toJSON v3), (k4, toJSON v4), (k5, toJSON v5)]</span></code></pre></div>
 <p>Now, we can simply write</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a>hs <span class="ot">=</span> ((<span class="st">&quot;name&quot;</span>   , <span class="st">&quot;Nadia&quot;</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>     ,(<span class="st">&quot;age&quot;</span>    , <span class="fl">36.0</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>     ,(<span class="st">&quot;age&quot;</span>    , <span class="fl">37.0</span>)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>     ,(<span class="st">&quot;likes&quot;</span>  , [<span class="st">&quot;poke&quot;</span>, <span class="st">&quot;coffee&quot;</span>, <span class="st">&quot;pasta&quot;</span>])</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a>     ,(<span class="st">&quot;hates&quot;</span>  , [<span class="st">&quot;beets&quot;</span>, <span class="st">&quot;milk&quot;</span>])</span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>     ,(<span class="st">&quot;lunches&quot;</span>, lunches)</span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true"></a>     )     </span></code></pre></div>
 <p>which is a Haskell value that describes our running JSON example, and can convert it directly like so</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a>js2 <span class="ot">=</span> toJSON hs</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br></p>
-<h2 id="serializing-environments">Serializing Environments</h2>
-<p>To wrap everything up, lets write a serializer for environments <code class="sourceCode haskell"><span class="dt">Env</span></code> with <code class="sourceCode haskell"><span class="dt">String</span></code> keys:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">JSON</span> (<span class="dt">Env</span> <span class="dt">String</span> v) <span class="kw">where</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>  toJSON env <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
-<p>and presto! our serializer <em>just works</em></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a>λ<span class="op">&gt;</span> env0</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a><span class="dt">Bind</span> <span class="st">&quot;cat&quot;</span> <span class="fl">10.0</span> (<span class="dt">Bind</span> <span class="st">&quot;dog&quot;</span> <span class="fl">20.0</span> (<span class="dt">Def</span> <span class="dv">0</span>))</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true"></a>λ<span class="op">&gt;</span> toJSON env0</span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true"></a><span class="dt">JObj</span> [ (<span class="st">&quot;cat&quot;</span>, <span class="dt">JNum</span> <span class="fl">10.0</span>)</span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true"></a>     , (<span class="st">&quot;dog&quot;</span>, <span class="dt">JNum</span> <span class="fl">20.0</span>)</span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true"></a>     , (<span class="st">&quot;def&quot;</span>, <span class="dt">JNum</span> <span class="fl">0.0</span>)</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true"></a>     ]</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="exercise-dictionary-with-default-values">EXERCISE: Dictionary with Default Values</h2>
+<p>Modify our implementation of fast dictionaries so that <code class="sourceCode haskell">get</code> returns a default value if the key is not found.</p>
+<p>You should get the following behavior:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="co">-- Note: the default value is NOT passed into `get`</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>λ<span class="op">&gt;</span> get <span class="dv">2</span>       (add <span class="dv">5</span> <span class="st">&quot;five&quot;</span>   (add <span class="dv">10</span> <span class="st">&quot;ten&quot;</span>  (add <span class="dv">3</span> <span class="st">&quot;three&quot;</span> empty)))</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true"></a><span class="st">&quot;&quot;</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true"></a></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true"></a>λ<span class="op">&gt;</span> get <span class="st">&quot;horse&quot;</span> (add <span class="st">&quot;cat&quot;</span> <span class="fl">10.0</span> (add <span class="st">&quot;dog&quot;</span> <span class="fl">20.1</span> empty))</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true"></a><span class="fl">0.0</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p>That’s all folks!</p>
                 <hr>
             </div>

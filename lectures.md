@@ -36,7 +36,7 @@ Lecture schedule is subject to change!
 [04-hof]: lectures/04-hof.html
 [05-hs-io]: lectures/05-haskell-io.html
 [06-classes]: lectures/06-classes.html
-[07-monads]: lectures/06-monads.html
+[07-monads]: lectures/07-monads.html
 
 
 <!-- OLD -->

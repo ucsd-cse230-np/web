@@ -18,8 +18,8 @@ Lecture schedule is subject to change!
 | *10/20*    | contd.                          |                           |
 | *10/25*    | Haskell: IO                     | [html][05-hs-io]          |
 | *10/27*    | Type Classes                    | [html][06-classes]        |
-| *11/1*     | Functors and Monads             |                           |
-| *11/3*     | Iteration and State             |                           |
+| *11/1*     | Functors and Monads             | [html][07-monads]         |
+| *11/3*     | contd.                          |                           |
 | *11/8*     | Parser Combinators              |                           |
 | *11/10*    | contd.                          |                           |
 | *11/15*    | Monad Transformers              |                           |
@@ -36,6 +36,7 @@ Lecture schedule is subject to change!
 [04-hof]: lectures/04-hof.html
 [05-hs-io]: lectures/05-haskell-io.html
 [06-classes]: lectures/06-classes.html
+[07-monads]: lectures/06-monads.html
 
 
 <!-- OLD -->

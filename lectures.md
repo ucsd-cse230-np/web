@@ -20,8 +20,8 @@ Lecture schedule is subject to change!
 | *10/27*    | Type Classes                    | [html][06-classes]        |
 | *11/1*     | Functors and Monads             | [html][07-monads]         |
 | *11/3*     | contd.                          |                           |
-| *11/8*     | Parser Combinators              |                           |
-| *11/10*    | contd.                          |                           |
+| *11/8*     | contd.                          |                           |
+| *11/10*    | Parser Combinators              | [html][08-parsers]        |
 | *11/15*    | Monad Transformers              |                           |
 | *11/17*    | Property-based Testing          |                           |
 | *11/22*    | Concurrency                     |                           |
@@ -37,6 +37,7 @@ Lecture schedule is subject to change!
 [05-hs-io]: lectures/05-haskell-io.html
 [06-classes]: lectures/06-classes.html
 [07-monads]: lectures/07-monads.html
+[08-parsers]: lectures/08-parsers.html
 
 
 <!-- OLD -->

@@ -813,8 +813,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li><p>can implement cool stuff like infinite lists: <code class="sourceCode haskell">[<span class="dv">1</span><span class="op">..</span>]</code></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="co">-- first n pairs of co-primes: </span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a><span class="fu">take</span> n [(i,j) <span class="op">|</span> i <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>],</span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a>                j <span class="ot">&lt;-</span> [<span class="dv">1</span><span class="op">..</span>i],</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a><span class="fu">take</span> n [(i,j) <span class="op">|</span> i <span class="ot">&lt;-</span> [<span class="dv">2</span><span class="op">..</span>],</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a>                j <span class="ot">&lt;-</span> [<span class="dv">2</span><span class="op">..</span>i],</span>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a>                <span class="fu">gcd</span> i j <span class="op">==</span> <span class="dv">1</span>]</span></code></pre></div></li>
 <li><p>encourages simple, general solutions</p></li>
 <li><p>but has its problems too :(</p></li>

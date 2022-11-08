@@ -1335,8 +1335,8 @@ Example: `take 2 [1 .. (factorial 100)]`
   
     ```haskell
     -- first n pairs of co-primes: 
-    take n [(i,j) | i <- [1..],
-                    j <- [1..i],
+    take n [(i,j) | i <- [2..],
+                    j <- [2..i],
                     gcd i j == 1]
     ```
 

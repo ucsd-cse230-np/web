@@ -451,7 +451,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p>Also, take a second look at the <code class="sourceCode haskell"><span class="dt">Parser</span></code> type:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Parser</span> a <span class="ot">=</span> <span class="dt">P</span> (<span class="dt">String</span> <span class="ot">-&gt;</span> [(a, <span class="dt">String</span>)])</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">ST</span> s a   <span class="ot">=</span> <span class="dt">S</span> (s <span class="ot">-&gt;</span> (a, s))</span></code></pre></div>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">State</span> s a   <span class="ot">=</span> <span class="dt">S</span> (s <span class="ot">-&gt;</span> (a, s))</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="parser-is-a-monad">Parser is a Monad!</h2>
 <p>Like <code class="sourceCode haskell"><span class="dt">State</span></code> and <code class="sourceCode haskell">[]</code>, <a href="http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf"><code class="sourceCode haskell"><span class="dt">Parser</span></code> is a monad!</a></p>
@@ -673,44 +673,45 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb38-20"><a href="#cb38-20" aria-hidden="true"></a>  )</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="a-simple-expression-parser">A Simple Expression Parser</h2>
-<p>Now, lets write a <em>tiny</em> calculator!</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">-- 1. First, parse the operator </span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="ot">opP      ::</span> <span class="dt">Parser</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>) </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>opP      <span class="ot">=</span> plus <span class="op">&lt;|&gt;</span> minus <span class="op">&lt;|&gt;</span> times <span class="op">&lt;|&gt;</span> divide </span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>    plus   <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'+'</span>; <span class="fu">return</span> (<span class="op">+</span>) }</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a>    minus  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'-'</span>; <span class="fu">return</span> (<span class="op">-</span>) }</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a>    times  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'*'</span>; <span class="fu">return</span> (<span class="op">*</span>) }</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a>    divide <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'/'</span>; <span class="fu">return</span> <span class="fu">div</span> }</span>
+<p>Let’s write a parser <code class="sourceCode haskell"><span class="ot">calc ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></code> that <em>parses and evaluates</em> simple arithmetic expressions</p>
+<ul>
+<li>an expression is <code class="sourceCode haskell">a <span class="op">+</span> b</code>, <code class="sourceCode haskell">a <span class="op">-</span> b</code>, <code class="sourceCode haskell">a <span class="op">*</span> b</code>, <code class="sourceCode haskell">a <span class="op">/</span> b</code></li>
+<li>where <code class="sourceCode haskell">a</code> and <code class="sourceCode haskell">b</code> are <em>single-digit</em> integers</li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8/2&quot;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>[(<span class="dv">4</span>,<span class="st">&quot;&quot;</span>)]</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8+2cat&quot;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>[(<span class="dv">10</span>,<span class="st">&quot;cat&quot;</span>)]</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8-2cat&quot;</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a>[(<span class="dv">6</span>,<span class="st">&quot;cat&quot;</span>)]</span>
 <span id="cb39-9"><a href="#cb39-9" aria-hidden="true"></a></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true"></a><span class="co">-- 2. Now parse the expression!</span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true"></a><span class="ot">calc ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true"></a>calc <span class="ot">=</span> <span class="kw">do</span> x  <span class="ot">&lt;-</span> digitP</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true"></a>          op <span class="ot">&lt;-</span> opP</span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true"></a>          y  <span class="ot">&lt;-</span> digitP</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true"></a>          <span class="fu">return</span> (x <span class="ot">`op`</span> y)</span></code></pre></div>
-<p>When <code class="sourceCode haskell">calc</code> is run, it will both parse <em>and</em> calculate</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8/2&quot;</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>[(<span class="dv">4</span>,<span class="st">&quot;&quot;</span>)]</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8+2cat&quot;</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a>[(<span class="dv">10</span>,<span class="st">&quot;cat&quot;</span>)]</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8/2cat&quot;</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a>[(<span class="dv">4</span>,<span class="st">&quot;cat&quot;</span>)]</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8*2cat&quot;</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true"></a>[(<span class="dv">16</span>,<span class="st">&quot;cat&quot;</span>)]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="co">-- 1. First, parse the operator </span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a><span class="ot">opP      ::</span> <span class="dt">Parser</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>) </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>opP      <span class="ot">=</span> plus <span class="op">&lt;|&gt;</span> minus <span class="op">&lt;|&gt;</span> times <span class="op">&lt;|&gt;</span> divide </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a>    plus   <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'+'</span>; <span class="fu">return</span> (<span class="op">+</span>) }</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a>    minus  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'-'</span>; <span class="fu">return</span> (<span class="op">-</span>) }</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true"></a>    times  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'*'</span>; <span class="fu">return</span> (<span class="op">*</span>) }</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a>    divide <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'/'</span>; <span class="fu">return</span> <span class="fu">div</span> }</span>
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8-2cat&quot;</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true"></a>[(<span class="dv">6</span>,<span class="st">&quot;cat&quot;</span>)]</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true"></a></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runParser calc <span class="st">&quot;8*2cat&quot;</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true"></a>[(<span class="dv">16</span>,<span class="st">&quot;cat&quot;</span>)]</span></code></pre></div>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true"></a><span class="co">-- 2. Now parse the expression!</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true"></a><span class="ot">calc ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true"></a>calc <span class="ot">=</span> <span class="kw">do</span> x  <span class="ot">&lt;-</span> digitP</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true"></a>          op <span class="ot">&lt;-</span> opP</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true"></a>          y  <span class="ot">&lt;-</span> digitP</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true"></a>          <span class="fu">return</span> (x <span class="ot">`op`</span> y)</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-6">QUIZ</h2>
 <p>What will <code class="sourceCode haskell">quiz</code> evaluate to?</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="ot">calc ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>calc <span class="ot">=</span> <span class="kw">do</span> x  <span class="ot">&lt;-</span> digitInt</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>          op <span class="ot">&lt;-</span> intOp</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>          y  <span class="ot">&lt;-</span> digitInt </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>calc <span class="ot">=</span> <span class="kw">do</span> x  <span class="ot">&lt;-</span> digitP</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>          op <span class="ot">&lt;-</span> opP</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>          y  <span class="ot">&lt;-</span> digitP</span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>          <span class="fu">return</span> (x <span class="ot">`op`</span> y)</span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a></span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>quiz <span class="ot">=</span> runParser calc <span class="st">&quot;99bottles&quot;</span></span></code></pre></div>

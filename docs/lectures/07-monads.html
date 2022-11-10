@@ -1080,12 +1080,21 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb93-4"><a href="#cb93-4" aria-hidden="true"></a>            bit <span class="ot">&lt;-</span> [<span class="ch">'0'</span>, <span class="ch">'1'</span>]</span>
 <span id="cb93-5"><a href="#cb93-5" aria-hidden="true"></a>            rest <span class="ot">&lt;-</span> bits (n <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb93-6"><a href="#cb93-6" aria-hidden="true"></a>            <span class="fu">return</span> (bit<span class="op">:</span>rest)</span></code></pre></div>
-<p>And guess what?</p>
-<p>Yes, there’s already a library function for this!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="useful-library-functions">Useful Library Functions</h3>
+<p>We can often eliminate recursion from monadic computations using library functions:</p>
 <div class="sourceCode" id="cb94"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true"></a><span class="co">-- From Control.Monad:</span></span>
-<span id="cb94-2"><a href="#cb94-2" aria-hidden="true"></a><span class="ot">replicateM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> m a <span class="ot">-&gt;</span> m [a]</span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true"></a></span>
-<span id="cb94-4"><a href="#cb94-4" aria-hidden="true"></a>bits n <span class="ot">=</span> replicateM n [<span class="ch">'0'</span>, <span class="ch">'1'</span>]</span></code></pre></div>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true"></a></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true"></a><span class="co">-- | Map a monadic computation over a list, get list of results:</span></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true"></a><span class="fu">mapM</span><span class="ot">       ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> m b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> m [b]</span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true"></a><span class="co">-- | Repeat the same monadic computation n times, get list of results:</span></span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true"></a><span class="ot">replicateM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> m a <span class="ot">-&gt;</span> m [a]</span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true"></a></span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true"></a><span class="co">-- For example:</span></span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true"></a>bits n <span class="ot">=</span> <span class="fu">mapM</span> (\_ <span class="ot">-&gt;</span> [<span class="ch">'0'</span>, <span class="ch">'1'</span>]) [<span class="dv">1</span><span class="op">..</span>n]</span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true"></a></span>
+<span id="cb94-11"><a href="#cb94-11" aria-hidden="true"></a><span class="co">-- or:</span></span>
+<span id="cb94-12"><a href="#cb94-12" aria-hidden="true"></a>bits n <span class="ot">=</span> replicateM n [<span class="ch">'0'</span>, <span class="ch">'1'</span>]</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="summary">Summary</h2>
 <p>Three monads and their meaning of sequencing:</p>

@@ -22,12 +22,12 @@ Lecture schedule is subject to change!
 | *11/3*     | contd.                          |                           |
 | *11/8*     | contd.                          |                           |
 | *11/10*    | Parser Combinators              | [html][08-parsers]        |
-| *11/15*    | Monad Transformers              |                           |
-| *11/17*    | Property-based Testing          |                           |
-| *11/22*    | Concurrency                     |                           |
-| *11/24*    | Refinement Types                |                           |
+| *11/15*    | contd.                          |                           |
+| *11/17*    | Monad Transformers              |                           |
+| *11/22*    | Property-based Testing          |                           |
+| *11/24*    | Concurrency                     |                           |
 | *11/29*    | *No lecture: Thanksgiving*      |                           |
-| *12/1*     | TBD                             |                           |
+| *12/1*     | Refinement Types                |                           |
 
 [00-intro]: lectures/00-intro.html
 [01-lambda]: lectures/01-lambda.html

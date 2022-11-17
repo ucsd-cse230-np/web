@@ -549,12 +549,12 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </tr>
 <tr class="even">
 <td style="text-align: right;"><strong>B</strong></td>
-<td style="text-align: right;"><code class="sourceCode haskell">[(<span class="ch">'h'</span>, <span class="st">&quot;ellow&quot;</span>)]</code></td>
+<td style="text-align: right;"><code class="sourceCode haskell">[(<span class="ch">'h'</span>, <span class="st">&quot;ello&quot;</span>)]</code></td>
 <td style="text-align: right;"><code class="sourceCode haskell">[(<span class="ch">'y'</span>, <span class="st">&quot;ellow&quot;</span>)]</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><strong>C</strong></td>
-<td style="text-align: right;"><code class="sourceCode haskell">[(<span class="ch">'h'</span>, <span class="st">&quot;ellow&quot;</span>)]</code></td>
+<td style="text-align: right;"><code class="sourceCode haskell">[(<span class="ch">'h'</span>, <span class="st">&quot;ello&quot;</span>)]</code></td>
 <td style="text-align: right;"><code class="sourceCode haskell">[]</code></td>
 </tr>
 <tr class="even">
@@ -687,10 +687,10 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="ot">opP      ::</span> <span class="dt">Parser</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>) </span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>opP      <span class="ot">=</span> plus <span class="op">&lt;|&gt;</span> minus <span class="op">&lt;|&gt;</span> times <span class="op">&lt;|&gt;</span> divide </span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>    plus   <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'+'</span>; <span class="fu">return</span> (<span class="op">+</span>) }</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a>    minus  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'-'</span>; <span class="fu">return</span> (<span class="op">-</span>) }</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a>    times  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'*'</span>; <span class="fu">return</span> (<span class="op">*</span>) }</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a>    divide <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> char <span class="ch">'/'</span>; <span class="fu">return</span> <span class="fu">div</span> }</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>    plus   <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> charP <span class="ch">'+'</span>; <span class="fu">return</span> (<span class="op">+</span>) }</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a>    minus  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> charP <span class="ch">'-'</span>; <span class="fu">return</span> (<span class="op">-</span>) }</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a>    times  <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> charP <span class="ch">'*'</span>; <span class="fu">return</span> (<span class="op">*</span>) }</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a>    divide <span class="ot">=</span> <span class="kw">do</span> { _ <span class="ot">&lt;-</span> charP <span class="ch">'/'</span>; <span class="fu">return</span> <span class="fu">div</span> }</span>
 <span id="cb39-9"><a href="#cb39-9" aria-hidden="true"></a></span>
 <span id="cb39-10"><a href="#cb39-10" aria-hidden="true"></a><span class="co">-- 2. Now parse the expression!</span></span>
 <span id="cb39-11"><a href="#cb39-11" aria-hidden="true"></a><span class="ot">calc ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>

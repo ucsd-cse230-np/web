@@ -23,7 +23,7 @@ Lecture schedule is subject to change!
 | *11/8*     | contd.                          |                           |
 | *11/10*    | Parser Combinators              | [html][08-parsers]        |
 | *11/15*    | contd.                          |                           |
-| *11/17*    | Monad Transformers              |                           |
+| *11/17*    | Monad Transformers              | [html][09-transformers]   |
 | *11/22*    | Property-based Testing          |                           |
 | *11/24*    | Concurrency                     |                           |
 | *11/29*    | *No lecture: Thanksgiving*      |                           |
@@ -38,6 +38,7 @@ Lecture schedule is subject to change!
 [06-classes]: lectures/06-classes.html
 [07-monads]: lectures/07-monads.html
 [08-parsers]: lectures/08-parsers.html
+[09-transformers]: lectures/09-transformers.html
 
 
 <!-- OLD -->

@@ -356,7 +356,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>C.</strong> <code class="sourceCode haskell"><span class="dt">Left</span> <span class="st">&quot;DBZ: (Plus (Number 5) (Number (-5)))&quot;</span></code></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="a-class-for-exception-handling-monads">A Class for Exception Handling Monads</h2>
-<p>The class <code class="sourceCode haskell"><span class="dt">MonadError</span> e m</code> defined in [<code class="sourceCode haskell"><span class="dt">Control.Monad.Except</span></code>][6] says</p>
+<p>The class <code class="sourceCode haskell"><span class="dt">MonadError</span> e m</code> defined in <code class="sourceCode haskell"><span class="dt">Control.Monad.Except</span></code> says</p>
 <ul>
 <li><code class="sourceCode haskell">m</code> is a <em>Exception-Handling</em> monad with exception type <code class="sourceCode haskell">e</code></li>
 </ul>
@@ -369,8 +369,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><p><code class="sourceCode haskell">throwError</code> and <code class="sourceCode haskell">catchError</code> operations specified by <code class="sourceCode haskell"><span class="dt">MonadError</span></code>!</p></li>
 </ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h3 id="generalizing-the-evaluator">Generalizing the Evaluator</h3>
-<p>Now we can <em>generalize</em> our evaluator to work with any <code class="sourceCode haskell"><span class="dt">MonadError</span></code>!</p>
+<h3 id="generalizing-the-dbz-evaluator">Generalizing the DBZ Evaluator</h3>
+<p>Now we can generalize our DBZ evaluator to work with <em>any</em> <code class="sourceCode haskell"><span class="dt">MonadError</span></code>!</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="co">-- | Attention: new type!</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadError</span> <span class="dt">String</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>eval (<span class="dt">Num</span> v)      <span class="ot">=</span> <span class="op">...</span></span>
@@ -382,25 +382,35 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>                        <span class="kw">then</span> throwError (<span class="st">&quot;DBZ &quot;</span> <span class="op">++</span> <span class="fu">show</span> e2)</span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a>                        <span class="kw">else</span> <span class="fu">return</span> (v1 <span class="ot">`div`</span> v2)</span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a>eval (<span class="dt">Try</span>  e)     <span class="ot">=</span> catchError (eval e) (\_ <span class="ot">-&gt;</span> <span class="fu">return</span> <span class="dv">0</span>)                        </span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="running-the-generalized-evaluator">Running the Generalized Evaluator</h3>
 <p>Lets try to run it!</p>
-<p><br> <br></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> eval e0</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="op">...</span> <span class="dt">GHC</span> yells <span class="st">&quot;I don't know what's this m you keep talking about!&quot;</span></span></code></pre></div>
-<p><br> <br></p>
-<p>Easy fix:</p>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="fu">error</span><span class="op">:</span> <span class="dt">Ambiguous</span> <span class="kw">type</span> variable ‘m0’<span class="op">...</span></span></code></pre></div>
+<p>What is the problem?</p>
+<p><br> <br> <br> <br></p>
+<ul>
+<li><code class="sourceCode haskell">eval</code> is now polymorphic in <code class="sourceCode haskell">m</code> (does not know which <code class="sourceCode haskell">m</code> to use)</li>
+<li>similar to the <code class="sourceCode haskell"><span class="fu">read</span> <span class="st">&quot;2&quot;</span></code> problem we saw earlier</li>
+<li>we need to tell GHC which instance of <code class="sourceCode haskell"><span class="dt">MonadError</span></code> to use</li>
+<li>we know just the guy for the job: <code class="sourceCode haskell"><span class="dt">Either</span> <span class="dt">String</span></code>!</li>
+</ul>
+<p><br> <br> <br></p>
+<p>For example, we can add an annotation:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> eval<span class="ot"> e0 ::</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="dt">Right</span> <span class="dv">3</span></span></code></pre></div>
 <p><br> <br></p>
-<p>A better fix: use a “run” function:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="ot">runResult ::</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">Result</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>runResult (<span class="dt">Left</span> msg)  <span class="ot">=</span> msg</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>runResult (<span class="dt">Right</span> val) <span class="ot">=</span> <span class="fu">show</span> val</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runResult (eval e0)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="st">&quot;3&quot;</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runResult (eval e1)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a><span class="st">&quot;DBZ Plus (Num 2) (Num (-2))&quot;</span></span></code></pre></div>
+<p>Or use it in context:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="ot">topEval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>topEval e <span class="ot">=</span> <span class="kw">case</span> eval e <span class="kw">of</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>              <span class="dt">Left</span>  s <span class="ot">-&gt;</span> <span class="st">&quot;Error: &quot;</span> <span class="op">++</span> s</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>              <span class="dt">Right</span> v <span class="ot">-&gt;</span> <span class="st">&quot;Ok: &quot;</span>    <span class="op">++</span> <span class="fu">show</span> v</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> topEval (<span class="dt">Div</span> (<span class="dt">Number</span> <span class="dv">10</span>) (<span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">5</span>) (<span class="dt">Number</span> <span class="dv">5</span>)))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a><span class="st">&quot;Ok: 1&quot;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> topEval (<span class="dt">Div</span> (<span class="dt">Number</span> <span class="dv">10</span>) (<span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">5</span>) (<span class="dt">Number</span> (<span class="op">-</span><span class="dv">5</span>))))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a><span class="st">&quot;Error: DBZ (Plus (Number 5) (Number (-5)))&quot;</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="outline-1">Outline</h2>
 <ol type="1">
@@ -416,17 +426,17 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Plus</span>   <span class="dt">Expr</span> <span class="dt">Expr</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Next</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a><span class="co">--        0</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>λ<span class="op">&gt;</span> eval <span class="dv">0</span> <span class="dt">Next</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a><span class="dv">0</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a><span class="co">-- 0</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a><span class="dt">Next</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a><span class="op">==&gt;</span> <span class="dv">0</span></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a><span class="co">--              0    1</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>λ<span class="op">&gt;</span> eval <span class="dv">0</span> (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a><span class="dv">1</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a><span class="co">--      0    1</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a><span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a><span class="op">==&gt;</span> <span class="dv">1</span></span>
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true"></a><span class="co">--              0          1    2</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true"></a>λ<span class="op">&gt;</span> eval <span class="dv">0</span> (<span class="dt">Plus</span> <span class="dt">Next</span> (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>))</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true"></a><span class="dv">3</span></span></code></pre></div>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true"></a><span class="co">--      0          1    2</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true"></a><span class="dt">Plus</span> <span class="dt">Next</span> (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true"></a><span class="op">==&gt;</span> <span class="dv">3</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="counting-with-state">Counting with State</h2>
 <p>We used the <em>standard library</em> type <code class="sourceCode haskell"><span class="dt">State</span></code>, which is an instance of <code class="sourceCode haskell"><span class="dt">Monad</span></code></p>
@@ -460,8 +470,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><p><code class="sourceCode haskell">get</code> and <code class="sourceCode haskell">put</code> operations specified by <code class="sourceCode haskell"><span class="dt">MonadState</span></code>!</p></li>
 </ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h3 id="generalizing-the-evaluator-1">Generalizing the Evaluator</h3>
-<p>So we can <em>generalize</em> our evaluator to work with any <code class="sourceCode haskell"><span class="dt">MonadState</span></code>!</p>
+<h3 id="generalizing-the-counting-evaluator">Generalizing the Counting Evaluator</h3>
+<p>So we can generalize our counting evaluator to work with <em>any</em> <code class="sourceCode haskell"><span class="dt">MonadState</span></code>!</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">-- | Attention: new type!</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadState</span> <span class="dt">Cnt</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>eval (<span class="dt">Num</span> n)      <span class="ot">=</span> <span class="fu">return</span> n</span>
@@ -472,6 +482,25 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>                      cnt <span class="ot">&lt;-</span> get</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a>                      _ <span class="ot">&lt;-</span> put (cnt <span class="op">+</span> <span class="dv">1</span>)</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a>                      <span class="fu">return</span> (cnt)</span></code></pre></div>
+<p>And define a <code class="sourceCode haskell">topEval</code> function that tells GHC to use <code class="sourceCode haskell"><span class="dt">State</span></code>:</p>
+<ul>
+<li>because <code class="sourceCode haskell"><span class="ot">evalState ::</span> <span class="dt">State</span> s a <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> a</code></li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="ot">topEval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>topEval e <span class="ot">=</span> evalState (eval e) <span class="dv">0</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> topEval (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="dv">1</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> topEval (<span class="dt">Plus</span> <span class="dt">Next</span> (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>))</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a><span class="dv">3</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br></p>
+<p>What was the point of generalizing the evaluators?</p>
+<ul>
+<li>We could now use a different <code class="sourceCode haskell"><span class="dt">MonadError</span></code> (not <code class="sourceCode haskell"><span class="dt">Either</span></code>)</li>
+<li>We could now use a different <code class="sourceCode haskell"><span class="dt">MonadState</span></code> (not <code class="sourceCode haskell"><span class="dt">State</span></code>)</li>
+<li>But the coolest thing is that we can now combine them!</li>
+</ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="outline-2">Outline</h2>
 <ol type="1">
@@ -479,60 +508,85 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Generalizing Mutable State [done]</li>
 <li><strong>Combining Exception Handling and Mutable State</strong></li>
 </ol>
-<p><br> <br></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="a-fancy-evaluator">A Fancy Evaluator</h2>
 <p>What if I want <em>Exceptions</em> <strong>and</strong> <em>Mutable State</em>?</p>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="profiling-with-the-st-monad">Profiling with the ST Monad</h2>
-<p>Lets implement a <em>profiling</em> monad that counts the number of operations</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="co">-- A State-Transformer with a &quot;global&quot; `Int` counter </span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Profile</span> a <span class="ot">=</span> <span class="dt">State</span> <span class="dt">Int</span> a</span></code></pre></div>
-<p>We can write a <code class="sourceCode haskell">runProfile</code> that</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Num</span>    <span class="dt">Int</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Plus</span>   <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Div</span>    <span class="dt">Expr</span> <span class="dt">Expr</span> <span class="co">-- Needs exceptions</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Next</span>             <span class="co">-- Needs state</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>  <span class="co">-- omitting Try for simplicity</span></span></code></pre></div>
+<p><br> <br></p>
+<p>It would be great if we could just mesh the two evaluators together!</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>eval (<span class="dt">Num</span> n)      <span class="ot">=</span> <span class="fu">return</span> n</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>eval (<span class="dt">Plus</span> e1 e2) <span class="ot">=</span> <span class="kw">do</span> v1 <span class="ot">&lt;-</span> eval e1</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>                       v2 <span class="ot">&lt;-</span> eval e2</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>                       <span class="fu">return</span> (v1 <span class="op">+</span> v2)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a><span class="co">-- This case is from the DBZ evaluator:</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a><span class="co">-- it uses `throwError`! </span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>eval (<span class="dt">Div</span>  e1 e2) <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a>                      v1 <span class="ot">&lt;-</span> eval e1</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>                      v2 <span class="ot">&lt;-</span> eval e2</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>                      <span class="kw">if</span> v2 <span class="op">==</span> <span class="dv">0</span>                        </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true"></a>                        <span class="kw">then</span> throwError (<span class="st">&quot;DBZ &quot;</span> <span class="op">++</span> <span class="fu">show</span> e2)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true"></a>                        <span class="kw">else</span> <span class="fu">return</span> (v1 <span class="ot">`div`</span> v2)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true"></a><span class="co">-- This case is from the Counting evaluator:</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true"></a><span class="co">-- it uses `get` and `put`!</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true"></a>eval <span class="dt">Next</span>         <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true"></a>                      cnt <span class="ot">&lt;-</span> get</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true"></a>                      _ <span class="ot">&lt;-</span> put (cnt <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true"></a>                      <span class="fu">return</span> (cnt)</span></code></pre></div>
+<p><br> <br></p>
+<p>But what <strong>type</strong> should <code class="sourceCode haskell">eval</code> have?</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">eval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="op">???</span> <span class="dt">Int</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-2">QUIZ</h2>
+<p>What should be the type of <code class="sourceCode haskell">eval</code> for the Fancy evaluator?</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="co">-- (A) </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a><span class="ot">eval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">State</span> <span class="dt">Cnt</span> (<span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a><span class="co">-- (B)</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a><span class="ot">eval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> (<span class="dt">State</span> <span class="dt">Cnt</span> <span class="dt">Int</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a><span class="co">-- (C)</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadState</span> <span class="dt">Cnt</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a><span class="co">-- (D)</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadError</span> <span class="dt">String</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a><span class="co">-- (E)</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadState</span> <span class="dt">Cnt</span> m, <span class="dt">MonadError</span> <span class="dt">String</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="composing-constraints">Composing Constraints</h2>
+<p>This is the best part about generalizing: <strong>constraints compose</strong>!</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="co">-- The type has both constraints we need:</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadState</span> <span class="dt">Cnt</span> m, <span class="dt">MonadError</span> <span class="dt">String</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>eval (<span class="dt">Num</span> n)      <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>eval (<span class="dt">Plus</span> e1 e2) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a><span class="co">-- We can use `throwError` because `m` is a `MonadError`! </span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>eval (<span class="dt">Div</span>  e1 e2) <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>                      <span class="op">...</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>                      <span class="kw">if</span> v2 <span class="op">==</span> <span class="dv">0</span>                        </span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>                        <span class="kw">then</span> throwError (<span class="st">&quot;DBZ &quot;</span> <span class="op">++</span> <span class="fu">show</span> e2)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a>                        <span class="kw">else</span> <span class="fu">return</span> (v1 <span class="ot">`div`</span> v2)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a><span class="co">-- We can use `get` and `put` because `m` is *also* a `MonadState`!                        </span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>eval <span class="dt">Next</span>         <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>                      cnt <span class="ot">&lt;-</span> get</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a>                      _ <span class="ot">&lt;-</span> put (cnt <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true"></a>                      <span class="fu">return</span> cnt</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="running-the-fancy-evaluator">Running the Fancy Evaluator</h3>
+<p>All is well until we try to run it:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> eval (<span class="dt">Div</span> (<span class="dt">Num</span> <span class="dv">3</span>) <span class="dt">Next</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="fu">error</span><span class="op">:</span> ambiguous <span class="kw">type</span> variable ‘m0’<span class="op">...</span></span></code></pre></div>
+<p><br> <br></p>
+<p>We are in a pickle:</p>
 <ul>
-<li>executes the transformer from <code class="sourceCode haskell"><span class="dv">0</span></code></li>
-<li>and renders the result</li>
+<li>We need a monad <code class="sourceCode haskell">m</code> that is <strong>both</strong> a <code class="sourceCode haskell"><span class="dt">MonadState</span></code> <strong>and</strong> a <code class="sourceCode haskell"><span class="dt">MonadError</span></code></li>
+<li><code class="sourceCode haskell"><span class="dt">State</span></code> is not our guy (why?)</li>
+<li><code class="sourceCode haskell"><span class="dt">Either</span></code> isn’t either (why?)</li>
+<li>Do we need to implement a new monad from scratch? :(</li>
 </ul>
-<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="ot">runProfile ::</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">Profile</span> a <span class="ot">-&gt;</span> <span class="dt">String</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>runProfile st <span class="ot">=</span> showValCount (runState st <span class="dv">0</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a><span class="ot">showValCount ::</span> (<span class="dt">Show</span> v, <span class="dt">Show</span> c) <span class="ot">=&gt;</span> (v, c) <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>showValCount (val, count) <span class="ot">=</span> <span class="st">&quot;value: &quot;</span> <span class="op">++</span> <span class="fu">show</span> val <span class="op">++</span> <span class="st">&quot;, count: &quot;</span> <span class="op">++</span> <span class="fu">show</span> count</span></code></pre></div>
-<p>A function to <em>increment</em> the counter</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="ot">count ::</span> <span class="dt">Profile</span> ()</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>count <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>  n <span class="ot">&lt;-</span> get</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>  put (n<span class="op">+</span><span class="dv">1</span>)</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="a-profiling-evaluator">A Profiling Evaluator</h2>
-<p>We can use <code class="sourceCode haskell">count</code> to write a <em>profiling</em> evaluator</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">evalProf ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Profile</span> <span class="dt">Int</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>evalProf <span class="ot">=</span> eval </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>    eval (<span class="dt">Number</span> n)    <span class="ot">=</span> <span class="fu">return</span> n</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a>    eval (<span class="dt">Plus</span>  e1 e2) <span class="ot">=</span> <span class="kw">do</span> n1 <span class="ot">&lt;-</span> eval e1 </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>                            n2 <span class="ot">&lt;-</span> eval e2</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>                            count</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>                            <span class="fu">return</span> (n1<span class="op">+</span>n2)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a>    eval (<span class="dt">Div</span>   e1 e2) <span class="ot">=</span> <span class="kw">do</span> n1 <span class="ot">&lt;-</span> eval e1 </span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true"></a>                            n2 <span class="ot">&lt;-</span> eval e2</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true"></a>                            count</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true"></a>                            <span class="fu">return</span> (n1 <span class="ot">`div`</span> n2) </span></code></pre></div>
-<p>And now, as there are <em>two</em> operations, we get</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> e1</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a><span class="dt">Div</span> (<span class="dt">Number</span> <span class="dv">10</span>) (<span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">5</span>) (<span class="dt">Number</span> <span class="dv">5</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runProfile (evalProf e1)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a><span class="st">&quot;value: 1, count: 2&quot;</span></span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="but-what-about-divide-by-zero">But what about Divide-by-Zero?</h2>
-<p>Bad things happen…</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> e2</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="dt">Div</span> (<span class="dt">Number</span> <span class="dv">10</span>) (<span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">5</span>) (<span class="dt">Number</span> (<span class="op">-</span><span class="dv">5</span>)))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runProfile (evalProf e2)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> divide by zero</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a><span class="st">&quot;value: </span></span></code></pre></div>
-<p><strong>Problem:</strong> How to get <em>global state</em> AND <em>exception handling</em> ?</p>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p><br> <br></p>
+<p><strong>Monad Transformers</strong> to the rescue!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="mixing-monads-with-transformers">Mixing Monads with Transformers</h2>
 <h3 id="start-with-a-basic-monad">Start with a <em>Basic</em> Monad</h3>
 <p><img src="../static/img/mtrans_0.png" id="fig:Basic-Monad" class="align-right" style="width:80.0%" /></p>
@@ -566,187 +620,132 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </ul>
 <p>Reminiscent of the <a href="http://oreilly.com/catalog/hfdesignpat/chapter/ch03.pdf">Decorator Design Pattern</a> or <a href="http://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators">Python’s Decorators</a>.</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="mixing-monads-with-transformers-1">Mixing Monads with Transformers</h2>
-<ul>
-<li><p>Step 1: <strong>Specifying</strong> Monads with Extra Features</p></li>
-<li><p>Step 2: <strong>Implementing</strong> Monads with Extra Features</p></li>
-</ul>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="specifying-monads-with-extra-features">Specifying Monads with Extra Features</h2>
-<p>First, instead of using <em>concrete</em> monads</p>
-<ul>
-<li>e.g. <code class="sourceCode haskell"><span class="dt">Profile</span></code> or <code class="sourceCode haskell"><span class="dt">Either</span></code></li>
-</ul>
-<p>We will use <strong>type-classes</strong> to <em>abstractly</em> specify a monad’s <em>capabilities</em></p>
-<ul>
-<li>e.g. <code class="sourceCode haskell"><span class="dt">MonadState</span> s m</code> or <code class="sourceCode haskell"><span class="dt">MonadError</span> e m</code></li>
-</ul>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="a-class-for-state-transformers-monads">A Class for State-Transformers Monads</h2>
-<p>The class <code class="sourceCode haskell"><span class="dt">MonadState</span> s m</code> defined in the <a href="http://hackage.haskell.org/package/mtl-2.2.2/docs/Control-Monad-Except.html"><code class="sourceCode haskell"><span class="dt">Control.Monad.State</span></code></a> says</p>
-<ul>
-<li><code class="sourceCode haskell">m</code> is a <em>State-Transformer</em> monad with state type <code class="sourceCode haskell">s</code></li>
-</ul>
-<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">MonadState</span> s m <span class="kw">where</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="ot">  get ::</span> m s</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a><span class="ot">  put ::</span> s <span class="ot">-&gt;</span> m ()</span></code></pre></div>
-<p>That is to say, <code class="sourceCode haskell">m</code> implements</p>
-<ul>
-<li><p><code class="sourceCode haskell"><span class="op">&gt;&gt;=</span></code> and <code class="sourceCode haskell"><span class="fu">return</span></code> operations specified by <code class="sourceCode haskell"><span class="dt">Monad</span></code> <em>and</em></p></li>
-<li><p><code class="sourceCode haskell">get</code> and <code class="sourceCode haskell">put</code> operations specified by <code class="sourceCode haskell"><span class="dt">MonadState</span></code>!</p></li>
-</ul>
-<h3 id="generalize-types-to-use-classes">Generalize Types to use Classes</h3>
-<p>So we can <em>generalize</em> the type of <code class="sourceCode haskell">count</code> to use <code class="sourceCode haskell"><span class="dt">MonadState</span> <span class="dt">Int</span> m</code></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="ot">count ::</span> (<span class="dt">MonadState</span> <span class="dt">Int</span> m) <span class="ot">=&gt;</span> m ()</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>count <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>  n <span class="ot">&lt;-</span> get</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>  put (n<span class="op">+</span><span class="dv">1</span>)</span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="generalize-eval-to-use-constraints">Generalize <code class="sourceCode haskell">eval</code> to use Constraints</h2>
-<p>We can now <em>specify</em> that <code class="sourceCode haskell">eval</code> uses a monad <code class="sourceCode haskell">m</code> that implements</p>
-<ul>
-<li><code class="sourceCode haskell"><span class="dt">MonadState</span> <span class="dt">Int</span></code> <strong>and</strong> <code class="sourceCode haskell"><span class="dt">MonadError</span> <span class="dt">Expr</span></code></li>
-</ul>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="ot">eval ::</span> (<span class="dt">MonadState</span> <span class="dt">Int</span> m, <span class="dt">MonadError</span> <span class="dt">Expr</span> m) <span class="ot">=&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> m <span class="dt">Int</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>eval (<span class="dt">Number</span> n)    <span class="ot">=</span> <span class="fu">return</span> n</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>eval (<span class="dt">Plus</span>  e1 e2) <span class="ot">=</span> <span class="kw">do</span> n1 <span class="ot">&lt;-</span> eval e1 </span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>                        n2 <span class="ot">&lt;-</span> eval e2</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>                        count</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a>                        <span class="fu">return</span> (n1 <span class="op">+</span> n2)</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true"></a>eval (<span class="dt">Div</span>   e1 e2) <span class="ot">=</span> <span class="kw">do</span> n1 <span class="ot">&lt;-</span> eval e1 </span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true"></a>                        n2 <span class="ot">&lt;-</span> eval e2</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true"></a>                        count</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true"></a>                        <span class="kw">if</span> (n2 <span class="op">/=</span> <span class="dv">0</span>) </span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true"></a>                          <span class="kw">then</span> <span class="fu">return</span> (n1 <span class="ot">`div`</span> n2) </span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true"></a>                          <span class="kw">else</span> throwError e2</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true"></a>eval (<span class="dt">Try</span> e n)     <span class="ot">=</span> tryCatch (eval e) n</span></code></pre></div>
-<p>Lets try to run it!</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> e1</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> evalMix e1</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a><span class="op">...</span> <span class="dt">GHC</span> yells <span class="st">&quot;please IMPLEMENT this MAGIC monad that implements BOTH features&quot;</span></span></code></pre></div>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="mixing-monads-with-transformers-2">Mixing Monads with Transformers</h2>
-<ul>
-<li><p>Step 1: <strong>Specifying</strong> Monads with Extra Features</p></li>
-<li><p>Step 2: <strong>Implementing</strong> Monads with Extra Features</p></li>
-</ul>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="implementing-monads-with-extra-features">Implementing Monads with <strong>Extra Features</strong></h2>
-<p><img src="../static/img/mtrans_2.png" id="fig:More-Capabilities" class="align-right" style="width:80.0%" /></p>
-<p><code class="sourceCode haskell"><span class="dt">Transform2</span> (<span class="dt">Transform1</span> m)</code> implements</p>
-<ul>
-<li><code class="sourceCode haskell">m</code> operations <strong>and</strong></li>
-<li>operations added by <code class="sourceCode haskell"><span class="dt">Transform1</span></code> <strong>and</strong></li>
-<li>operations added by <code class="sourceCode haskell"><span class="dt">Transform2</span></code></li>
-</ul>
-<p>We require</p>
-<ul>
-<li>A <em>basic</em> monad <code class="sourceCode haskell">m</code></li>
-<li>A <em>Transform1</em> that adds <code class="sourceCode haskell"><span class="dt">State</span></code> capabilities</li>
-<li>A <em>Transform2</em> that adds <code class="sourceCode haskell"><span class="dt">Exception</span></code> capabilities</li>
-</ul>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="a-basic-monad">A Basic Monad</h2>
 <p>First, lets make a <strong>basic</strong> monad</p>
 <ul>
 <li>only implements <code class="sourceCode haskell"><span class="op">&gt;&gt;=</span></code> and <code class="sourceCode haskell"><span class="fu">return</span></code></li>
+<li>adds <strong>no effects</strong> to the computation</li>
+<li>just a <strong>wrapper</strong> around a value of type <code class="sourceCode haskell">a</code></li>
 </ul>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Identity</span> a <span class="ot">=</span> <span class="dt">Id</span> a</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Monad</span> <span class="dt">Identity</span> <span class="kw">where</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>  <span class="fu">return</span> a     <span class="ot">=</span> <span class="dt">Id</span> a</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>  (<span class="dt">Id</span> a) <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> f a</span></code></pre></div>
-<p>A very <em>basic</em> monad: just a <strong>wrapper</strong> (<code class="sourceCode haskell"><span class="dt">Id</span></code>) around the value (<code class="sourceCode haskell">a</code>)</p>
-<ul>
-<li><em>No</em> extra features</li>
-</ul>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Identity</span> a <span class="ot">=</span> <span class="dt">Id</span> a</span></code></pre></div>
 <p><img src="../static/img/mtrans_id.png" /></p>
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="a-transform-that-adds-state-capabilities">A Transform that adds <code class="sourceCode haskell"><span class="dt">State</span></code> Capabilities</h2>
-<p>The transformer <code class="sourceCode haskell"><span class="dt">StateT</span> s m</code> defined in the <code class="sourceCode haskell"><span class="dt">Control.Monad.State</span></code> <a href="http://hackage.haskell.org/package/mtl-2.2.2/docs/Control-Monad-Except.html">module</a> - <em>takes</em> as input monad <code class="sourceCode haskell">m</code> and</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="exercise-monad-instance-for-identity">EXERCISE: Monad Instance for Identity</h3>
+<p>Implement the <code class="sourceCode haskell"><span class="dt">Monad</span></code> instance for <code class="sourceCode haskell"><span class="dt">Identity</span></code>:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Identity</span> a <span class="ot">=</span> <span class="dt">Id</span> a</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Monad</span> <span class="dt">Identity</span> <span class="kw">where</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>  <span class="fu">return</span> a     <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>  x <span class="op">&gt;&gt;=</span> f      <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="a-basic-monad-1">A Basic Monad</h2>
+<p>First, lets make a <strong>basic</strong> monad</p>
 <ul>
-<li><em>transforms</em> it into a new monad <code class="sourceCode haskell">m'</code></li>
+<li>only implements <code class="sourceCode haskell"><span class="op">&gt;&gt;=</span></code> and <code class="sourceCode haskell"><span class="fu">return</span></code></li>
+<li>adds <strong>no effects</strong> to the computation</li>
+<li>just a <strong>wrapper</strong> around a value of type <code class="sourceCode haskell">a</code></li>
 </ul>
-<p>such that <code class="sourceCode haskell">m'</code> implements</p>
-<ul>
-<li><p>all the operations that <code class="sourceCode haskell">m</code> implements</p></li>
-<li><p><em>and adds</em> State-transformer capabilities</p></li>
-</ul>
-<p><code class="sourceCode haskell"><span class="dt">StateT</span> s m</code> satisfies the constraint <code class="sourceCode haskell">(<span class="dt">MonadState</span> s (<span class="dt">StateT</span> s m))</code></p>
-<h3 id="a-state-transformer-over-int-states">A <em>State-transformer over <code class="sourceCode haskell"><span class="dt">Int</span></code> states</em></h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Prof</span> <span class="ot">=</span> <span class="dt">StateT</span> <span class="dt">Int</span> <span class="dt">Identity</span> </span></code></pre></div>
-<p><img src="../static/img/mtrans_state_id.png" /></p>
-<p>We can go back and give <code class="sourceCode haskell">evalProf</code> the type</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">evalProf ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Prof</span> <span class="dt">Int</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Identity</span> a <span class="ot">=</span> <span class="dt">Id</span> a</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Monad</span> <span class="dt">Identity</span> <span class="kw">where</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a>  <span class="fu">return</span> a     <span class="ot">=</span> <span class="dt">Id</span> a</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a>  (<span class="dt">Id</span> a) <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> f a</span></code></pre></div>
+<p><img src="../static/img/mtrans_id.png" /></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="a-transform-that-adds-exception-capabilities">A Transform that adds <code class="sourceCode haskell"><span class="dt">Except</span></code>ion Capabilities</h2>
-<p>The transformer <code class="sourceCode haskell"><span class="dt">ExceptT</span> e m</code></p>
+<h2 id="adding-exception-capabilities">Adding Exception Capabilities</h2>
+<p>The transformer <code class="sourceCode haskell"><span class="dt">ExceptT</span> e m</code> defined in <code class="sourceCode haskell"><span class="dt">Control.Monad.Except</span></code></p>
 <ul>
 <li>takes as <em>input</em> a monad <code class="sourceCode haskell">m</code> and</li>
 <li><em>transforms</em> it into a new monad <code class="sourceCode haskell">m'</code></li>
 </ul>
 <p>such that <code class="sourceCode haskell">m'</code> implements</p>
 <ul>
-<li><p>all the operations that <code class="sourceCode haskell">m</code> implements</p></li>
-<li><p><em>and adds</em> Exception-handling capabilities</p></li>
+<li>all the operations that <code class="sourceCode haskell">m</code> implements</li>
+<li><em>and adds</em> exception-handling capabilities</li>
+<li>that is, it can <code class="sourceCode haskell">throwError</code> and <code class="sourceCode haskell">catchError</code></li>
 </ul>
-<p><code class="sourceCode haskell"><span class="dt">ExceptT</span> e m</code> satisfies the constraint <code class="sourceCode haskell">(<span class="dt">MonadError</span> e (<span class="dt">ExceptT</span> e m))</code></p>
-<h3 id="an-exception-handler-monad-with-expr-typed-exceptions">An Exception Handler Monad with <code class="sourceCode haskell"><span class="dt">Expr</span></code>-typed exceptions</h3>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Exn</span> <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">Expr</span> <span class="dt">Identity</span> </span></code></pre></div>
+<p>In other words:</p>
+<ul>
+<li><code class="sourceCode haskell"><span class="dt">ExceptT</span> e m</code> satisfies the constraint <code class="sourceCode haskell">(<span class="dt">MonadError</span> e (<span class="dt">ExceptT</span> e m))</code></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="dbz-evaluator-using-transformers">DBZ Evaluator using transformers</h2>
+<p>For example, we could give our (non-generalized) DBZ evaluator the type:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="co">-- instead of: type Result a = Either String a</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Result</span> a <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">String</span> <span class="dt">Identity</span> a</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a><span class="ot">eval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Result</span> <span class="dt">Int</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a><span class="op">...</span></span></code></pre></div>
 <p><img src="../static/img/mtrans_except_id.png" /></p>
-<p>We can go back and give <code class="sourceCode haskell">evalThrowCatch</code> the type</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">evalThrowCatch ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Exn</span> <span class="dt">Int</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="composing-transformers">Composing Transformers</h2>
-<p>We can use <em>both</em> transformers to get <em>both</em> powers!</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ExnProf</span> a <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">Expr</span> (<span class="dt">StateT</span> <span class="dt">Int</span> (<span class="dt">Identity</span>)) a</span></code></pre></div>
+<h3 id="running-transformers">Running Transformers</h3>
+<p>If we run this evaluator, we get:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> eval e0</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a><span class="dt">ExceptT</span> (<span class="dt">Id</span> (<span class="dt">Right</span> <span class="dv">3</span>))</span></code></pre></div>
+<p>The result is wrapped in all these layers of monads…</p>
+<p><br> <br></p>
+<p>Each monad/transformer <code class="sourceCode haskell"><span class="dt">M</span></code> provides a function <code class="sourceCode haskell">runM</code> that “unwraps” the results:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">runIdentity ::</span> <span class="dt">Identity</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a><span class="ot">runExceptT ::</span> <span class="dt">ExceptT</span> e m a <span class="ot">-&gt;</span> m (<span class="dt">Either</span> e a)</span></code></pre></div>
+<p>So we can do:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runIdentity (runExceptT (eval e0))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a><span class="dt">Right</span> <span class="dv">3</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="adding-state-capabilities">Adding State Capabilities</h2>
+<p>The transformer <code class="sourceCode haskell"><span class="dt">StateT</span> s m</code> defined in the <code class="sourceCode haskell"><span class="dt">Control.Monad.State</span></code></p>
+<ul>
+<li><em>takes</em> as input monad <code class="sourceCode haskell">m</code> and</li>
+<li><em>transforms</em> it into a new monad <code class="sourceCode haskell">m'</code></li>
+</ul>
+<p>such that <code class="sourceCode haskell">m'</code> implements</p>
+<ul>
+<li>all the operations that <code class="sourceCode haskell">m</code> implements</li>
+<li><em>and adds</em> state-threading capabilities</li>
+<li>e.g. it can <code class="sourceCode haskell">get</code> and <code class="sourceCode haskell">put</code> the state</li>
+</ul>
+<p>In other words:</p>
+<ul>
+<li><code class="sourceCode haskell"><span class="dt">StateT</span> s m</code> satisfies the constraint <code class="sourceCode haskell">(<span class="dt">MonadState</span> s (<span class="dt">StateT</span> s m))</code></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="counting-evaluator-using-transformers">Counting Evaluator Using Transformers</h3>
+<p>For example, we could give our (non-generalized) DBZ evaluator the type:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="co">-- instead of: type Counting a = State Int a</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Counting</span> a <span class="ot">=</span> <span class="dt">StateT</span> <span class="dt">Int</span> <span class="dt">Identity</span>  a</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a><span class="ot">eval ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Counting</span> <span class="dt">Int</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a><span class="op">...</span></span></code></pre></div>
+<p><img src="../static/img/mtrans_state_id.png" /></p>
+<p><br> <br></p>
+<p>And we can run it using <code class="sourceCode haskell">runStateT</code> (or <code class="sourceCode haskell">evalStateT</code>):</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">runStateT ::</span> <span class="dt">StateT</span> s m a <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> m (a, s)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a><span class="ot">evalStateT ::</span> <span class="dt">StateT</span> s m a <span class="ot">-&gt;</span> s <span class="ot">-&gt;</span> m a</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runIdentity (runStateT (eval (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)) <span class="dv">0</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a>(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runIdentity (evalStateT (eval (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)) <span class="dv">0</span>)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a><span class="dv">1</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="fancy-evaluator-using-transformers">Fancy Evaluator Using Transformers</h2>
+<p>We can stack <em>both</em> transformers on top of each other!</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Fancy</span> a <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">String</span> (<span class="dt">StateT</span> <span class="dt">Cnt</span> <span class="dt">Identity</span>) a</span></code></pre></div>
 <p><img src="../static/img/mtrans_except_state_id.png" /></p>
-<p><code class="sourceCode haskell"><span class="dt">ExnProf</span></code> implements <em>State-transformer-over</em> <code class="sourceCode haskell"><span class="dt">Int</span></code> <strong>and</strong> <em>Exception-handling-over-<code class="sourceCode haskell"><span class="dt">Expr</span></code></em></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<h2 id="exercise-executing-the-combined-transformer">EXERCISE: Executing the Combined Transformer</h2>
-<p>Recall that</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ExnProf</span> a <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">Expr</span> (<span class="dt">StateT</span> <span class="dt">Int</span> (<span class="dt">Identity</span>)) a</span></code></pre></div>
+<h2 id="exercise-running-fancy">EXERCISE: Running Fancy</h2>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Fancy</span> a <span class="ot">=</span> <span class="dt">ExceptT</span> <span class="dt">String</span> (<span class="dt">StateT</span> <span class="dt">Cnt</span> <span class="dt">Identity</span>) a</span></code></pre></div>
 <p>Lets write a function</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">runExnProf ::</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">ExnProf</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>runExnProf epm <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="ot">runFancy ::</span> <span class="dt">Fancy</span> a <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> a</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>runFancy x <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
 <p>such that</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runExnProf (eval e1) </span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="st">&quot;value: 1, count: 2&quot;</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runExnProf (eval e2) </span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a><span class="st">&quot;Plus (Number 5) (Number (-5)) after 2 operations&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runFancy (eval (<span class="dt">Div</span> (<span class="dt">Num</span> <span class="dv">3</span>) (<span class="dt">Plus</span> <span class="dt">Next</span> <span class="dt">Next</span>)))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="dt">Right</span> <span class="dv">3</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">&gt;&gt;&gt;</span> runFancy (eval (<span class="dt">Div</span> (<span class="dt">Num</span> <span class="dv">3</span>) <span class="dt">Next</span>))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a><span class="dt">Left</span> <span class="st">&quot;DBZ: Next&quot;</span></span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<!--
-
-```haskell
-runExnProf :: (Show a) => ExnProf a -> String
-runExnProf m = case runIdentity (runStateT (runExceptT m) 0) of
-                 (Right v, c) -> showValCount (v, c)
-                 (Left e, c)  -> show e ++ " after " ++ show c ++ " operations"
-```
-
--->
-<h2 id="try-at-home-combining-in-a-different-order">TRY AT HOME: Combining in a Different Order</h2>
-<p>We can also combine the transformers in a <em>different</em> order</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ProfExn</span> a <span class="ot">=</span> <span class="dt">StateT</span> <span class="dt">Int</span> (<span class="dt">ExceptT</span> <span class="dt">Expr</span> (<span class="dt">Identity</span>)) a</span></code></pre></div>
-<p><img src="../static/img/mtrans_state_except_id.png" /></p>
-<p><code class="sourceCode haskell"><span class="dt">ExnProf</span></code> implements <em>State-transformer-over</em> <code class="sourceCode haskell"><span class="dt">Int</span></code> <strong>and</strong> <em>Exception-handling-over-<code class="sourceCode haskell"><span class="dt">Expr</span></code></em></p>
-<p>Can you implement the function</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="ot">runProfExn ::</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">ProfExn</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span></code></pre></div>
-<p>such that when you are done, we can get the following behavior?</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runProfExn (eval e1) </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="st">&quot;value: 1, count: 2&quot;</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> runProfExn (eval e2) </span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a><span class="st">&quot;Left (Plus (Number 5) (Number (-5)))&quot;</span></span></code></pre></div>
-<!--
-runProfExn :: (Show a) => ProfExn a -> String
-runProfExn st = case (runIdentity (runExceptT (runStateT st 0))) of
-  Right vc -> showValCount vc
-  e        -> show e
--->
-<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="summary-mixing-monads-with-many-features">Summary: Mixing Monads with Many Features</h2>
 <h3 id="transformers-add-capabilities-to-monads">1. Transformers add capabilities to Monads</h3>
 <p><img src="../static/img/mtrans_3.png" id="fig:More-Capabilities" class="align-right" style="width:80.0%" /></p>

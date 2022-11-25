@@ -26,7 +26,7 @@ Lecture schedule is subject to change!
 | *11/17*    | Monad Transformers              | [html][09-transformers]   |
 | *11/22*    | contd.                          |                           |
 | *11/24*    | *No lecture: Thanksgiving*      |                           |
-| *11/29*    | Property-based Testing          |                           |
+| *11/29*    | Property-based Testing          | [html][10-pbt]            |
 | *12/1*     | Refinement Types                |                           |
 
 [00-intro]: lectures/00-intro.html
@@ -39,6 +39,7 @@ Lecture schedule is subject to change!
 [07-monads]: lectures/07-monads.html
 [08-parsers]: lectures/08-parsers.html
 [09-transformers]: lectures/09-transformers.html
+[10-pbt]: lectures/10-pbt.html
 
 
 <!-- OLD -->
